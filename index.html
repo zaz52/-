@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="zh-CN" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Weiyi - 个人介绍页 | 热爱代码的终身学习者" />
+    <meta name="theme-color" content="#0b0f1a" />
+    <title>Weiyi | 个人名片页</title>
+    <link rel="stylesheet" href="./styles/main.css" />
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  </head>
+
+  <body class="antialiased">
+
+    <!-- 背景图层 -->
+    <div class="fixed-bg"></div>
+
+    <!-- ========== 固定顶部导航栏 ========== -->
+    <nav class="navbar" id="navbar">
+      <div class="navbar-inner">
+        <a href="#" class="nav-logo">Weiyi<span class="text-accent">.</span></a>
+        <div class="nav-links" id="navLinks">
+          <a href="#about">关于我</a>
+          <a href="#projects">我的项目</a>
+          <a href="#contact">联系我</a>
+          <a href="#contact" class="nav-cta-btn"><i class="fa-solid fa-paper-plane"></i> 联系我</a>
+        </div>
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="打开菜单">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+      <div class="mobile-menu" id="mobileMenu">
+        <a href="#about" onclick="closeMobileMenu()">关于我</a>
+        <a href="#projects" onclick="closeMobileMenu()">我的项目</a>
+        <a href="#contact" onclick="closeMobileMenu()">联系我</a>
+      </div>
+    </nav>
+
+    <!-- ======== 头部区域 ======== -->
+    <header class="hero" id="top">
+      <div class="hero-content">
+        <div class="avatar-wrapper">
+          <img src="/public/avatar.jpg" alt="Weiyi 的头像" class="avatar" />
+          <div class="avatar-overlay"></div>
+        </div>
+        <h1 class="hero-name">Weiyi</h1>
+        <p class="hero-tagline">热爱代码的猫奴 | 终身学习者 | 咖啡成瘾者</p>
+        <h2 class="hero-headline">把每一个想法，用代码变成现实</h2>
+        <p class="hero-desc">一个对世界充满好奇的人，正在学习如何用技术创造价值。相信"做中学"，相信复利，相信持续行动的力量。</p>
+        <div class="tag-cloud">
+          <span class="tag tag-blue">正在学 HTML/CSS</span>
+          <span class="tag tag-green">探索 AI 工具</span>
+          <span class="tag tag-amber">记录成长过程</span>
+        </div>
+        <div class="cta-group">
+          <a href="#contact" class="cta-primary"><i class="fa-brands fa-telegram"></i> 联系我</a>
+          <a href="#projects" class="cta-secondary">查看我的项目 <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </header>
+
+    <!-- ======== 三栏自我介绍 ======== -->
+    <section class="section about-grid-section" id="about">
+      <div class="container-narrow">
+        <div class="info-card">
+          <div class="info-card-label text-sky">我是谁</div>
+          <h3 class="info-card-title">不是最厉害的，但一定是最认真的</h3>
+          <p class="info-card-text">一个从零开始学编程的新手，正在一步步搭建自己的技能树。喜欢把复杂的概念拆解成简单易懂的内容。</p>
+        </div>
+        <div class="info-card">
+          <div class="info-card-label text-purple">我在做什么</div>
+          <h3 class="info-card-title">学技术、做项目、写过程</h3>
+          <p class="info-card-text">目前专注于前端开发学习，同时尝试用 AI 工具提升效率。希望通过持续输出把自己的学习路径变成对别人也有用的参考。</p>
+        </div>
+        <div class="info-card">
+          <div class="info-card-label text-emerald">为什么值得关注</div>
+          <h3 class="info-card-title">你看到的是真实过程，不是包装后的结果</h3>
+          <p class="info-card-text">我分享的不是"我已经会了什么"，而是"我怎么从不会到会"。每一个项目都是真实的练习。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======== 我的网站（原技能展示区改造）====== -->
+    <section class="section skills-section" id="projects">
+      <div class="container-narrow">
+        <h2 class="section-title"><i class="fa-solid fa-globe"></i> 我的网站</h2>
+        <div class="skills-list">
+
+          <!-- 网站1：虚拟资料 -->
+          <a href="https://pan.quark.cn/s/bc839cf401af#/list/share" target="_blank" class="skill-item skill-item-link">
+            <div class="skill-icon"><i class="fa-solid fa-cloud"></i></div>
+            <div class="skill-name">虚拟资料库</div>
+            <div class="skill-desc">各类学习资源、工具和素材分享</div>
+            <div class="skill-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+          </a>
+
+          <!-- 占位卡片 - 后续添加更多 -->
+          <div class="skill-item skill-item-placeholder">
+            <div class="skill-icon"><i class="fa-solid fa-plus"></i></div>
+            <div class="skill-name">更多网站...</div>
+            <div class="skill-desc">敬请期待</div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ======== 项目展示 ======== -->
+    <section class="section projects-section">
+      <div class="container-wide">
+        <h2 class="section-title"><i class="fa-solid fa-rocket"></i> 我的项目</h2>
+        <div class="projects-grid">
+          <a href="#" class="project-card project-card-blue">
+            <div class="project-cover"><i class="fa-solid fa-globe project-cover-icon"></i></div>
+            <div class="project-info">
+              <div class="project-tag">Web 开发</div>
+              <h3 class="project-title">个人名片页</h3>
+              <p class="project-desc">从零搭建的第一个个人网页，包含 HTML 骨架、CSS 装修和响应式设计。</p>
+              <div class="project-stats">
+                <div class="project-stat"><span class="stat-value">#1</span><span class="stat-label">第一个项目</span></div>
+                <div class="project-stat"><span class="stat-value">HTML+CSS</span><span class="stat-label">技术栈</span></div>
+              </div>
+            </div>
+          </a>
+          <a href="#" class="project-card project-card-emerald">
+            <div class="project-cover"><i class="fa-solid fa-sparkles project-cover-icon"></i></div>
+            <div class="project-info">
+              <div class="project-tag text-emerald">Coming Soon</div>
+              <h3 class="project-title">更多项目在路上...</h3>
+              <p class="project-desc">正在学习中，下一个项目即将诞生。敬请期待！</p>
+              <div class="project-stats">
+                <div class="project-stat"><span class="stat-value">🚧</span><span class="stat-label">施工中</span></div>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======== 信任构建区 ======== -->
+    <section class="section trust-section">
+      <div class="container-narrow">
+        <div class="trust-grid">
+          <div class="trust-card">
+            <div class="trust-label text-amber">适合谁看</div>
+            <h3 class="trust-title">这个网站最适合这些人</h3>
+            <ul class="trust-list">
+              <li><span class="dot dot-amber"></span>和我一样从零开始学编程的人</li>
+              <li><span class="dot dot-amber"></span>对 AI 工具感兴趣的人</li>
+              <li><span class="dot dot-amber"></span>想看到真实踩坑过程的人</li>
+            </ul>
+          </div>
+          <div class="trust-card">
+            <div class="trust-label text-blue">为什么信我</div>
+            <h3 class="trust-title">我有三个特点</h3>
+            <div class="trust-points">
+              <div class="trust-point"><strong>真实记录</strong><p>不装大神，如实展示自己的水平。</p></div>
+              <div class="trust-point"><strong>做中学</strong><p>边做边学，立刻变成可见的项目。</p></div>
+              <div class="trust-point"><strong>持续更新</strong><p>随着成长不断迭代。</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======== 联系方式 ======== -->
+    <section class="section contact-section" id="contact">
+      <div class="container-narrow">
+        <div class="contact-header">
+          <a href="#top" class="back-link"><i class="fa-solid fa-arrow-up"></i> 返回顶部</a>
+          <h2 class="section-title" style="margin-bottom:6px;"><i class="fa-solid fa-link"></i> 联系我</h2>
+          <p class="contact-subtitle">欢迎交流技术、学习心得或任何有趣的想法</p>
+        </div>
+        <div class="contact-list">
+
+          <!-- 📧 邮箱 -->
+          <a href="mailto:1845779520@qq.com" class="contact-row contact-row-sky">
+            <div class="contact-row-icon"><i class="fa-solid fa-envelope"></i></div>
+            <div class="contact-row-info"><h3 class="contact-row-title">邮箱 (Email)</h3><p class="contact-row-desc">1845779520@qq.com</p></div>
+            <div class="contact-row-arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></div>
+            <span class="contact-badge">发送邮件</span>
+          </a>
+
+          <!-- 💬 微信 -->
+          <button type="button" class="contact-row contact-row-green" onclick="openModal('wxModal')">
+            <div class="contact-row-icon"><i class="fa-brands fa-weixin"></i></div>
+            <div class="contact-row-info"><h3 class="contact-row-title">微信 (WeChat)</h3><p class="contact-row-desc">Z3_March</p></div>
+            <div class="contact-row-arrow"><i class="fa-solid fa-qrcode"></i></div>
+            <span class="contact-badge">点击查看</span>
+          </button>
+
+          <!-- 𝕏 X / Twitter -->
+          <a href="https://x.com/Weiyi_Learn" target="_blank" class="contact-row contact-row-dark">
+            <div class="contact-row-icon"><i class="fa-brands fa-x-twitter"></i></div>
+            <div class="contact-row-info"><h3 class="contact-row-title">X (Twitter)</h3><p class="contact-row-desc">@Weiyi_Learn</p></div>
+            <div class="contact-row-arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></div>
+            <span class="contact-badge">关注我</span>
+          </a>
+
+          <!-- 🐧 QQ -->
+          <a href="https://wpa.qq.com/msgrd?v=3&uin=1845779520&site=qq&menu=yes" target="_blank" class="contact-row contact-row-blue">
+            <div class="contact-row-icon"><i class="fa-brands fa-qq"></i></div>
+            <div class="contact-row-info"><h3 class="contact-row-title">QQ</h3><p class="contact-row-desc">1845779520</p></div>
+            <div class="contact-row-arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></div>
+            <span class="contact-badge">打开聊天</span>
+          </a>
+
+          <!-- ✈️ Telegram（直接跳转） -->
+          <a href="https://t.me/Weiyiusername" target="_blank" class="contact-row contact-row-sky">
+            <div class="contact-row-icon"><i class="fa-brands fa-telegram"></i></div>
+            <div class="contact-row-info"><h3 class="contact-row-title">Telegram</h3><p class="contact-row-desc">@Weiyiusername</p></div>
+            <div class="contact-row-arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></div>
+            <span class="contact-badge">发送消息</span>
+          </a>
+
+          <!-- 🔗 GitHub -->
+          <a href="https://github.com/" target="_blank" class="contact-row contact-row-dark">
+            <div class="contact-row-icon"><i class="fa-brands fa-github"></i></div>
+            <div class="contact-row-info"><h3 class="contact-row-title">GitHub</h3><p class="contact-row-desc">查看我的代码仓库</p></div>
+            <div class="contact-row-arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></div>
+            <span class="contact-badge">访问主页</span>
+          </a>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ======== 微信弹窗 ======== -->
+    <div class="modal" id="wxModal" onclick="closeModalOnOverlay(event,'wxModal')">
+      <div class="modal-box">
+        <button class="modal-close" onclick="closeModal('wxModal')"><i class="fa-solid fa-xmark"></i></button>
+        <div class="modal-icon modal-icon-green"><i class="fa-brands fa-weixin"></i></div>
+        <h3 class="modal-title">微信 (WeChat)</h3>
+        <p class="modal-subtitle">扫码或搜索微信号添加</p>
+        <div class="modal-qr-placeholder"><i class="fa-solid fa-qrcode qr-placeholder-icon"></i><p>放置你的微信二维码</p></div>
+        <div class="modal-id-box"><span class="modal-id-label">微信号:</span><span class="modal-id-value">Z3_March</span></div>
+      </div>
+    </div>
+
+    <!-- ======== 底部 ======== -->
+    <footer class="footer">
+      <p>&copy; 2024 Weiyi. 用 ❤️ 和代码搭建</p>
+      <p class="footer-sub">Let's build something cool together.</p>
+    </footer>
+
+    <!-- ======== JavaScript ======== -->
+    <script>
+      var mobileBtn=document.getElementById('mobileMenuBtn');
+      var mobileMenu=document.getElementById('mobileMenu');
+      mobileBtn.addEventListener('click',function(){
+        mobileMenu.classList.toggle('active');
+        var icon=mobileBtn.querySelector('i');
+        icon.classList.toggle('fa-bars');icon.classList.toggle('fa-xmark');
+      });
+      function closeMobileMenu(){mobileMenu.classList.remove('active');var i=mobileBtn.querySelector('i');i.classList.add('fa-bars');i.classList.remove('fa-xmark');}
+      function openModal(id){document.getElementById(id).style.display='flex';document.body.style.overflow='hidden';}
+      function closeModal(id){document.getElementById(id).style.display='none';document.body.style.overflow='auto';}
+      function closeModalOnOverlay(e,id){if(e.target===e.currentTarget)closeModal(id);}
+      document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeModal('wxModal');}});
+      window.addEventListener('scroll',function(){
+        var nb=document.getElementById('navbar');
+        if(window.scrollY>50)nb.classList.add('scrolled');else nb.classList.remove('scrolled');
+      });
+    </script>
+
+  </body>
+</html>
