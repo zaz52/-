@@ -25,7 +25,7 @@ export const profile = {
 };
 
 export const stats = [
-  { value: '5+', label: '在线作品入口' },
+  { value: '6+', label: '在线作品入口' },
   { value: 'AI+Web', label: '主要方向' },
   { value: '24h', label: '持续迭代节奏' },
 ];
@@ -62,6 +62,13 @@ export const websites = [
     description: '在线占卜工具，用轻量交互探索自我提问。',
     href: 'https://suanguan.netlify.app/',
     accent: 'from-violet-400 to-fuchsia-500',
+  },
+  {
+    icon: Sparkles,
+    name: '乾坤之道',
+    description: '周易起卦与 AI 问事工具，用传统卦象结合智能解读。',
+    href: 'https://yulesuangua.pages.dev/',
+    accent: 'from-lime-300 to-emerald-600',
   },
   {
     icon: HeartPulse,

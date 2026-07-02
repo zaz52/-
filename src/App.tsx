@@ -159,7 +159,7 @@ function PortfolioWork() {
   return (
     <section id="work" className="system-panel mt-4">
       <SectionTitle index="01" title="作品入口" subtitle="Live Websites" />
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
         {websites.map((site) => (
           <a key={site.href} href={site.href} target="_blank" rel="noopener noreferrer" className="nature-card group">
             <div className={`grid size-14 place-items-center rounded-2xl bg-gradient-to-br ${site.accent} text-white shadow-md`}>
