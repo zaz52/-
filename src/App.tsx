@@ -228,43 +228,83 @@ function ColorTypography() {
 }
 
 function ControlsLibrary() {
+  const [query, setQuery] = useState('');
+  const [selectedOption, setSelectedOption] = useState(formOptions[0]);
+  const [activeChip, setActiveChip] = useState(formOptions[0]);
+  const [isNatureMode, setIsNatureMode] = useState(true);
+  const [allowUpdates, setAllowUpdates] = useState(true);
+
+  const filteredSites = websites.filter((site) =>
+    [site.name, site.description].join(' ').toLowerCase().includes(query.toLowerCase()),
+  );
+
   return (
     <div className="system-panel">
       <SectionTitle index="03" title="控件与按钮" subtitle="Controls & Buttons" />
       <div className="grid gap-5 lg:grid-cols-2">
         <div className="grid gap-3">
           <div className="flex flex-wrap gap-3">
-            <button className="btn-primary">探索未来 <ArrowRight size={16} /></button>
-            <button className="btn-secondary">了解更多</button>
-            <button className="btn-ghost">观察视角</button>
-            <button className="btn-disabled">不可点击</button>
+            <a className="btn-primary" href="#work">探索作品 <ArrowRight size={16} /></a>
+            <a className="btn-secondary" href="#cases">查看案例</a>
+            <a className="btn-ghost" href="#contact">联系我</a>
           </div>
           <div className="field">
             <Search size={17} />
-            <input aria-label="搜索" placeholder="搜索灵感、文章、产品..." />
+            <input
+              aria-label="搜索作品"
+              placeholder="搜索作品、工具、资料..."
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+            />
           </div>
-          <div className="select-row">
-            <span>选择一个选项</span>
+          <label className="select-row" aria-label="选择设计方向">
+            <select value={selectedOption} onChange={(event) => setSelectedOption(event.target.value)}>
+              {formOptions.map((option) => <option key={option}>{option}</option>)}
+            </select>
             <ChevronDown size={17} />
-          </div>
+          </label>
           <div className="flex flex-wrap gap-2">
-            {formOptions.map((option, index) => (
-              <span key={option} className={index === 0 ? 'chip-active' : 'chip'}>
+            {formOptions.map((option) => (
+              <button
+                key={option}
+                type="button"
+                className={activeChip === option ? 'chip-active' : 'chip'}
+                onClick={() => setActiveChip(option)}
+              >
                 {option}
-              </span>
+              </button>
             ))}
+          </div>
+          <div className="rounded-2xl border border-[#d8cbb8] bg-[#fffaf0] p-3 text-sm text-[#52675d]">
+            当前方向：<strong className="text-[#176B4F]">{selectedOption}</strong> / 标签：
+            <strong className="text-[#176B4F]">{activeChip}</strong>
+            <div className="mt-2 text-xs">
+              搜索结果：{filteredSites.length ? filteredSites.map((site) => site.name).join('、') : '暂无匹配'}
+            </div>
           </div>
         </div>
         <div className="grid gap-4">
           <div className="flex items-center gap-4">
-            <span className="switch-on" />
-            <span className="switch-off" />
-            <label className="check-row"><input type="checkbox" defaultChecked /> 自然灵感</label>
-            <label className="check-row"><input type="radio" defaultChecked /> 选中</label>
+            <button
+              type="button"
+              className={isNatureMode ? 'switch-on' : 'switch-off'}
+              aria-label="切换自然模式"
+              onClick={() => setIsNatureMode((value) => !value)}
+            />
+            <label className="check-row">
+              <input type="checkbox" checked={allowUpdates} onChange={(event) => setAllowUpdates(event.target.checked)} />
+              接收更新
+            </label>
+            <label className="check-row"><input type="radio" checked readOnly /> 已选中</label>
           </div>
           <div>
-            <div className="mb-2 flex justify-between text-sm font-bold"><span>自然能量值</span><span>76%</span></div>
-            <div className="h-3 rounded-full bg-[#e8dfce]"><div className="h-full w-3/4 rounded-full bg-[#176B4F]" /></div>
+            <div className="mb-2 flex justify-between text-sm font-bold">
+              <span>{isNatureMode ? '自然能量值' : '科技能量值'}</span>
+              <span>{isNatureMode ? '76%' : '58%'}</span>
+            </div>
+            <div className="h-3 rounded-full bg-[#e8dfce]">
+              <div className={`h-full rounded-full ${isNatureMode ? 'w-3/4 bg-[#176B4F]' : 'w-[58%] bg-[#2EC4C7]'}`} />
+            </div>
           </div>
           <div className="grid gap-2">
             {alerts.map((alert) => (
@@ -301,7 +341,7 @@ function CardsLibrary() {
           <img src={profile.avatar} alt={`${profile.name} 的头像`} />
           <h3>{profile.name}</h3>
           <p>{profile.role}</p>
-          <button className="btn-primary w-full justify-center">关注</button>
+          <a href="#contact" className="btn-primary w-full justify-center">联系我</a>
         </article>
       </div>
     </div>
@@ -321,7 +361,7 @@ function WebMobilePreview() {
           <div className="mt-16 max-w-md">
             <h3>科技自然<br />青春创造未来</h3>
             <p>复古科技和自然灵感结合的个人品牌首页。</p>
-            <button className="mt-5 rounded-full bg-[#4CAF7A] px-5 py-2 text-sm font-black text-white">探索作品</button>
+            <a href="#work" className="mt-5 inline-flex rounded-full bg-[#4CAF7A] px-5 py-2 text-sm font-black text-white">探索作品</a>
           </div>
         </div>
         <div className="grid grid-cols-2 gap-3">

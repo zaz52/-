@@ -99,8 +99,7 @@ body {
 
 .btn-primary,
 .btn-secondary,
-.btn-ghost,
-.btn-disabled {
+.btn-ghost {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -138,12 +137,6 @@ body {
   border: 1px solid #e0d4c0;
   background: rgba(255, 255, 255, 0.55);
   color: #314d44;
-}
-
-.btn-disabled {
-  cursor: not-allowed;
-  background: #d7d2ca;
-  color: #fffaf0;
 }
 
 .pill-soft,
@@ -198,6 +191,17 @@ body {
 .select-row {
   justify-content: space-between;
   font-size: 0.9rem;
+}
+
+.select-row select {
+  width: 100%;
+  appearance: none;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #52675d;
+  font: inherit;
+  font-weight: 800;
 }
 
 .switch-on,
