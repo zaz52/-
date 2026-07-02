@@ -1,6 +1,6 @@
 # Weiyi Portfolio
 
-Weiyi 的个人作品集网站。项目已从静态 HTML/CSS 名片页升级为 React + TypeScript + Tailwind CSS 架构，用于展示在线作品、项目案例、构建方法和联系方式。
+Weiyi 的个人作品集与 UI 设计系统网站。当前视觉方向为“复古科技 + 青春自然”，用于展示在线作品、网页/移动端界面、卡片、控件、按钮、图标、间距、圆角和联系方式。
 
 ## 技术栈
 
@@ -9,6 +9,19 @@ Weiyi 的个人作品集网站。项目已从静态 HTML/CSS 名片页升级为 
 - Vite
 - Tailwind CSS
 - lucide-react
+
+## 设计系统
+
+核心模块位于首页：
+
+- 色彩与字体
+- 按钮、输入框、下拉、开关、选择控件
+- 卡片样式和内容卡片
+- Web 页面预览与移动端界面预览
+- 间距、圆角、图标系统
+- 提示、徽章、标签和联系方式组件
+
+设计 token 位于 `src/data/designSystem.ts`，个人内容位于 `src/data/portfolio.ts`。
 
 ## 本地运行
 
