@@ -5,6 +5,7 @@ import { Header } from './components/layout/Header';
 import { Admin } from './pages/Admin';
 import { DesignSystem } from './pages/DesignSystem';
 import { Home } from './pages/Home';
+import { ProjectDetail } from './pages/ProjectDetail';
 import { SkillDetail } from './pages/SkillDetail';
 import { Skills } from './pages/Skills';
 import { trackPageView } from './lib/analytics';
@@ -15,6 +16,7 @@ function App() {
   const isDesignSystem = path === '/design-system';
   const isSkills = path === '/skills';
   const skillSlug = path.startsWith('/skills/') ? decodeURIComponent(path.replace('/skills/', '').replace(/\/$/, '')) : null;
+  const projectId = path.startsWith('/projects/') ? decodeURIComponent(path.replace('/projects/', '').replace(/\/$/, '')) : null;
   const isAdmin = path === '/admin';
 
   useEffect(() => {
@@ -48,7 +50,7 @@ function App() {
   return (
     <div id="top" className="min-h-screen bg-[var(--cream)] text-[var(--deep)]">
       <Header currentPath={path} />
-      {isDesignSystem ? <DesignSystem /> : skillSlug ? <SkillDetail slug={skillSlug} /> : isSkills ? <Skills /> : <Home />}
+      {isDesignSystem ? <DesignSystem /> : projectId ? <ProjectDetail projectId={projectId} /> : skillSlug ? <SkillDetail slug={skillSlug} /> : isSkills ? <Skills /> : <Home />}
       <Footer />
     </div>
   );

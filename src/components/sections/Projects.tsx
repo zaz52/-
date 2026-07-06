@@ -47,15 +47,13 @@ export function Projects() {
             description="作品区用大卡片和横向作品墙展示，每个项目都有明确封面、类型、标签和入口。"
             light
           />
-          <Button href={featured.href} target="_blank" rel="noopener noreferrer" variant="secondary" className="w-fit">
+          <Button href={`/projects/${featured.id}`} variant="secondary" className="w-fit">
             打开主推作品
           </Button>
         </div>
 
         <motion.a
-          href={featured.href}
-          target="_blank"
-          rel="noopener noreferrer"
+          href={`/projects/${featured.id}`}
           className="group mt-14 grid overflow-hidden rounded-[2.5rem] border border-white/10 bg-[rgba(255,244,225,0.08)] p-5 backdrop-blur md:grid-cols-[1.1fr_0.9fr] md:p-7"
           initial={{ opacity: 0, y: 60 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -85,10 +83,8 @@ export function Projects() {
         <div className="scroll-strip mt-10 flex gap-6 overflow-x-auto pb-6">
           {rest.slice(0, 5).map((project, index) => (
             <motion.a
-              key={project.href}
-              href={project.href}
-              target="_blank"
-              rel="noopener noreferrer"
+              key={project.id}
+              href={`/projects/${project.id}`}
               className="group min-w-[320px] rounded-[2rem] border border-white/10 bg-[rgba(255,244,225,0.08)] p-5 transition hover:-translate-y-2 hover:border-[var(--coral)] md:min-w-[460px]"
               initial={{ opacity: 0, x: 80 }}
               whileInView={{ opacity: 1, x: 0 }}

@@ -241,6 +241,53 @@ This confirms the blocker is at the Netlify account/deploy permission level, not
 
 Do not sync this work to Obsidian unless the user explicitly says to sync.
 
+## Current Goal: Project Detail Pages
+
+User approved the next step: improve the portfolio by adding real project detail pages.
+
+### Success Criteria
+
+- Project cards on the homepage open internal detail pages instead of immediately jumping away.
+- Every project has a stable route at `/projects/:id`.
+- Detail pages read the same dynamic `/api/projects` data used by the homepage/admin so future admin edits remain reflected.
+- Each detail page includes cover, title, type, description, tags, project link, narrative sections, and clear back navigation.
+- Unknown project IDs show a useful not-found state.
+- Desktop and mobile layouts remain readable.
+- `npm run lint`, `npm run build`, production deploy, route checks, and GitHub push complete.
+
+### Architecture
+
+- Add `src/pages/ProjectDetail.tsx`.
+- Update the SPA router in `src/App.tsx` to handle `/projects/:id`.
+- Update homepage project cards in `src/components/sections/Projects.tsx` to link to internal detail pages and keep external project launch as a clear button.
+- Reuse `hydrateProjects` and `/api/projects` for consistent project data.
+
+### Progress
+
+- Started on 2026-07-07.
+- Added `src/pages/ProjectDetail.tsx`.
+- Added `/projects/:id` SPA routing in `src/App.tsx`.
+- Updated homepage project cards to open internal detail pages.
+- Local validation:
+  - `npm run lint`: passed.
+  - `npm run build`: passed.
+- Deployed to Cloudflare Worker version `78ddc0dc-8c86-4faf-a6d8-12f795498dbb`.
+- Final deploy after removing the public admin CTA from detail pages: `7105991a-82c0-4c7d-9208-80ab7d3636a9`.
+- Production validation:
+  - `/`: HTTP 200.
+  - `/projects/yulesuangua`: HTTP 200.
+  - `/projects/magic-resume`: HTTP 200.
+  - `/projects/not-exist`: HTTP 200 with SPA fallback for the not-found state.
+  - `/admin`: HTTP 200.
+  - Production JS asset `/assets/index-BDZn5UFU.js` contains the `/projects/` route.
+  - Public detail page bundle no longer contains the "后台管理作品" CTA.
+
+### Review Notes
+
+- Detail pages intentionally derive narrative sections from the current project record, so projects created in `/admin` get a useful detail page without adding a separate CMS schema.
+- The external project URL remains available through the "打开线上项目" CTA inside each detail page.
+- Future enhancement: add optional admin fields for richer case studies, such as problem, role, stack, screenshots, and process notes.
+
 ## Current Goal: Built-In Visit Analytics
 
 User selected the third improvement: add visit analytics for the live personal website.
