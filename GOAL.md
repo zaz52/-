@@ -133,6 +133,24 @@ This confirms the blocker is at the Netlify account/deploy permission level, not
   - HTTP check confirms no `yulesuangua` or `suanguan` references in the deployed page.
   - Chrome browser check confirms `魔方简历` is visible and `乾坤之道` / `算卦` are not visible.
 
+## Custom Domain
+
+- User provided custom domain `weiyiai.top`, with DNS managed in Cloudflare.
+- Added `wrangler.jsonc` for Cloudflare Workers Static Assets deployment:
+  - Worker name: `weiyiai-portfolio`
+  - Asset directory: `./dist`
+  - SPA fallback: `not_found_handling: single-page-application`
+  - Routes:
+    - `weiyiai.top/*`
+    - `www.weiyiai.top/*`
+- Initial Workers custom-domain mode conflicted with existing DNS/domain records, so deployment was switched to Workers route mode.
+- Deployed Worker version `e127c7d8-b1a4-44af-b445-8b4fca6607d2`.
+- Verified:
+  - `https://weiyiai.top/`: HTTP 200.
+  - `https://www.weiyiai.top/`: HTTP 200.
+  - `https://weiyiai.top/design-system`: HTTP 200.
+  - Chrome browser check confirms title, Hero, Contact, and Design System route render correctly.
+
 ## Obsidian Sync
 
 Do not sync this work to Obsidian unless the user explicitly says to sync.
