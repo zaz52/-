@@ -167,6 +167,14 @@ This confirms the blocker is at the Netlify account/deploy permission level, not
   - Cloudflare Worker custom-domain deployment succeeded with version `252e6f25-41e5-4dca-be31-3e11a389fa14`.
   - `https://weiyiai.top/avatar.jpg` and all `/covers/*` assets return HTTP 200.
   - Chrome browser check confirms the Hero avatar loads and all 4 project covers load after scrolling to Projects.
+- Replaced `public/avatar.jpg` with the new user-provided WeChat image.
+- Revalidated replacement:
+  - `npm run lint`: passed.
+  - `npm run build`: passed.
+  - Cloudflare Pages fallback deployment succeeded.
+  - Cloudflare Worker custom-domain deployment succeeded with version `c26650ba-5633-41ee-81ea-3e2ce3388908`.
+  - Remote `https://weiyiai.top/avatar.jpg` SHA256 matches local `public/avatar.jpg`.
+  - Chrome browser check confirms the new 908x908 avatar loads in the Hero.
 
 ## Obsidian Sync
 
