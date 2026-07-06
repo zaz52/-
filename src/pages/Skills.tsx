@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ArrowRight, BadgeCheck, Github, Workflow } from 'lucide-react';
+import { ArrowRight, BadgeCheck, Workflow } from 'lucide-react';
 import { skills } from '../data/skills';
 
 export function Skills() {

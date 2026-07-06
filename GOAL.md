@@ -210,12 +210,13 @@ This confirms the blocker is at the Netlify account/deploy permission level, not
 - Revalidated:
   - `npm run lint`: passed.
   - `npm run build`: passed.
-  - Cloudflare Worker custom-domain deployment succeeded with version `4604da19-141f-4c8a-9308-7aac601c6414`.
+  - Cloudflare Worker custom-domain deployment succeeded with version `b58ebe02-9525-4891-913e-aea9b586f9ac`.
   - Added explicit `ASSETS` binding and manual SPA fallback in the Worker so `/admin` and `/design-system` return HTTP 200.
   - `GET /api/projects`: returns 5 projects with correct Chinese text.
   - Wrong admin password returns HTTP 401.
   - Correct admin password returns `{ ok: true }`.
-  - Browser check confirms `/admin` login works, project inputs contain Chinese text, and front page reads dynamic projects without `????` corruption.
+  - Browser check confirms `/admin` login works, project inputs contain Chinese text, front page reads dynamic projects without `????` corruption, and the merged `/skills` page still renders.
+  - Integrated remote `main` changes that added Skills pages and fixed the imported `Github` lint issue in `src/pages/Skills.tsx`.
 
 ## Obsidian Sync
 
