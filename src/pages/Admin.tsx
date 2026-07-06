@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowUp, Eye, Plus, Save, Star, Trash2, Upload } from 'lucide-react';
+import { ArrowDown, ArrowUp, BarChart3, Eye, Plus, RefreshCw, Save, Star, Trash2, Upload } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { defaultProjects } from '../data/projects';
 import type { ProjectIconKey, ProjectPalette, ProjectRecord } from '../data/projectTypes';
@@ -19,6 +19,17 @@ const paletteOptions: { value: ProjectPalette; label: string }[] = [
   { value: 'cyan', label: '松石青' },
   { value: 'violet', label: '蓝紫' },
 ];
+
+type AnalyticsSummary = {
+  total: number;
+  today: number;
+  recentDays: { date: string; views: number }[];
+  topPages: { label: string; count: number }[];
+  topReferrers: { label: string; count: number }[];
+  devices: { label: string; count: number }[];
+  browsers: { label: string; count: number }[];
+  updatedAt: string | null;
+};
 
 const emptyProject = (): ProjectRecord => ({
   id: crypto.randomUUID(),
@@ -56,6 +67,8 @@ export function Admin() {
   const [projects, setProjects] = useState<ProjectRecord[]>(defaultProjects);
   const [message, setMessage] = useState('输入后台密码后管理作品。');
   const [saving, setSaving] = useState(false);
+  const [analytics, setAnalytics] = useState<AnalyticsSummary | null>(null);
+  const [analyticsLoading, setAnalyticsLoading] = useState(false);
 
   const featuredId = useMemo(() => projects.find((project) => project.featured)?.id ?? projects[0]?.id, [projects]);
 
@@ -68,6 +81,21 @@ export function Admin() {
       .catch(() => setMessage('云端数据暂时不可用，正在显示本地默认作品。'));
   }, []);
 
+  const loadAnalytics = async () => {
+    setAnalyticsLoading(true);
+    try {
+      const response = await fetch('/api/analytics/summary', {
+        headers: { authorization: `Bearer ${password}` },
+      });
+      if (!response.ok) throw new Error('Analytics unavailable');
+      setAnalytics(await response.json() as AnalyticsSummary);
+    } catch {
+      setAnalytics(null);
+    } finally {
+      setAnalyticsLoading(false);
+    }
+  };
+
   const login = async () => {
     const response = await fetch('/api/admin-check', {
       headers: { authorization: `Bearer ${password}` },
@@ -78,6 +106,7 @@ export function Admin() {
     }
     sessionStorage.setItem('adminPassword', password);
     setUnlocked(true);
+    await loadAnalytics();
     setMessage('已登录，可以编辑作品。');
   };
 
@@ -161,6 +190,98 @@ export function Admin() {
           </div>
           <p className="mt-4 text-sm font-bold text-[#617268]">{message}</p>
         </section>
+
+        {unlocked ? (
+          <section className="mt-8 rounded-[1.5rem] border border-[rgba(18,48,38,0.12)] bg-[#0b3d2e] p-5 text-[#fff4e1] shadow-[0_18px_48px_rgba(11,61,46,0.16)]">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div>
+                <p className="text-sm font-black uppercase tracking-[0.22em] text-[#28c7b7]">Analytics</p>
+                <h2 className="mt-2 text-3xl font-black">访问统计</h2>
+                <p className="mt-2 text-sm text-[#dad7ce]">
+                  {analytics?.updatedAt ? `最后更新：${new Date(analytics.updatedAt).toLocaleString('zh-CN')}` : '等待第一批访问数据。'}
+                </p>
+              </div>
+              <button className="btn-flow bg-[#fff4e1] text-[#123026] disabled:opacity-60" type="button" onClick={loadAnalytics} disabled={analyticsLoading}>
+                <RefreshCw size={18} />
+                刷新统计
+              </button>
+            </div>
+
+            <div className="mt-5 grid gap-4 md:grid-cols-3">
+              <div className="rounded-[1rem] border border-white/10 bg-white/10 p-4">
+                <p className="text-sm text-[#dad7ce]">总浏览量</p>
+                <p className="mt-2 text-4xl font-black">{analytics?.total ?? 0}</p>
+              </div>
+              <div className="rounded-[1rem] border border-white/10 bg-white/10 p-4">
+                <p className="text-sm text-[#dad7ce]">今日浏览</p>
+                <p className="mt-2 text-4xl font-black">{analytics?.today ?? 0}</p>
+              </div>
+              <div className="rounded-[1rem] border border-white/10 bg-white/10 p-4">
+                <p className="text-sm text-[#dad7ce]">最近 14 天</p>
+                <p className="mt-2 text-4xl font-black">
+                  {analytics?.recentDays.reduce((sum, day) => sum + day.views, 0) ?? 0}
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-5 grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
+              <div className="rounded-[1rem] border border-white/10 bg-white/10 p-4">
+                <div className="flex items-center gap-2 text-sm font-bold text-[#dad7ce]">
+                  <BarChart3 size={16} />
+                  14 天趋势
+                </div>
+                <div className="mt-4 flex h-36 items-end gap-2">
+                  {(analytics?.recentDays ?? []).map((day) => {
+                    const max = Math.max(1, ...(analytics?.recentDays.map((item) => item.views) ?? [1]));
+                    return (
+                      <div key={day.date} className="flex flex-1 flex-col items-center gap-2">
+                        <div className="w-full rounded-t bg-[#28c7b7]" style={{ height: `${Math.max(8, (day.views / max) * 112)}px` }} title={`${day.date}: ${day.views}`} />
+                        <span className="text-[10px] text-[#dad7ce]">{day.date.slice(5)}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="rounded-[1rem] border border-white/10 bg-white/10 p-4">
+                <p className="text-sm font-bold text-[#dad7ce]">设备 / 浏览器</p>
+                <div className="mt-4 grid gap-3 text-sm">
+                  {[...(analytics?.devices ?? []), ...(analytics?.browsers ?? [])].map((item) => (
+                    <div key={`${item.label}-${item.count}`} className="flex items-center justify-between gap-3">
+                      <span>{item.label}</span>
+                      <span className="font-black">{item.count}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-5 grid gap-4 lg:grid-cols-2">
+              <div className="rounded-[1rem] border border-white/10 bg-white/10 p-4">
+                <p className="text-sm font-bold text-[#dad7ce]">热门页面</p>
+                <div className="mt-4 grid gap-3 text-sm">
+                  {(analytics?.topPages ?? []).map((item) => (
+                    <div key={item.label} className="flex items-center justify-between gap-3">
+                      <span className="truncate">{item.label}</span>
+                      <span className="font-black">{item.count}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="rounded-[1rem] border border-white/10 bg-white/10 p-4">
+                <p className="text-sm font-bold text-[#dad7ce]">访问来源</p>
+                <div className="mt-4 grid gap-3 text-sm">
+                  {(analytics?.topReferrers ?? []).map((item) => (
+                    <div key={item.label} className="flex items-center justify-between gap-3">
+                      <span className="truncate">{item.label}</span>
+                      <span className="font-black">{item.count}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+        ) : null}
 
         <div className="mt-8 flex justify-end">
           <button className="btn-flow bg-[var(--coral)] text-white" type="button" onClick={() => setProjects((items) => [...items, emptyProject()])}>

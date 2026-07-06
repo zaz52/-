@@ -240,3 +240,57 @@ This confirms the blocker is at the Netlify account/deploy permission level, not
 ## Obsidian Sync
 
 Do not sync this work to Obsidian unless the user explicitly says to sync.
+
+## Current Goal: Built-In Visit Analytics
+
+User selected the third improvement: add visit analytics for the live personal website.
+
+### Success Criteria
+
+- The production site records page views without requiring the user to manually edit Cloudflare Dashboard settings.
+- Analytics data is stored in the existing Cloudflare KV namespace and does not expose the admin password or other secrets in Git.
+- Tracking is privacy-light: count visits by day, path, referrer host, device class, and browser class only; do not store raw IP addresses.
+- `/admin` shows a usable analytics summary after login:
+  - total views
+  - today views
+  - recent 14-day trend
+  - top pages
+  - top referrers
+  - device/browser split
+- Build, lint, Worker deploy, API checks, and browser checks pass before final handoff.
+
+### Architecture
+
+- Frontend sends a single best-effort page view event on page load through `/api/analytics/pageview`.
+- Cloudflare Worker validates and aggregates events into KV key `analytics:v1`.
+- Admin-only endpoint `/api/analytics/summary` returns the aggregated dashboard payload.
+- Admin UI reads the summary only after password verification.
+
+### Progress
+
+- Started implementation on 2026-07-07.
+- Cloudflare Web Analytics API access was checked first, but the current Wrangler OAuth token returned 403 for RUM/Web Analytics endpoints. Decision: implement first-party KV analytics so the user can proceed without manual Cloudflare token setup.
+- Added first-party analytics aggregation to the Cloudflare Worker:
+  - `POST /api/analytics/pageview`
+  - `GET /api/analytics/summary`
+- Added frontend page-view tracking through `src/lib/analytics.ts`.
+- Added the logged-in `/admin` analytics dashboard.
+- Local validation:
+  - `npm run lint`: passed.
+  - `npm run build`: passed.
+- Deployed to Cloudflare Worker:
+  - First analytics deploy: `57bb45c5-1590-42b8-9898-c1cb47a24d56`.
+  - Final timezone/body parsing fix deploy: `0a4c518a-bfcd-4e28-8952-4571bb939358`.
+- Production validation:
+  - `POST /api/analytics/pageview`: returns `{ ok: true }`.
+  - Wrong admin password on `/api/analytics/summary`: returns HTTP 401.
+  - Correct admin password on `/api/analytics/summary`: returns totals, recent days, top pages, referrers, devices, and browsers.
+  - Main routes `/`, `/admin`, `/design-system`, and `/skills`: all return HTTP 200.
+  - Production JS contains `/api/analytics/pageview` and `/api/analytics/summary`.
+  - Verified Beijing-date aggregation: recent last date is `2026-07-07`, and `/design-system` is tracked as a separate top page.
+
+### Review Notes
+
+- The analytics implementation is intentionally first-party and privacy-light; it does not store raw IP addresses or individual visitor IDs.
+- Data aggregation uses KV read-modify-write, which is appropriate for a low-traffic personal website. If traffic becomes high, this should move to Durable Objects or Analytics Engine to avoid write contention.
+- The Playwright skill installed in this environment only contains documentation and no `run.js` executor, and the project does not include Playwright. Browser validation was therefore replaced with production HTTP/API checks rather than adding a test dependency to the production project.

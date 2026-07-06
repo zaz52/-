@@ -7,6 +7,7 @@ import { DesignSystem } from './pages/DesignSystem';
 import { Home } from './pages/Home';
 import { SkillDetail } from './pages/SkillDetail';
 import { Skills } from './pages/Skills';
+import { trackPageView } from './lib/analytics';
 import './styles/globals.css';
 
 function App() {
@@ -15,6 +16,10 @@ function App() {
   const isSkills = path === '/skills';
   const skillSlug = path.startsWith('/skills/') ? decodeURIComponent(path.replace('/skills/', '').replace(/\/$/, '')) : null;
   const isAdmin = path === '/admin';
+
+  useEffect(() => {
+    trackPageView();
+  }, []);
 
   useEffect(() => {
     if (isAdmin) return undefined;
