@@ -100,6 +100,26 @@ This confirms the blocker is at the Netlify account/deploy permission level, not
 
 - Note: direct deep links such as `/design-system` on GitHub Pages are served through the SPA fallback and may return HTTP 404 while still rendering in the browser. This is a limitation of GitHub Pages static hosting. Netlify will support clean route fallback once the account deploy blocker is resolved.
 
+## Cloudflare Pages Migration
+
+- Netlify remains blocked because the account is unpaid/over quota.
+- User approved moving deployment to another provider.
+- Next target: Cloudflare Pages project for the rebuilt portfolio.
+- Initial local check found no `CLOUDFLARE_API_TOKEN`, no `CLOUDFLARE_API_KEY`, no `CLOUDFLARE_ACCOUNT_ID`, and no installed `wrangler` command.
+- Installed local project dev dependency `wrangler`.
+- Revalidated `npm run lint` and `npm run build`: passed.
+- `wrangler whoami` confirms Cloudflare account `504628394@qq.com` with Pages write permission.
+- Target Cloudflare Pages project name: `weiyi666-portfolio`.
+- Created Cloudflare Pages project `weiyi666-portfolio`.
+- First production URL: `https://weiyi666-portfolio.pages.dev/`.
+- Added `public/_redirects` with `/* /index.html 200` so SPA routes such as `/design-system` work as direct links.
+- Revalidated:
+  - `npm run lint`: passed.
+  - `npm run build`: passed.
+  - `https://weiyi666-portfolio.pages.dev/`: HTTP 200, title is `Weiyi | 复古科技青春自然个人网站`.
+  - `https://weiyi666-portfolio.pages.dev/design-system`: HTTP 200 through Cloudflare redirect fallback.
+  - Chrome browser smoke test on Cloudflare: title, Hero, Contact, and desktop width check passed.
+
 ## Obsidian Sync
 
 Do not sync this work to Obsidian unless the user explicitly says to sync.
