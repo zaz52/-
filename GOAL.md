@@ -217,6 +217,7 @@ This confirms the blocker is at the Netlify account/deploy permission level, not
   - Correct admin password returns `{ ok: true }`.
   - Browser check confirms `/admin` login works, project inputs contain Chinese text, front page reads dynamic projects without `????` corruption, and the merged `/skills` page still renders.
   - Integrated remote `main` changes that added Skills pages and fixed the imported `Github` lint issue in `src/pages/Skills.tsx`.
+- Admin password was rotated via Cloudflare Worker secret update. The previous password now returns HTTP 401 and the new password passes `/api/admin-check`. The password value is not committed to Git.
 
 ## Obsidian Sync
 
