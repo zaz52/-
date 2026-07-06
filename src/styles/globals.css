@@ -155,6 +155,17 @@ section {
   overflow: hidden;
 }
 
+.project-cover img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition:
+    transform 520ms ease,
+    filter 520ms ease;
+}
+
 .project-cover::before {
   position: absolute;
   inset: 0;
@@ -163,7 +174,14 @@ section {
     radial-gradient(circle at 78% 24%, rgba(40, 199, 183, 0.72), transparent 9%),
     radial-gradient(circle at 30% 25%, rgba(255, 244, 225, 0.25), transparent 18%),
     linear-gradient(120deg, rgba(255, 244, 225, 0.08), transparent);
+  z-index: 1;
+  mix-blend-mode: screen;
   transition: transform 400ms ease;
+}
+
+a:hover .project-cover img {
+  filter: saturate(1.08) contrast(1.03);
+  transform: scale(1.045);
 }
 
 a:hover .project-cover::before {

@@ -73,6 +73,23 @@ export function Hero() {
             <Button href="#projects">查看作品</Button>
             <Button href="#contact" variant="secondary">联系我</Button>
           </motion.div>
+
+          <motion.div
+            className="mt-8 flex w-fit items-center gap-4 rounded-[1.6rem] border border-[rgba(47,143,91,0.18)] bg-white/58 p-3 pr-5 shadow-[0_18px_48px_rgba(11,61,46,0.12)] backdrop-blur"
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.96 }}
+          >
+            <img
+              src={siteProfile.avatar}
+              alt={`${siteProfile.name} 头像`}
+              className="size-16 rounded-[1.15rem] object-cover ring-4 ring-[#fff4e1]"
+            />
+            <div>
+              <div className="text-sm font-black uppercase tracking-[0.22em] text-[var(--green)]">Designer</div>
+              <div className="mt-1 text-xl font-black text-[var(--deep)]">{siteProfile.name}</div>
+            </div>
+          </motion.div>
         </div>
 
         <motion.div

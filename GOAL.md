@@ -151,6 +151,23 @@ This confirms the blocker is at the Netlify account/deploy permission level, not
   - `https://weiyiai.top/design-system`: HTTP 200.
   - Chrome browser check confirms title, Hero, Contact, and Design System route render correctly.
 
+## Visual Assets Update
+
+- Added visible avatar card to the homepage Hero using `public/avatar.jpg`.
+- Added project cover image assets under `public/covers/`:
+  - `magic-resume.png`: live screenshot cover.
+  - `elder-health.png`: live screenshot cover.
+  - `ppt-master.svg`: generated visual cover because the target site failed to load reliably during capture.
+  - `resource-vault.svg`: generated visual cover for the resource entry.
+- Updated project data with `cover` fields and rendered covers in both featured and horizontal project cards.
+- Revalidated:
+  - `npm run lint`: passed.
+  - `npm run build`: passed.
+  - Cloudflare Pages fallback deployment succeeded.
+  - Cloudflare Worker custom-domain deployment succeeded with version `252e6f25-41e5-4dca-be31-3e11a389fa14`.
+  - `https://weiyiai.top/avatar.jpg` and all `/covers/*` assets return HTTP 200.
+  - Chrome browser check confirms the Hero avatar loads and all 4 project covers load after scrolling to Projects.
+
 ## Obsidian Sync
 
 Do not sync this work to Obsidian unless the user explicitly says to sync.
