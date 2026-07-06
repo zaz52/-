@@ -29,16 +29,19 @@ export const skills: SkillEntry[] = [
       '素材匹配必须带置信度，低置信度镜头标记缺素材，不用无关素材硬凑。',
       '配音生成后读取真实时长，再反向调整时间线和字幕。',
       '剪映草稿必须校验绝对路径、唯一 ID、时间轴、字幕和配音同步。',
+      '完整文章补充了可直接复用的环境检查、拆解、匹配、配音、草稿生成提示词和 AGENTS.md 模板。',
     ],
     files: [
       'SKILL.md',
       'references/source-notes.md',
       'references/workflow-protocol.md',
+      'references/prompt-library.md',
+      'references/agents-template.md',
       'references/quality-gates.md',
       'examples/retest-prompts.md',
       'scripts/check_skill_package.mjs',
     ],
-    validation: ['node scripts/check_skill_package.mjs .', 'source boundary recorded', 'quality gates included'],
+    validation: ['node scripts/check_skill_package.mjs .', 'source boundary upgraded', 'prompt library included', 'quality gates included'],
   },
 ];
 
