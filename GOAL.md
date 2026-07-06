@@ -44,6 +44,7 @@ Rebuild the personal portfolio at `https://weiyi666.netlify.app/` into a real pe
   - `7eaf0ce Rebuild homepage and split design system route`
   - `9775c46 Trigger Netlify redeploy`
   - `b3a384b Set Netlify Node version`
+- Added configurable Vite `base` so Netlify can keep root-path deployment while GitHub Pages can serve the same app from the repository path.
 
 ## Validation
 
@@ -68,12 +69,19 @@ Netlify deploys for latest commits were skipped with the error:
 
 This means the live site cannot update until the Netlify account usage or billing issue is resolved, or until the site is deployed through another account/provider with available build/deploy capacity.
 
+Manual Netlify deployment of the local `dist/` build was also attempted and failed with:
+
+`JSONHTTPError: Forbidden`
+
+This confirms the blocker is at the Netlify account/deploy permission level, not the application build.
+
 ## Next Steps
 
 - Resolve Netlify account credit/build usage issue in the Netlify dashboard.
 - Retry the latest Netlify deploy, or push an empty commit after credits are restored.
 - Re-check production title and assets after deployment.
 - Final review pass once production serves the new build.
+- As a temporary working deployment, publish the latest build through GitHub Pages.
 
 ## Obsidian Sync
 
