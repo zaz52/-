@@ -219,6 +219,24 @@ This confirms the blocker is at the Netlify account/deploy permission level, not
   - Integrated remote `main` changes that added Skills pages and fixed the imported `Github` lint issue in `src/pages/Skills.tsx`.
 - Admin password was rotated via Cloudflare Worker secret update. The previous password now returns HTTP 401 and the new password passes `/api/admin-check`. The password value is not committed to Git.
 
+## Project Content Enrichment
+
+- Audited current project links and page metadata with browser automation.
+- Rewrote project records into a fuller portfolio presentation:
+  - `乾坤之道`: main featured project, positioned as an Eastern divination + AI inquiry platform.
+  - `魔方简历`: restored full product name and clarified privacy-first AI resume editing features.
+  - `PPT Master`: clarified native editable PPTX generation from documents and URLs.
+  - `银龄守护`: renamed from `老年健康` and clarified mobile senior-health workflows.
+  - `虚拟资源库`: renamed from `虚拟资料库` and clarified cloud resource/material collection use.
+- Updated both `src/data/projects.ts` and `worker/default-projects.json`.
+- Wrote the enriched records to Cloudflare KV using Node fetch to preserve UTF-8 Chinese text.
+- Revalidated:
+  - `npm run lint`: passed.
+  - `npm run build`: passed.
+  - Cloudflare Worker custom-domain deployment succeeded with version `06abd1bf-b493-4fd1-8e28-9b079c9e1c28`.
+  - `GET /api/projects`: returns the enriched 5-project list with `乾坤之道` featured.
+  - Chrome browser check confirms the front page and `/admin` both show the enriched content without `????` corruption.
+
 ## Obsidian Sync
 
 Do not sync this work to Obsidian unless the user explicitly says to sync.
