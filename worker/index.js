@@ -375,6 +375,15 @@ const getSeo = async (env, url) => {
     };
   }
 
+  if (url.pathname === '/projects') {
+    return {
+      ...baseSeo,
+      title: '全部作品 | Weiyi',
+      description: '查看 Weiyi 的全部作品，包括 AI 工具、GitHub 项目、个人品牌网站、移动端界面、自动化工具和设计系统项目。',
+      url: `${SITE_URL}/projects`,
+    };
+  }
+
   if (url.pathname === '/skills' || url.pathname.startsWith('/skills/')) {
     return {
       ...baseSeo,
@@ -477,6 +486,7 @@ const renderSitemap = async (env) => {
   const projects = await getProjects(env);
   const urls = [
     { loc: `${SITE_URL}/`, priority: '1.0' },
+    { loc: `${SITE_URL}/projects`, priority: '0.9' },
     { loc: `${SITE_URL}/design-system`, priority: '0.6' },
     { loc: `${SITE_URL}/skills`, priority: '0.7' },
     ...projects.map((project) => ({ loc: `${SITE_URL}/projects/${project.id}`, priority: project.featured ? '0.9' : '0.8' })),

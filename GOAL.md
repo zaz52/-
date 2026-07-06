@@ -241,6 +241,52 @@ This confirms the blocker is at the Netlify account/deploy permission level, not
 
 Do not sync this work to Obsidian unless the user explicitly says to sync.
 
+## Current Goal: Full Projects Index Page
+
+User noticed that works are concentrated together and approved adding a complete projects page while keeping the homepage curated.
+
+### Success Criteria
+
+- Homepage remains clean with featured/selected projects.
+- Add `/projects` as a complete portfolio index for all projects.
+- `/projects` shows all 14 current projects.
+- Provide category filters:
+  - 全部
+  - 主推
+  - AI 工具
+  - GitHub 项目
+  - 网站 / UI
+  - 自动化
+- Provide search by name, type, description, and tags.
+- Each card links to its detail page and external project link.
+- Homepage Projects section includes a "查看全部作品" entry.
+- `/projects` has route-aware SEO and appears in dynamic sitemap.
+
+### Implementation
+
+- Added `src/hooks/useProjects.ts` to reuse dynamic project loading.
+- Added `src/pages/ProjectsIndex.tsx`.
+- Updated `src/App.tsx` to route `/projects` before `/projects/:id`.
+- Updated homepage Projects section to use the shared hook and link to `/projects`.
+- Added `/projects` SEO in frontend and Worker.
+- Added `/projects` to dynamic sitemap.
+- Added a `全部作品` nav item before `Skills`.
+
+### Validation
+
+- `npm run lint`: passed.
+- `npm run build`: passed.
+- Deployed Worker version `444d35f7-8f45-439e-a5ca-bfbaa3c98329`.
+- Final deploy after adding nav entry: `9e86c1db-6e02-42aa-bbf3-99c8222eedf0`.
+- Production checks:
+  - `/`: HTTP 200.
+  - `/projects`: HTTP 200.
+  - `/projects/github-agent-reach`: HTTP 200.
+  - `/sitemap.xml`: HTTP 200.
+  - `/projects` title is `全部作品 | Weiyi`.
+  - `/projects` canonical is `https://weiyiai.top/projects`.
+  - Production JS contains `/projects` route references.
+
 ## Current Goal: Add GitHub Projects To Portfolio
 
 User asked to add projects from the GitHub account to the personal website.

@@ -24,6 +24,7 @@ export const navItems = [
   { label: '首页', href: '/' },
   { label: '关于', href: '/#about' },
   { label: '作品', href: '/#projects' },
+  { label: '全部作品', href: '/projects' },
   { label: 'Skills', href: '/skills' },
   { label: '服务', href: '/#services' },
   { label: '设计系统', href: '/design-system' },

@@ -45,6 +45,10 @@ export const routeSeo = {
     title: 'AI 工作流与 Skills | Weiyi',
     description: 'Weiyi 沉淀的 AI 工作流、Codex skills、自动化方法和可复用项目经验。',
   },
+  projects: {
+    title: '全部作品 | Weiyi',
+    description: '查看 Weiyi 的全部作品，包括 AI 工具、GitHub 项目、个人品牌网站、移动端界面、自动化工具和设计系统项目。',
+  },
   admin: {
     title: '后台管理 | Weiyi',
     description: 'Weiyi 个人网站后台管理入口。',

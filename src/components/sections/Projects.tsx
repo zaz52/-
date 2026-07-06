@@ -1,8 +1,6 @@
 import { motion } from 'framer-motion';
 import { ExternalLink } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
-import { hydrateProjects, projects as fallbackProjects } from '../../data/projects';
-import type { ProjectRecord } from '../../data/projectTypes';
+import { useProjects } from '../../hooks/useProjects';
 import { Button } from '../ui/Button';
 import { SectionTitle } from '../ui/SectionTitle';
 
@@ -16,24 +14,7 @@ const paletteClass: Record<string, string> = {
 };
 
 export function Projects() {
-  const [records, setRecords] = useState<ProjectRecord[] | null>(null);
-
-  useEffect(() => {
-    let ignore = false;
-
-    fetch('/api/projects')
-      .then((response) => response.ok ? response.json() : Promise.reject(new Error('Failed to load projects')))
-      .then((data: ProjectRecord[]) => {
-        if (!ignore && Array.isArray(data) && data.length > 0) setRecords(data);
-      })
-      .catch(() => undefined);
-
-    return () => {
-      ignore = true;
-    };
-  }, []);
-
-  const projects = useMemo(() => records ? hydrateProjects(records) : fallbackProjects, [records]);
+  const projects = useProjects();
   const featured = projects.find((project) => project.featured) ?? projects[0];
   const rest = projects.filter((project) => project.id !== featured.id);
 
@@ -49,6 +30,9 @@ export function Projects() {
           />
           <Button href={`/projects/${featured.id}`} variant="secondary" className="w-fit">
             打开主推作品
+          </Button>
+          <Button href="/projects" variant="secondary" className="w-fit">
+            查看全部作品
           </Button>
         </div>
 

@@ -6,6 +6,7 @@ import { Admin } from './pages/Admin';
 import { DesignSystem } from './pages/DesignSystem';
 import { Home } from './pages/Home';
 import { ProjectDetail } from './pages/ProjectDetail';
+import { ProjectsIndex } from './pages/ProjectsIndex';
 import { SkillDetail } from './pages/SkillDetail';
 import { Skills } from './pages/Skills';
 import { trackPageView } from './lib/analytics';
@@ -16,6 +17,7 @@ function App() {
   const path = useMemo(() => window.location.pathname, []);
   const isDesignSystem = path === '/design-system';
   const isSkills = path === '/skills';
+  const isProjectsIndex = path === '/projects';
   const skillSlug = path.startsWith('/skills/') ? decodeURIComponent(path.replace('/skills/', '').replace(/\/$/, '')) : null;
   const projectId = path.startsWith('/projects/') ? decodeURIComponent(path.replace('/projects/', '').replace(/\/$/, '')) : null;
   const isAdmin = path === '/admin';
@@ -29,8 +31,9 @@ function App() {
     if (isAdmin) applySeo(routeSeo.admin);
     else if (isDesignSystem) applySeo(routeSeo.designSystem);
     else if (isSkills) applySeo(routeSeo.skills);
+    else if (isProjectsIndex) applySeo(routeSeo.projects);
     else applySeo(routeSeo.home);
-  }, [isAdmin, isDesignSystem, isSkills, projectId, skillSlug]);
+  }, [isAdmin, isDesignSystem, isProjectsIndex, isSkills, projectId, skillSlug]);
 
   useEffect(() => {
     if (isAdmin) return undefined;
@@ -59,7 +62,7 @@ function App() {
   return (
     <div id="top" className="min-h-screen bg-[var(--cream)] text-[var(--deep)]">
       <Header currentPath={path} />
-      {isDesignSystem ? <DesignSystem /> : projectId ? <ProjectDetail projectId={projectId} /> : skillSlug ? <SkillDetail slug={skillSlug} /> : isSkills ? <Skills /> : <Home />}
+      {isDesignSystem ? <DesignSystem /> : isProjectsIndex ? <ProjectsIndex /> : projectId ? <ProjectDetail projectId={projectId} /> : skillSlug ? <SkillDetail slug={skillSlug} /> : isSkills ? <Skills /> : <Home />}
       <Footer />
     </div>
   );
