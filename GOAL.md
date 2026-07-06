@@ -241,6 +241,29 @@ This confirms the blocker is at the Netlify account/deploy permission level, not
 
 Do not sync this work to Obsidian unless the user explicitly says to sync.
 
+## Current Goal: Update Divination Project Link
+
+User asked to change the divination project link to `https://suangua.weiyiai.top/`.
+
+### Progress
+
+- Updated default project data in:
+  - `src/data/projects.ts`
+  - `worker/index.js`
+  - `worker/default-projects.json`
+- Updated live Cloudflare KV project data for `yulesuangua`.
+- Restored Chinese project data using a UTF-8 safe Node request after a PowerShell JSON request corrupted Chinese text.
+
+### Validation
+
+- `npm run lint`: passed.
+- `npm run build`: passed.
+- Deployed Worker version `39dc0f48-1d51-4be4-bba2-de3592c14605`.
+- `GET /api/projects` confirms:
+  - `yulesuangua.href` is `https://suangua.weiyiai.top/`.
+  - the old `https://yulesuangua.pages.dev/` link is no longer present in live project data.
+- `/`, `/projects/yulesuangua`, and `/admin`: all return HTTP 200.
+
 ## Current Goal: Project Detail Pages
 
 User approved the next step: improve the portfolio by adding real project detail pages.

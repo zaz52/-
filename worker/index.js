@@ -42,7 +42,7 @@ const DEFAULT_PROJECTS = [
     name: '乾坤之道',
     type: 'AI + 周易工具',
     description: '把传统卦象与 AI 解读结合，提供更具仪式感的在线问事体验。',
-    href: 'https://yulesuangua.pages.dev/',
+    href: 'https://suangua.weiyiai.top/',
     cover: '/covers/yulesuangua.svg',
     tags: ['AI', 'Divination', 'Cloudflare'],
     palette: 'emerald',

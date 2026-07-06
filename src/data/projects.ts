@@ -16,7 +16,7 @@ export const defaultProjects: ProjectRecord[] = [
     name: '乾坤之道',
     type: '东方术数 + AI 问事平台',
     description: '融合周易起卦、八字、奇门、六爻与 AI 解读的东方问事工具台，围绕问题、术法和结果生成结构化洞察。',
-    href: 'https://yulesuangua.pages.dev/',
+    href: 'https://suangua.weiyiai.top/',
     cover: '/covers/yulesuangua.svg',
     tags: ['AI 问卦', '周易', 'Cloudflare'],
     palette: 'emerald',
