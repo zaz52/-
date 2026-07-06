@@ -4,11 +4,15 @@ import { Footer } from './components/layout/Footer';
 import { Header } from './components/layout/Header';
 import { DesignSystem } from './pages/DesignSystem';
 import { Home } from './pages/Home';
+import { SkillDetail } from './pages/SkillDetail';
+import { Skills } from './pages/Skills';
 import './styles/globals.css';
 
 function App() {
   const path = useMemo(() => window.location.pathname, []);
   const isDesignSystem = path === '/design-system';
+  const isSkills = path === '/skills';
+  const skillSlug = path.startsWith('/skills/') ? decodeURIComponent(path.replace('/skills/', '').replace(/\/$/, '')) : null;
 
   useEffect(() => {
     const lenis = new Lenis({
@@ -33,7 +37,7 @@ function App() {
   return (
     <div id="top" className="min-h-screen bg-[var(--cream)] text-[var(--deep)]">
       <Header currentPath={path} />
-      {isDesignSystem ? <DesignSystem /> : <Home />}
+      {isDesignSystem ? <DesignSystem /> : skillSlug ? <SkillDetail slug={skillSlug} /> : isSkills ? <Skills /> : <Home />}
       <Footer />
     </div>
   );

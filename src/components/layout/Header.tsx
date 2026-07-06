@@ -19,7 +19,10 @@ export function Header({ currentPath }: HeaderProps) {
 
         <div className="hidden items-center gap-7 lg:flex">
           {navItems.map((item) => {
-            const active = currentPath === '/design-system' ? item.href === '/design-system' : item.href !== '/design-system' && item.href !== '/';
+            const active =
+              item.href === currentPath ||
+              (item.href === '/skills' && currentPath.startsWith('/skills')) ||
+              (currentPath === '/' && item.href !== '/design-system' && item.href !== '/skills' && item.href !== '/');
             return (
               <a
                 key={item.href}
