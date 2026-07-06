@@ -27,7 +27,7 @@ export function About() {
         <div>
           <SectionTitle
             eyebrow="About"
-            title="我是 Weiyi，正在把想法做成可以被打开的作品。"
+            title="我是唯一，正在把想法做成可以被打开的作品。"
             description="我关注 AI 工具、个人品牌网站、移动端界面和视觉系统，也在持续把自己的项目、审美和学习过程整理成一个长期生长的个人空间。"
           />
           <Card className="mt-10 p-8 md:p-10">

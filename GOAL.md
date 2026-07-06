@@ -456,6 +456,40 @@ User approved the next step: improve the portfolio by adding real project detail
 - Future admin-created projects are protected by `ProjectCover` fallback UI if a cover URL is missing or fails to load.
 - No secrets were committed; the admin API was used only to update existing project cover URLs in KV.
 
+## Goal: Switch Public Brand Name To Chinese
+
+### Task
+
+Use the Chinese personal brand name "唯一" across the public website while preserving Weiyi where it is part of real accounts, URLs, repository names, or compatibility metadata.
+
+### Success Criteria
+
+- Header, footer, hero/about copy, SEO titles, descriptions, Open Graph metadata, and share card use "唯一".
+- The site still keeps the domain `weiyiai.top` and real external accounts unchanged.
+- Build, lint, deploy, production checks, commit, and push complete.
+
+### Architecture
+
+- Update shared profile data first, then static SEO sources and Worker HTML injection metadata.
+- Keep the change copy-only; no data model or route behavior changes.
+
+### Progress
+
+- Started on 2026-07-07 after user asked to use a Chinese name: "唯一".
+- Updated public brand display from "Weiyi" to "唯一" in shared profile data, header, footer, About copy, SEO metadata, Worker route metadata, `index.html`, README, Open Graph image, and the portfolio project cover SVG.
+- Kept real URLs, deployment names, and external account handles unchanged.
+- Local validation:
+  - `npm run lint`: passed.
+  - `npm run build`: passed.
+- Deployed to Cloudflare Worker:
+  - Version `5d4bac23-0833-4bb5-a627-c3d1217a1e40`.
+- Production validation:
+  - `/`: HTTP 200, title `唯一 | 复古科技青春自然个人网站`.
+  - `/projects`: HTTP 200, title `全部作品 | 唯一`.
+  - `/design-system`: HTTP 200, title `设计系统 | 唯一`.
+  - `/admin`: HTTP 200, title `后台管理 | 唯一`.
+  - `/og-image.svg`: contains `唯一` and no visible `Weiyi` text.
+
 ## Goal: Strengthen Personal Introduction
 
 ### Task

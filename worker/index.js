@@ -347,8 +347,8 @@ const absoluteUrl = (value) => {
 };
 
 const baseSeo = {
-  title: 'Weiyi | 复古科技青春自然个人网站',
-  description: 'Weiyi 的个人作品集，展示 AI 工具、个人品牌网页、移动端界面、设计系统与复古科技自然风格项目。',
+  title: '唯一 | 复古科技青春自然个人网站',
+  description: '唯一的个人作品集，展示 AI 工具、个人品牌网页、移动端界面、设计系统与复古科技自然风格项目。',
   url: `${SITE_URL}/`,
   image: DEFAULT_OG_IMAGE,
   robots: 'index,follow',
@@ -359,8 +359,8 @@ const getSeo = async (env, url) => {
   if (url.pathname === '/admin') {
     return {
       ...baseSeo,
-      title: '后台管理 | Weiyi',
-      description: 'Weiyi 个人网站后台管理入口。',
+      title: '后台管理 | 唯一',
+      description: '唯一个人网站后台管理入口。',
       url: `${SITE_URL}/admin`,
       robots: 'noindex,nofollow',
     };
@@ -369,8 +369,8 @@ const getSeo = async (env, url) => {
   if (url.pathname === '/design-system') {
     return {
       ...baseSeo,
-      title: '设计系统 | Weiyi',
-      description: 'Weiyi 的复古科技、青春自然风格设计系统，包含色彩、字体、按钮、卡片、表单和移动端组件。',
+      title: '设计系统 | 唯一',
+      description: '唯一的复古科技、青春自然风格设计系统，包含色彩、字体、按钮、卡片、表单和移动端组件。',
       url: `${SITE_URL}/design-system`,
     };
   }
@@ -378,8 +378,8 @@ const getSeo = async (env, url) => {
   if (url.pathname === '/projects') {
     return {
       ...baseSeo,
-      title: '全部作品 | Weiyi',
-      description: '查看 Weiyi 的全部作品，包括 AI 工具、GitHub 项目、个人品牌网站、移动端界面、自动化工具和设计系统项目。',
+      title: '全部作品 | 唯一',
+      description: '查看唯一的全部作品，包括 AI 工具、GitHub 项目、个人品牌网站、移动端界面、自动化工具和设计系统项目。',
       url: `${SITE_URL}/projects`,
     };
   }
@@ -387,8 +387,8 @@ const getSeo = async (env, url) => {
   if (url.pathname === '/skills' || url.pathname.startsWith('/skills/')) {
     return {
       ...baseSeo,
-      title: 'AI 工作流与 Skills | Weiyi',
-      description: 'Weiyi 沉淀的 AI 工作流、Codex skills、自动化方法和可复用项目经验。',
+      title: 'AI 工作流与 Skills | 唯一',
+      description: '唯一沉淀的 AI 工作流、Codex skills、自动化方法和可复用项目经验。',
       url: `${SITE_URL}${url.pathname}`,
     };
   }
@@ -399,7 +399,7 @@ const getSeo = async (env, url) => {
     if (project) {
       return {
         ...baseSeo,
-        title: `${project.name} | Weiyi 作品详情`,
+        title: `${project.name} | 唯一作品详情`,
         description: project.description || `${project.name} 的项目详情页。`,
         url: `${SITE_URL}/projects/${project.id}`,
         image: absoluteUrl(project.cover),
@@ -409,7 +409,7 @@ const getSeo = async (env, url) => {
 
     return {
       ...baseSeo,
-      title: '作品未找到 | Weiyi',
+      title: '作品未找到 | 唯一',
       description: '这个项目可能已经在后台被删除或改名，可以回到作品区查看当前公开的项目列表。',
       url: `${SITE_URL}${url.pathname}`,
       robots: 'noindex,follow',

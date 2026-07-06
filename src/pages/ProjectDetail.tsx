@@ -56,7 +56,7 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
   useEffect(() => {
     if (!project) {
       applySeo({
-        title: '作品未找到 | Weiyi',
+        title: '作品未找到 | 唯一',
         description: '这个项目可能已经在后台被删除或改名，可以回到作品区查看当前公开的项目列表。',
         canonical: `https://weiyiai.top/projects/${projectId}`,
       });
@@ -64,7 +64,7 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
     }
 
     applySeo({
-      title: `${project.name} | Weiyi 作品详情`,
+      title: `${project.name} | 唯一作品详情`,
       description: project.description,
       canonical: `https://weiyiai.top/projects/${project.id}`,
       image: project.cover.startsWith('http') ? project.cover : `https://weiyiai.top${project.cover}`,

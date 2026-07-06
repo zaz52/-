@@ -14,7 +14,7 @@ export function Header({ currentPath }: HeaderProps) {
       <nav className="mx-auto flex h-18 max-w-[1280px] items-center justify-between px-6 md:px-12 lg:px-16">
         <a href="/" className="flex items-center gap-3 text-[var(--deep)]">
           <span className="grid size-11 place-items-center rounded-full border border-[rgba(47,143,91,0.28)] bg-[#ecf3dc] text-sm font-black">NFY</span>
-          <span className="font-black tracking-tight">Weiyi</span>
+          <span className="font-black tracking-tight">唯一</span>
         </a>
 
         <div className="hidden items-center gap-7 lg:flex">

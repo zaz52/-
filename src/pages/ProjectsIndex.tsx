@@ -42,8 +42,8 @@ export function ProjectsIndex() {
 
   useEffect(() => {
     applySeo({
-      title: '全部作品 | Weiyi',
-      description: '查看 Weiyi 的全部作品，包括 AI 工具、GitHub 项目、个人品牌网站、移动端界面、自动化工具和设计系统项目。',
+      title: '全部作品 | 唯一',
+      description: '查看唯一的全部作品，包括 AI 工具、GitHub 项目、个人品牌网站、移动端界面、自动化工具和设计系统项目。',
       canonical: 'https://weiyiai.top/projects',
     });
   }, []);
