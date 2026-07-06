@@ -189,6 +189,34 @@ This confirms the blocker is at the Netlify account/deploy permission level, not
   - Remote `https://weiyiai.top/avatar.jpg` SHA256 matches local `public/avatar.jpg`.
   - Chrome browser check confirms the new 908x908 avatar loads in the Hero.
 
+## Admin CMS
+
+- Added `/admin` route for self-service project management.
+- Added Cloudflare Worker API:
+  - `GET /api/projects`: public project data read.
+  - `GET /api/admin-check`: password verification.
+  - `PUT /api/projects`: authenticated project save.
+- Added Cloudflare KV namespace `PROJECTS_KV` with ID `fbf42b519d5b4baebe61c41b050bea02`.
+- Added `ADMIN_PASSWORD` as a Cloudflare Worker secret. The password value is not committed to Git.
+- Added `worker/default-projects.json` for UTF-8 safe seed data.
+- Seeded KV with the current project list using Node fetch after PowerShell JSON encoding corrupted Chinese text during an initial seed attempt.
+- Admin capabilities:
+  - Add project.
+  - Edit project title, type, URL, description, tags, icon, palette, and cover.
+  - Upload cover image; browser compresses it to a JPEG data URL before saving.
+  - Delete project.
+  - Move project up/down.
+  - Set featured project.
+- Revalidated:
+  - `npm run lint`: passed.
+  - `npm run build`: passed.
+  - Cloudflare Worker custom-domain deployment succeeded with version `4604da19-141f-4c8a-9308-7aac601c6414`.
+  - Added explicit `ASSETS` binding and manual SPA fallback in the Worker so `/admin` and `/design-system` return HTTP 200.
+  - `GET /api/projects`: returns 5 projects with correct Chinese text.
+  - Wrong admin password returns HTTP 401.
+  - Correct admin password returns `{ ok: true }`.
+  - Browser check confirms `/admin` login works, project inputs contain Chinese text, and front page reads dynamic projects without `????` corruption.
+
 ## Obsidian Sync
 
 Do not sync this work to Obsidian unless the user explicitly says to sync.

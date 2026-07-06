@@ -1,11 +1,19 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "weiyiai-portfolio",
+  "main": "worker/index.js",
   "compatibility_date": "2026-07-06",
   "assets": {
     "directory": "./dist",
+    "binding": "ASSETS",
     "not_found_handling": "single-page-application"
   },
+  "kv_namespaces": [
+    {
+      "binding": "PROJECTS_KV",
+      "id": "fbf42b519d5b4baebe61c41b050bea02"
+    }
+  ],
   "routes": [
     {
       "pattern": "weiyiai.top/*",

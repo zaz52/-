@@ -1,8 +1,18 @@
 import { Cloud, FileText, HeartPulse, Presentation, Sparkles } from 'lucide-react';
+import type { ProjectIconKey, ProjectRecord } from './projectTypes';
 
-export const projects = [
+export const projectIcons = {
+  cloud: Cloud,
+  fileText: FileText,
+  heartPulse: HeartPulse,
+  presentation: Presentation,
+  sparkles: Sparkles,
+} satisfies Record<ProjectIconKey, typeof Cloud>;
+
+export const defaultProjects: ProjectRecord[] = [
   {
-    icon: FileText,
+    id: 'magic-resume',
+    iconKey: 'fileText',
     name: '魔方简历',
     type: 'AI 简历编辑器',
     description: 'AI 驱动的在线简历编辑器，强调免费与隐私优先。',
@@ -10,9 +20,11 @@ export const projects = [
     cover: '/covers/magic-resume.png',
     tags: ['AI', 'Resume', 'Productivity'],
     palette: 'blue',
+    featured: true,
   },
   {
-    icon: Presentation,
+    id: 'ppt-master',
+    iconKey: 'presentation',
     name: 'PPT Master',
     type: 'AI 文档工具',
     description: 'AI 一键生成可编辑 PPTX，关注原生动画与排版。',
@@ -22,7 +34,8 @@ export const projects = [
     palette: 'orange',
   },
   {
-    icon: HeartPulse,
+    id: 'elder-health',
+    iconKey: 'heartPulse',
     name: '老年健康',
     type: '健康资讯平台',
     description: '面向长辈健康关怀的信息平台，强调移动端可读性。',
@@ -32,7 +45,8 @@ export const projects = [
     palette: 'mint',
   },
   {
-    icon: Sparkles,
+    id: 'yulesuangua',
+    iconKey: 'sparkles',
     name: '乾坤之道',
     type: 'AI + 周易工具',
     description: '把传统卦象与 AI 解读结合，提供更具仪式感的在线问事体验。',
@@ -42,7 +56,8 @@ export const projects = [
     palette: 'emerald',
   },
   {
-    icon: Cloud,
+    id: 'resource-vault',
+    iconKey: 'cloud',
     name: '虚拟资料库',
     type: '资源整理入口',
     description: '学习资源、工具与素材的整理入口。',
@@ -52,3 +67,10 @@ export const projects = [
     palette: 'cyan',
   },
 ];
+
+export const hydrateProjects = (records: ProjectRecord[]) => records.map((project) => ({
+  ...project,
+  icon: projectIcons[project.iconKey] ?? Sparkles,
+}));
+
+export const projects = hydrateProjects(defaultProjects);

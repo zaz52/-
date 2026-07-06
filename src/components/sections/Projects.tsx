@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion';
 import { ExternalLink } from 'lucide-react';
-import { projects } from '../../data/projects';
+import { useEffect, useMemo, useState } from 'react';
+import { hydrateProjects, projects as fallbackProjects } from '../../data/projects';
+import type { ProjectRecord } from '../../data/projectTypes';
 import { Button } from '../ui/Button';
 import { SectionTitle } from '../ui/SectionTitle';
 
@@ -14,7 +16,26 @@ const paletteClass: Record<string, string> = {
 };
 
 export function Projects() {
-  const [featured, ...rest] = projects;
+  const [records, setRecords] = useState<ProjectRecord[] | null>(null);
+
+  useEffect(() => {
+    let ignore = false;
+
+    fetch('/api/projects')
+      .then((response) => response.ok ? response.json() : Promise.reject(new Error('Failed to load projects')))
+      .then((data: ProjectRecord[]) => {
+        if (!ignore && Array.isArray(data) && data.length > 0) setRecords(data);
+      })
+      .catch(() => undefined);
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
+  const projects = useMemo(() => records ? hydrateProjects(records) : fallbackProjects, [records]);
+  const featured = projects.find((project) => project.featured) ?? projects[0];
+  const rest = projects.filter((project) => project.id !== featured.id);
 
   return (
     <section id="projects" className="min-h-screen overflow-hidden bg-[var(--forest)] px-6 py-28 text-[var(--cream)] md:px-16 lg:px-24">

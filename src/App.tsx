@@ -2,6 +2,7 @@ import Lenis from 'lenis';
 import { useEffect, useMemo } from 'react';
 import { Footer } from './components/layout/Footer';
 import { Header } from './components/layout/Header';
+import { Admin } from './pages/Admin';
 import { DesignSystem } from './pages/DesignSystem';
 import { Home } from './pages/Home';
 import './styles/globals.css';
@@ -9,8 +10,11 @@ import './styles/globals.css';
 function App() {
   const path = useMemo(() => window.location.pathname, []);
   const isDesignSystem = path === '/design-system';
+  const isAdmin = path === '/admin';
 
   useEffect(() => {
+    if (isAdmin) return undefined;
+
     const lenis = new Lenis({
       duration: 1.08,
       smoothWheel: true,
@@ -28,7 +32,9 @@ function App() {
       cancelAnimationFrame(frame);
       lenis.destroy();
     };
-  }, []);
+  }, [isAdmin]);
+
+  if (isAdmin) return <Admin />;
 
   return (
     <div id="top" className="min-h-screen bg-[var(--cream)] text-[var(--deep)]">
