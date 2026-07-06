@@ -92,6 +92,12 @@ This confirms the blocker is at the Netlify account/deploy permission level, not
 
 `Weiyi | 复古科技青春自然个人网站`
 
+- Browser smoke test using local Chrome passed:
+  - title is `Weiyi | 复古科技青春自然个人网站`
+  - Hero copy is present
+  - Contact CTA copy is present
+  - desktop viewport has no horizontal overflow
+
 - Note: direct deep links such as `/design-system` on GitHub Pages are served through the SPA fallback and may return HTTP 404 while still rendering in the browser. This is a limitation of GitHub Pages static hosting. Netlify will support clean route fallback once the account deploy blocker is resolved.
 
 ## Obsidian Sync
