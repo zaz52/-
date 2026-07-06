@@ -1,25 +1,6 @@
-import { Cloud, FileText, HeartPulse, MoonStar, Presentation, Sparkles } from 'lucide-react';
+import { Cloud, FileText, HeartPulse, Presentation } from 'lucide-react';
 
 export const projects = [
-  {
-    icon: Sparkles,
-    name: '乾坤之道',
-    type: 'AI + 周易工具',
-    description: '周易起卦与 AI 问事工具，用传统卦象结合智能解读。',
-    href: 'https://yulesuangua.pages.dev/',
-    tags: ['AI', 'Divination', 'Cloudflare'],
-    featured: true,
-    palette: 'emerald',
-  },
-  {
-    icon: MoonStar,
-    name: '算卦',
-    type: '轻量互动工具',
-    description: '在线占卜工具，用轻量交互探索自我提问。',
-    href: 'https://suanguan.netlify.app/',
-    tags: ['Tool', 'Interaction'],
-    palette: 'violet',
-  },
   {
     icon: FileText,
     name: '魔方简历',

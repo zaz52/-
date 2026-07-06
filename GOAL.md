@@ -120,6 +120,19 @@ This confirms the blocker is at the Netlify account/deploy permission level, not
   - `https://weiyi666-portfolio.pages.dev/design-system`: HTTP 200 through Cloudflare redirect fallback.
   - Chrome browser smoke test on Cloudflare: title, Hero, Contact, and desktop width check passed.
 
+## Project Cleanup
+
+- Removed duplicated divination-related portfolio items:
+  - `乾坤之道` / `https://yulesuangua.pages.dev/`
+  - `算卦` / `https://suanguan.netlify.app/`
+- The Projects section now promotes the first remaining item, `魔方简历`, as the main featured project.
+- Revalidated cleanup:
+  - `npm run lint`: passed.
+  - `npm run build`: passed.
+  - Cloudflare production deploy succeeded.
+  - HTTP check confirms no `yulesuangua` or `suanguan` references in the deployed page.
+  - Chrome browser check confirms `魔方简历` is visible and `乾坤之道` / `算卦` are not visible.
+
 ## Obsidian Sync
 
 Do not sync this work to Obsidian unless the user explicitly says to sync.
