@@ -133,6 +133,19 @@ This confirms the blocker is at the Netlify account/deploy permission level, not
   - HTTP check confirms no `yulesuangua` or `suanguan` references in the deployed page.
   - Chrome browser check confirms `魔方简历` is visible and `乾坤之道` / `算卦` are not visible.
 
+## Project Addition
+
+- Re-added `https://yulesuangua.pages.dev/` as a single project entry named `乾坤之道`.
+- This is distinct from the removed duplicate `算卦` entry and uses the existing Projects card pattern.
+- Added `public/covers/yulesuangua.svg` as a styled project cover because live screenshot capture timed out.
+- Revalidated:
+  - `npm run lint`: passed.
+  - `npm run build`: passed.
+  - Cloudflare Pages fallback deployment succeeded.
+  - Cloudflare Worker custom-domain deployment succeeded with version `346362c6-b9e0-436c-b45c-5dd1a8d7a20f`.
+  - `https://weiyiai.top/covers/yulesuangua.svg`: HTTP 200.
+  - Chrome browser check confirms `乾坤之道` is visible, links to `https://yulesuangua.pages.dev/`, cover loads, and old `算卦` card is not visible.
+
 ## Custom Domain
 
 - User provided custom domain `weiyiai.top`, with DNS managed in Cloudflare.

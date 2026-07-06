@@ -1,4 +1,4 @@
-import { Cloud, FileText, HeartPulse, Presentation } from 'lucide-react';
+import { Cloud, FileText, HeartPulse, Presentation, Sparkles } from 'lucide-react';
 
 export const projects = [
   {
@@ -30,6 +30,16 @@ export const projects = [
     cover: '/covers/elder-health.png',
     tags: ['Health', 'Mobile', 'Content'],
     palette: 'mint',
+  },
+  {
+    icon: Sparkles,
+    name: '乾坤之道',
+    type: 'AI + 周易工具',
+    description: '把传统卦象与 AI 解读结合，提供更具仪式感的在线问事体验。',
+    href: 'https://yulesuangua.pages.dev/',
+    cover: '/covers/yulesuangua.svg',
+    tags: ['AI', 'Divination', 'Cloudflare'],
+    palette: 'emerald',
   },
   {
     icon: Cloud,
