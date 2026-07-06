@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-label="Qian Kun deploy scripts project cover">
+  <rect width="1200" height="900" fill="#fff4e1"/>
+  <path d="M0 0h1200v210H0z" fill="#0b3d2e"/>
+  <path d="M0 690h1200v210H0z" fill="#0b3d2e"/>
+  <circle cx="600" cy="450" r="260" fill="#e8efe0"/>
+  <circle cx="600" cy="450" r="210" fill="none" stroke="#0b3d2e" stroke-width="18"/>
+  <path d="M600 240a210 210 0 0 1 0 420 105 105 0 0 0 0-210 105 105 0 0 1 0-210z" fill="#0b3d2e"/>
+  <circle cx="600" cy="345" r="34" fill="#fff4e1"/>
+  <circle cx="600" cy="555" r="34" fill="#0b3d2e"/>
+  <path d="M170 450h170M860 450h170M600 120v112M600 668v112" stroke="#ff7a66" stroke-width="20" stroke-linecap="round"/>
+  <rect x="145" y="110" width="250" height="90" rx="28" fill="#28c7b7"/>
+  <rect x="805" y="700" width="250" height="90" rx="28" fill="#28c7b7"/>
+  <text x="145" y="805" fill="#fff4e1" font-family="Inter,Arial,sans-serif" font-size="56" font-weight="900">DEPLOY SCRIPTS</text>
+  <text x="145" y="848" fill="#9de8c2" font-family="Inter,Arial,sans-serif" font-size="24" font-weight="800" letter-spacing="4">QIAN KUN TOOLING</text>
+</svg>

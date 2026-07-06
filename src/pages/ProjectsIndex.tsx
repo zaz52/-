@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import { useProjects } from '../hooks/useProjects';
 import { applySeo } from '../lib/seo';
 import { useEffect } from 'react';
+import { ProjectCover } from '../components/ui/ProjectCover';
 
 const paletteClass: Record<string, string> = {
   emerald: 'from-[#0b3d2e] to-[#2f8f5b]',
@@ -110,8 +111,13 @@ export function ProjectsIndex() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: Math.min(index * 0.04, 0.28) }}
             >
-              <a href={`/projects/${project.id}`} className={`project-cover block h-52 rounded-[1.35rem] bg-gradient-to-br ${paletteClass[project.palette]}`}>
-                <img src={project.cover} alt={`${project.name} 项目封面`} loading="lazy" />
+              <a href={`/projects/${project.id}`} className="block">
+                <ProjectCover
+                  className={`h-52 rounded-[1.35rem] bg-gradient-to-br ${paletteClass[project.palette]}`}
+                  src={project.cover}
+                  title={project.name}
+                  kind={project.type}
+                />
               </a>
               <div className="p-2 pt-5">
                 <div className="flex items-center gap-3 text-[var(--green)]">

@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { hydrateProjects, projects as fallbackProjects } from '../data/projects';
 import type { ProjectRecord } from '../data/projectTypes';
 import { applySeo } from '../lib/seo';
+import { ProjectCover } from '../components/ui/ProjectCover';
 
 const paletteClass: Record<string, string> = {
   emerald: 'from-[#0b3d2e] to-[#2f8f5b]',
@@ -131,12 +132,18 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
           </motion.div>
 
           <motion.div
-            className={`project-cover min-h-[360px] rounded-[2.4rem] bg-gradient-to-br p-4 shadow-[0_30px_80px_rgba(11,61,46,0.18)] ${paletteClass[project.palette]}`}
+            className="shadow-[0_30px_80px_rgba(11,61,46,0.18)]"
             initial={{ opacity: 0, scale: 0.94, rotate: 1.5 }}
             animate={{ opacity: 1, scale: 1, rotate: 0 }}
             transition={{ duration: 0.78, ease: [0.22, 1, 0.36, 1] }}
           >
-            <img src={project.cover} alt={`${project.name} 项目封面`} loading="eager" />
+            <ProjectCover
+              className={`min-h-[360px] rounded-[2.4rem] bg-gradient-to-br ${paletteClass[project.palette]}`}
+              src={project.cover}
+              title={project.name}
+              kind={project.type}
+              loading="eager"
+            />
           </motion.div>
         </div>
       </section>
@@ -204,9 +211,12 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
           <div className="mt-8 grid gap-5 md:grid-cols-3">
             {related.map((item) => (
               <a key={item.id} className="group rounded-[1.5rem] border border-[rgba(18,48,38,0.12)] bg-white/78 p-4 shadow-[0_18px_50px_rgba(11,61,46,0.08)] transition hover:-translate-y-1" href={`/projects/${item.id}`}>
-                <div className={`project-cover h-40 rounded-[1.2rem] bg-gradient-to-br ${paletteClass[item.palette]}`}>
-                  <img src={item.cover} alt={`${item.name} 项目封面`} loading="lazy" />
-                </div>
+                <ProjectCover
+                  className={`h-40 rounded-[1.2rem] bg-gradient-to-br ${paletteClass[item.palette]}`}
+                  src={item.cover}
+                  title={item.name}
+                  kind={item.type}
+                />
                 <p className="mt-4 text-sm font-black text-[var(--green)]">{item.type}</p>
                 <h3 className="mt-2 text-2xl font-black">{item.name}</h3>
               </a>

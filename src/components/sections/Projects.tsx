@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { ExternalLink } from 'lucide-react';
 import { useProjects } from '../../hooks/useProjects';
 import { Button } from '../ui/Button';
+import { ProjectCover } from '../ui/ProjectCover';
 import { SectionTitle } from '../ui/SectionTitle';
 
 const paletteClass: Record<string, string> = {
@@ -44,9 +45,13 @@ export function Projects() {
           viewport={{ once: true, margin: '-120px' }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
         >
-          <div className={`project-cover min-h-[360px] rounded-[2rem] bg-gradient-to-br ${paletteClass[featured.palette]}`}>
-            <img src={featured.cover} alt={`${featured.name} 项目封面`} loading="eager" />
-          </div>
+          <ProjectCover
+            className={`min-h-[360px] rounded-[2rem] bg-gradient-to-br ${paletteClass[featured.palette]}`}
+            src={featured.cover}
+            title={featured.name}
+            kind={featured.type}
+            loading="eager"
+          />
           <div className="flex flex-col justify-center p-4 md:p-10">
             <div className="mb-5 flex items-center gap-3 text-[#9de8c2]">
               <featured.icon size={28} />
@@ -75,9 +80,12 @@ export function Projects() {
               viewport={{ once: true, margin: '-100px' }}
               transition={{ duration: 0.7, delay: index * 0.08 }}
             >
-              <div className={`project-cover mb-6 h-56 rounded-[1.5rem] bg-gradient-to-br ${paletteClass[project.palette]}`}>
-                <img src={project.cover} alt={`${project.name} 项目封面`} loading="lazy" />
-              </div>
+              <ProjectCover
+                className={`mb-6 h-56 rounded-[1.5rem] bg-gradient-to-br ${paletteClass[project.palette]}`}
+                src={project.cover}
+                title={project.name}
+                kind={project.type}
+              />
               <div className="flex items-center gap-3 text-[#9de8c2]">
                 <project.icon size={22} />
                 <span className="text-xs font-black uppercase tracking-[0.22em]">{project.type}</span>

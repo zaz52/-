@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-label="GitHub Pages archive project cover">
+  <rect width="1200" height="900" fill="#eef4df"/>
+  <rect x="110" y="105" width="980" height="620" rx="42" fill="#8a6f5a"/>
+  <rect x="155" y="155" width="890" height="520" rx="22" fill="#fff4e1"/>
+  <path d="M155 250h890" stroke="#123026" stroke-opacity=".18" stroke-width="5"/>
+  <circle cx="210" cy="202" r="17" fill="#ff7a66"/>
+  <circle cx="262" cy="202" r="17" fill="#28c7b7"/>
+  <circle cx="314" cy="202" r="17" fill="#6a7bff"/>
+  <rect x="215" y="315" width="300" height="245" rx="28" fill="#0b3d2e"/>
+  <path d="M575 325h350M575 392h260M575 459h330M575 526h210" stroke="#0b3d2e" stroke-width="28" stroke-linecap="round"/>
+  <path d="M275 495l70-95 62 70 38-48 44 73z" fill="#28c7b7"/>
+  <circle cx="425" cy="370" r="34" fill="#ff7a66"/>
+  <text x="125" y="815" fill="#123026" font-family="Inter,Arial,sans-serif" font-size="64" font-weight="900">PAGES ARCHIVE</text>
+  <text x="130" y="854" fill="#2f8f5b" font-family="Inter,Arial,sans-serif" font-size="24" font-weight="800" letter-spacing="4">STATIC SITE HISTORY</text>
+</svg>

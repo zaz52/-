@@ -166,6 +166,55 @@ section {
     filter 520ms ease;
 }
 
+.project-cover-fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+    padding: 24px;
+    background:
+      linear-gradient(rgba(255, 244, 225, 0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 244, 225, 0.08) 1px, transparent 1px),
+      radial-gradient(circle at 70% 22%, rgba(255, 122, 102, 0.36), transparent 20%),
+      radial-gradient(circle at 22% 78%, rgba(40, 199, 183, 0.42), transparent 18%);
+    background-size: 22px 22px, 22px 22px, auto, auto;
+  color: #fff4e1;
+  text-align: center;
+}
+
+.project-cover-fallback__screen {
+  display: grid;
+  max-width: 78%;
+  gap: 12px;
+    place-items: center;
+    border: 1px solid rgba(255, 244, 225, 0.28);
+    border-radius: 20px;
+    background: rgba(11, 61, 46, 0.74);
+    padding: 22px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.22);
+}
+
+.project-cover-fallback__screen span {
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 1.25;
+}
+
+.project-cover-fallback small {
+  position: absolute;
+  bottom: 20px;
+  left: 22px;
+    right: 22px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: rgba(255, 244, 225, 0.72);
+    font-size: 12px;
+    font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .project-cover::before {
   position: absolute;
   inset: 0;

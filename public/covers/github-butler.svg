@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-label="Xianyu super butler project cover">
+  <rect width="1200" height="900" fill="#fff4e1"/>
+  <path d="M0 720c190-90 330-80 520 0s350 100 680-20v200H0z" fill="#dff0d8"/>
+  <rect x="120" y="105" width="960" height="610" rx="42" fill="#0b3d2e"/>
+  <rect x="165" y="155" width="870" height="500" rx="24" fill="#143f34"/>
+  <path d="M165 245h870" stroke="#fff4e1" stroke-opacity=".2" stroke-width="4"/>
+  <circle cx="214" cy="202" r="16" fill="#ff7a66"/>
+  <circle cx="262" cy="202" r="16" fill="#28c7b7"/>
+  <circle cx="310" cy="202" r="16" fill="#6a7bff"/>
+  <rect x="220" y="300" width="260" height="240" rx="28" fill="#fff4e1"/>
+  <rect x="535" y="300" width="445" height="54" rx="18" fill="#28c7b7"/>
+  <rect x="535" y="390" width="360" height="34" rx="17" fill="#fff4e1" opacity=".86"/>
+  <rect x="535" y="455" width="410" height="34" rx="17" fill="#fff4e1" opacity=".68"/>
+  <rect x="535" y="520" width="310" height="34" rx="17" fill="#fff4e1" opacity=".5"/>
+  <path d="M285 420c40-80 105-80 145 0" fill="none" stroke="#0b3d2e" stroke-width="20" stroke-linecap="round"/>
+  <circle cx="305" cy="385" r="18" fill="#0b3d2e"/>
+  <circle cx="410" cy="385" r="18" fill="#0b3d2e"/>
+  <path d="M280 480h150" stroke="#ff7a66" stroke-width="18" stroke-linecap="round"/>
+  <text x="160" y="800" fill="#123026" font-family="Inter,Arial,sans-serif" font-size="64" font-weight="900">SUPER BUTLER</text>
+  <text x="162" y="842" fill="#2f8f5b" font-family="Inter,Arial,sans-serif" font-size="26" font-weight="800" letter-spacing="4">AUTOMATION UI SYSTEM</text>
+</svg>

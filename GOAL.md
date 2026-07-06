@@ -435,6 +435,26 @@ User approved the next step: improve the portfolio by adding real project detail
 - Local validation:
   - `npm run lint`: passed.
   - `npm run build`: passed.
+- Deployed to Cloudflare Worker:
+  - First cover deploy: `c2a50597-b06e-41be-aa08-0af1e31e8c2b`.
+  - Final redeploy after CSS review: `0f931257-43f7-4624-8da9-eabc57ad9e89`.
+- Production validation:
+  - `/`: HTTP 200.
+  - `/projects`: HTTP 200.
+  - `/projects/github-xianyu-super-butler`: HTTP 200.
+  - `/projects/github-genius-fkoai`: HTTP 200.
+  - Production `/api/projects`: 14 projects, 0 missing covers, 14 unique cover URLs.
+  - New cover assets `/covers/github-butler.svg`, `/covers/github-genius.svg`, `/covers/github-deploy.svg`, and `/covers/github-pages.svg`: all HTTP 200.
+- Browser automation note:
+  - Playwright package is available, but browser binaries are not installed.
+  - Installing them would write to `C:\Users\Administrator\AppData\Local\ms-playwright`, so this was intentionally skipped to respect the user's "不要碰 C 盘" constraint.
+  - Validation was completed with production route checks, asset checks, build checks, and production bundle checks instead.
+
+### Review Notes
+
+- The current production data now has one cover per project, with no duplicate cover URLs across the 14 projects.
+- Future admin-created projects are protected by `ProjectCover` fallback UI if a cover URL is missing or fails to load.
+- No secrets were committed; the admin API was used only to update existing project cover URLs in KV.
 - Deployed to Cloudflare Worker version `78ddc0dc-8c86-4faf-a6d8-12f795498dbb`.
 - Final deploy after removing the public admin CTA from detail pages: `7105991a-82c0-4c7d-9208-80ab7d3636a9`.
 - Production validation:
@@ -535,3 +555,42 @@ User selected the third improvement: add visit analytics for the live personal w
   - Deployed Worker version `937b992e-0760-4603-940c-379eff21fb94`.
   - Production `/admin` JS asset is `/assets/index-Bi27NAJ_.js` and contains `useRef`, `adminPassword`, and `Analytics`.
   - Main routes `/`, `/admin`, `/design-system`, and `/skills`: all return HTTP 200.
+
+## Goal: Give Every Project A Clear Cover Image
+
+### Task
+
+Ensure every portfolio project has a visible, distinctive cover image on the homepage, `/projects`, and `/projects/:id`. Existing projects must not look like text-only placeholders or repeated generic cards.
+
+### Success Criteria
+
+- Every project returned by production `/api/projects` has a valid `cover`.
+- Projects that previously shared generic GitHub covers get more specific local SVG covers where appropriate.
+- Project cards gracefully fall back to a styled generated cover if a future admin-created project has no image.
+- Homepage, all-projects page, and detail pages continue to render project covers consistently.
+- `npm run lint`, `npm run build`, production HTTP checks, and deploy all pass.
+- Changes are committed and pushed to GitHub.
+
+### Architecture
+
+- Keep static cover assets under `public/covers` so Cloudflare Static Assets can serve them without extra storage.
+- Keep project cover assignment in `src/data/projects.ts` and `worker/default-projects.json`.
+- Add a reusable project-cover fallback component instead of duplicating fragile `<img>` behavior across pages.
+
+### Progress
+
+- Started on 2026-07-07 after user requested: "每个作品配上图片啊".
+- Verified production `/api/projects` currently returns 14 projects and all have non-empty `cover` fields.
+- Decision: improve cover quality and uniqueness, because several GitHub-derived projects share the same generic cover and can look like placeholders.
+- Added reusable `ProjectCover` UI component with a styled fallback state for missing or broken future covers.
+- Updated homepage project section, `/projects`, and `/projects/:id` to use the shared cover component.
+- Added new local SVG covers:
+  - `/covers/github-butler.svg`
+  - `/covers/github-genius.svg`
+  - `/covers/github-deploy.svg`
+  - `/covers/github-pages.svg`
+- Updated default project data in `src/data/projects.ts` and `worker/default-projects.json` so GitHub-derived projects use more distinctive covers.
+- Updated production `/api/projects` through the admin API so the current KV records point at the new covers without changing project text, order, or featured state.
+- Local validation:
+  - `npm run lint`: passed.
+  - `npm run build`: passed.
