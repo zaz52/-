@@ -241,6 +241,50 @@ This confirms the blocker is at the Netlify account/deploy permission level, not
 
 Do not sync this work to Obsidian unless the user explicitly says to sync.
 
+## Current Goal: SEO And Share Cards
+
+User approved the next step: improve SEO and social sharing for the personal website.
+
+### Success Criteria
+
+- Base HTML has clean Chinese title, description, canonical, Open Graph, and Twitter Card tags.
+- Cloudflare Worker injects route-aware meta for `/`, `/design-system`, `/skills`, `/projects/:id`, and `/admin`.
+- Project detail pages expose their own title, description, URL, and image for sharing.
+- Admin page is marked `noindex`.
+- `robots.txt` and `sitemap.xml` are available on production.
+- Frontend updates browser title/meta after route render.
+- `npm run lint`, `npm run build`, deployment, and production HTTP/meta checks pass.
+
+### Progress
+
+- Started on 2026-07-07.
+- Replaced the base `index.html` SEO with clean Chinese title, description, canonical, Open Graph, and Twitter Card tags.
+- Added `public/og-image.svg` as a 1200x630 share image.
+- Added `public/robots.txt` and `public/sitemap.xml` fallbacks.
+- Added `src/lib/seo.ts` and wired frontend route title/meta updates.
+- Added Cloudflare Worker route-aware SEO injection for `/`, `/design-system`, `/skills`, `/projects/:id`, and `/admin`.
+- Added dynamic Worker `robots.txt` and `sitemap.xml` handlers.
+- Admin route is marked `noindex,nofollow`.
+- Project detail routes use live project data for title, description, canonical URL, and share image.
+
+### Validation
+
+- `npm run lint`: passed.
+- `npm run build`: passed.
+- Deployed Worker version `42c6f6c1-227a-43c1-9cbf-221f4dc8c598`.
+- Final deploy after removing the leftover SEO marker from static home HTML: `bc3f0cc4-1398-4d32-baee-af3e20133511`.
+- Production HTML checks passed for:
+  - `/`
+  - `/projects/yulesuangua`
+  - `/design-system`
+  - `/admin`
+- Each checked route has title, description, robots, canonical, `og:title`, `og:image`, and Twitter Card tags.
+- `/admin` title is `后台管理 | Weiyi` and is noindex.
+- `/projects/yulesuangua` title is `乾坤之道 | Weiyi 作品详情`.
+- `/og-image.svg`, `/robots.txt`, and `/sitemap.xml`: all return HTTP 200.
+- `robots.txt` includes the sitemap location and mentions `/admin`.
+- `sitemap.xml` includes home and project detail pages, and does not include `/admin`.
+
 ## Current Goal: Update Divination Project Link
 
 User asked to change the divination project link to `https://suangua.weiyiai.top/`.

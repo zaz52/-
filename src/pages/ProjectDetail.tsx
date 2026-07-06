@@ -3,6 +3,7 @@ import { ArrowLeft, ExternalLink, Layers, MousePointer2, Sparkles } from 'lucide
 import { useEffect, useMemo, useState } from 'react';
 import { hydrateProjects, projects as fallbackProjects } from '../data/projects';
 import type { ProjectRecord } from '../data/projectTypes';
+import { applySeo } from '../lib/seo';
 
 const paletteClass: Record<string, string> = {
   emerald: 'from-[#0b3d2e] to-[#2f8f5b]',
@@ -50,6 +51,24 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
   const projects = useMemo(() => records ? hydrateProjects(records) : fallbackProjects, [records]);
   const project = projects.find((item) => item.id === projectId);
   const related = projects.filter((item) => item.id !== projectId).slice(0, 3);
+
+  useEffect(() => {
+    if (!project) {
+      applySeo({
+        title: '作品未找到 | Weiyi',
+        description: '这个项目可能已经在后台被删除或改名，可以回到作品区查看当前公开的项目列表。',
+        canonical: `https://weiyiai.top/projects/${projectId}`,
+      });
+      return;
+    }
+
+    applySeo({
+      title: `${project.name} | Weiyi 作品详情`,
+      description: project.description,
+      canonical: `https://weiyiai.top/projects/${project.id}`,
+      image: project.cover.startsWith('http') ? project.cover : `https://weiyiai.top${project.cover}`,
+    });
+  }, [project, projectId]);
 
   if (!project) {
     return (

@@ -1,5 +1,7 @@
 const PROJECTS_KEY = 'projects';
 const ANALYTICS_KEY = 'analytics:v1';
+const SITE_URL = 'https://weiyiai.top';
+const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.svg`;
 
 const DEFAULT_PROJECTS = [
   {
@@ -232,6 +234,165 @@ const getProjects = async (env) => {
   }
 };
 
+const escapeHtml = (value) => String(value ?? '')
+  .replaceAll('&', '&amp;')
+  .replaceAll('<', '&lt;')
+  .replaceAll('>', '&gt;')
+  .replaceAll('"', '&quot;');
+
+const absoluteUrl = (value) => {
+  const url = normalizeText(value, 2_000);
+  if (!url || url.startsWith('data:')) return DEFAULT_OG_IMAGE;
+  if (url.startsWith('http://') || url.startsWith('https://')) return url;
+  return `${SITE_URL}${url.startsWith('/') ? url : `/${url}`}`;
+};
+
+const baseSeo = {
+  title: 'Weiyi | 复古科技青春自然个人网站',
+  description: 'Weiyi 的个人作品集，展示 AI 工具、个人品牌网页、移动端界面、设计系统与复古科技自然风格项目。',
+  url: `${SITE_URL}/`,
+  image: DEFAULT_OG_IMAGE,
+  robots: 'index,follow',
+  type: 'website',
+};
+
+const getSeo = async (env, url) => {
+  if (url.pathname === '/admin') {
+    return {
+      ...baseSeo,
+      title: '后台管理 | Weiyi',
+      description: 'Weiyi 个人网站后台管理入口。',
+      url: `${SITE_URL}/admin`,
+      robots: 'noindex,nofollow',
+    };
+  }
+
+  if (url.pathname === '/design-system') {
+    return {
+      ...baseSeo,
+      title: '设计系统 | Weiyi',
+      description: 'Weiyi 的复古科技、青春自然风格设计系统，包含色彩、字体、按钮、卡片、表单和移动端组件。',
+      url: `${SITE_URL}/design-system`,
+    };
+  }
+
+  if (url.pathname === '/skills' || url.pathname.startsWith('/skills/')) {
+    return {
+      ...baseSeo,
+      title: 'AI 工作流与 Skills | Weiyi',
+      description: 'Weiyi 沉淀的 AI 工作流、Codex skills、自动化方法和可复用项目经验。',
+      url: `${SITE_URL}${url.pathname}`,
+    };
+  }
+
+  if (url.pathname.startsWith('/projects/')) {
+    const projectId = decodeURIComponent(url.pathname.replace('/projects/', '').replace(/\/$/, ''));
+    const project = (await getProjects(env)).find((item) => item.id === projectId);
+    if (project) {
+      return {
+        ...baseSeo,
+        title: `${project.name} | Weiyi 作品详情`,
+        description: project.description || `${project.name} 的项目详情页。`,
+        url: `${SITE_URL}/projects/${project.id}`,
+        image: absoluteUrl(project.cover),
+        type: 'article',
+      };
+    }
+
+    return {
+      ...baseSeo,
+      title: '作品未找到 | Weiyi',
+      description: '这个项目可能已经在后台被删除或改名，可以回到作品区查看当前公开的项目列表。',
+      url: `${SITE_URL}${url.pathname}`,
+      robots: 'noindex,follow',
+    };
+  }
+
+  return baseSeo;
+};
+
+const replaceOrInsert = (html, pattern, replacement) => (
+  pattern.test(html) ? html.replace(pattern, replacement) : html.replace('<!-- SEO_META -->', `${replacement}\n    <!-- SEO_META -->`)
+);
+
+const injectSeo = (html, seo) => {
+  const values = {
+    title: escapeHtml(seo.title),
+    description: escapeHtml(seo.description),
+    url: escapeHtml(seo.url),
+    image: escapeHtml(seo.image || DEFAULT_OG_IMAGE),
+    robots: escapeHtml(seo.robots || 'index,follow'),
+    type: escapeHtml(seo.type || 'website'),
+  };
+
+  let output = html
+    .replace(/<title>.*?<\/title>/i, `<title>${values.title}</title>`)
+    .replace('<!-- SEO_META -->', '');
+
+  output = replaceOrInsert(output, /<meta\s+name="description"\s+content="[^"]*"\s*\/?>/i, `<meta name="description" content="${values.description}" />`);
+  output = replaceOrInsert(output, /<meta\s+name="robots"\s+content="[^"]*"\s*\/?>/i, `<meta name="robots" content="${values.robots}" />`);
+  output = replaceOrInsert(output, /<link\s+rel="canonical"\s+href="[^"]*"\s*\/?>/i, `<link rel="canonical" href="${values.url}" />`);
+  output = replaceOrInsert(output, /<meta\s+property="og:type"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:type" content="${values.type}" />`);
+  output = replaceOrInsert(output, /<meta\s+property="og:title"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:title" content="${values.title}" />`);
+  output = replaceOrInsert(output, /<meta\s+property="og:description"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:description" content="${values.description}" />`);
+  output = replaceOrInsert(output, /<meta\s+property="og:url"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:url" content="${values.url}" />`);
+  output = replaceOrInsert(output, /<meta\s+property="og:image"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:image" content="${values.image}" />`);
+  output = replaceOrInsert(output, /<meta\s+name="twitter:title"\s+content="[^"]*"\s*\/?>/i, `<meta name="twitter:title" content="${values.title}" />`);
+  output = replaceOrInsert(output, /<meta\s+name="twitter:description"\s+content="[^"]*"\s*\/?>/i, `<meta name="twitter:description" content="${values.description}" />`);
+  output = replaceOrInsert(output, /<meta\s+name="twitter:image"\s+content="[^"]*"\s*\/?>/i, `<meta name="twitter:image" content="${values.image}" />`);
+
+  return output;
+};
+
+const renderIndex = async (request, env, url) => {
+  const indexUrl = new URL(request.url);
+  indexUrl.pathname = '/';
+  const response = await env.ASSETS.fetch(new Request(indexUrl.toString(), { method: 'GET' }));
+  const html = await response.text();
+  const seo = await getSeo(env, url);
+
+  return new Response(injectSeo(html, seo), {
+    status: response.status,
+    headers: {
+      'content-type': 'text/html; charset=utf-8',
+      'cache-control': 'public, max-age=120',
+    },
+  });
+};
+
+const renderRobots = () => new Response([
+  'User-agent: *',
+  'Allow: /',
+  'Disallow: /admin',
+  '',
+  `Sitemap: ${SITE_URL}/sitemap.xml`,
+  '',
+].join('\n'), {
+  headers: {
+    'content-type': 'text/plain; charset=utf-8',
+    'cache-control': 'public, max-age=3600',
+  },
+});
+
+const renderSitemap = async (env) => {
+  const projects = await getProjects(env);
+  const urls = [
+    { loc: `${SITE_URL}/`, priority: '1.0' },
+    { loc: `${SITE_URL}/design-system`, priority: '0.6' },
+    { loc: `${SITE_URL}/skills`, priority: '0.7' },
+    ...projects.map((project) => ({ loc: `${SITE_URL}/projects/${project.id}`, priority: project.featured ? '0.9' : '0.8' })),
+  ];
+
+  const body = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map((item) => `  <url><loc>${escapeHtml(item.loc)}</loc><priority>${item.priority}</priority></url>`).join('\n')}\n</urlset>\n`;
+
+  return new Response(body, {
+    headers: {
+      'content-type': 'application/xml; charset=utf-8',
+      'cache-control': 'public, max-age=3600',
+    },
+  });
+};
+
 const handleApi = async (request, env, url, ctx) => {
   if (request.method === 'OPTIONS') return new Response(null, { status: 204 });
 
@@ -275,12 +436,12 @@ const handleApi = async (request, env, url, ctx) => {
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+    if (url.pathname === '/robots.txt') return renderRobots();
+    if (url.pathname === '/sitemap.xml') return renderSitemap(env);
     if (url.pathname.startsWith('/api/')) return handleApi(request, env, url, ctx);
 
     if (!url.pathname.split('/').pop()?.includes('.')) {
-      const indexUrl = new URL(request.url);
-      indexUrl.pathname = '/';
-      return env.ASSETS.fetch(new Request(indexUrl.toString(), { method: 'GET' }));
+      return renderIndex(request, env, url);
     }
 
     try {

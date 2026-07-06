@@ -9,6 +9,7 @@ import { ProjectDetail } from './pages/ProjectDetail';
 import { SkillDetail } from './pages/SkillDetail';
 import { Skills } from './pages/Skills';
 import { trackPageView } from './lib/analytics';
+import { applySeo, routeSeo } from './lib/seo';
 import './styles/globals.css';
 
 function App() {
@@ -22,6 +23,14 @@ function App() {
   useEffect(() => {
     trackPageView();
   }, []);
+
+  useEffect(() => {
+    if (projectId || skillSlug) return;
+    if (isAdmin) applySeo(routeSeo.admin);
+    else if (isDesignSystem) applySeo(routeSeo.designSystem);
+    else if (isSkills) applySeo(routeSeo.skills);
+    else applySeo(routeSeo.home);
+  }, [isAdmin, isDesignSystem, isSkills, projectId, skillSlug]);
 
   useEffect(() => {
     if (isAdmin) return undefined;
