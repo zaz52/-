@@ -83,6 +83,17 @@ This confirms the blocker is at the Netlify account/deploy permission level, not
 - Final review pass once production serves the new build.
 - As a temporary working deployment, publish the latest build through GitHub Pages.
 
+## Fallback Deployment
+
+- Created `https://github.com/zaz52/zaz52.github.io` as a clean GitHub Pages user-site repository.
+- Published the rebuilt portfolio to `https://zaz52.github.io/`.
+- Switched GitHub Pages from legacy mode to workflow mode after legacy deploy returned `Deployment failed, try again later`.
+- Verified `https://zaz52.github.io/` returns 200 with title:
+
+`Weiyi | 复古科技青春自然个人网站`
+
+- Note: direct deep links such as `/design-system` on GitHub Pages are served through the SPA fallback and may return HTTP 404 while still rendering in the browser. This is a limitation of GitHub Pages static hosting. Netlify will support clean route fallback once the account deploy blocker is resolved.
+
 ## Obsidian Sync
 
 Do not sync this work to Obsidian unless the user explicitly says to sync.
