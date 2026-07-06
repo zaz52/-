@@ -81,11 +81,11 @@ export function Admin() {
       .catch(() => setMessage('云端数据暂时不可用，正在显示本地默认作品。'));
   }, []);
 
-  const loadAnalytics = async () => {
+  const loadAnalytics = async (authPassword = password) => {
     setAnalyticsLoading(true);
     try {
       const response = await fetch('/api/analytics/summary', {
-        headers: { authorization: `Bearer ${password}` },
+        headers: { authorization: `Bearer ${authPassword}` },
       });
       if (!response.ok) throw new Error('Analytics unavailable');
       setAnalytics(await response.json() as AnalyticsSummary);
@@ -96,19 +96,45 @@ export function Admin() {
     }
   };
 
-  const login = async () => {
+  const login = async (authPassword = password) => {
     const response = await fetch('/api/admin-check', {
-      headers: { authorization: `Bearer ${password}` },
+      headers: { authorization: `Bearer ${authPassword}` },
     });
     if (!response.ok) {
       setMessage('密码不正确。');
       return;
     }
-    sessionStorage.setItem('adminPassword', password);
+    sessionStorage.setItem('adminPassword', authPassword);
     setUnlocked(true);
-    await loadAnalytics();
+    await loadAnalytics(authPassword);
     setMessage('已登录，可以编辑作品。');
   };
+
+  useEffect(() => {
+    const savedPassword = sessionStorage.getItem('adminPassword');
+    if (!savedPassword) return;
+
+    void fetch('/api/admin-check', {
+      headers: { authorization: `Bearer ${savedPassword}` },
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error('Unauthorized');
+        setUnlocked(true);
+        return fetch('/api/analytics/summary', {
+          headers: { authorization: `Bearer ${savedPassword}` },
+        });
+      })
+      .then((response) => {
+        if (!response.ok) throw new Error('Analytics unavailable');
+        return response.json();
+      })
+      .then((data: AnalyticsSummary) => {
+        setAnalytics(data);
+      })
+      .catch(() => {
+        sessionStorage.removeItem('adminPassword');
+      });
+  }, []);
 
   const updateProject = (id: string, patch: Partial<ProjectRecord>) => {
     setProjects((items) => items.map((item) => item.id === id ? { ...item, ...patch } : item));
@@ -180,7 +206,7 @@ export function Admin() {
               value={password}
               onChange={(event) => setPassword(event.target.value)}
             />
-            <button className="btn-flow bg-[var(--deep)] text-[var(--cream)]" type="button" onClick={login}>
+            <button className="btn-flow bg-[var(--deep)] text-[var(--cream)]" type="button" onClick={() => login()}>
               登录
             </button>
             <button className="btn-flow bg-[var(--green)] text-white disabled:opacity-50" type="button" onClick={save} disabled={!unlocked || saving}>
@@ -201,7 +227,7 @@ export function Admin() {
                   {analytics?.updatedAt ? `最后更新：${new Date(analytics.updatedAt).toLocaleString('zh-CN')}` : '等待第一批访问数据。'}
                 </p>
               </div>
-              <button className="btn-flow bg-[#fff4e1] text-[#123026] disabled:opacity-60" type="button" onClick={loadAnalytics} disabled={analyticsLoading}>
+              <button className="btn-flow bg-[#fff4e1] text-[#123026] disabled:opacity-60" type="button" onClick={() => loadAnalytics()} disabled={analyticsLoading}>
                 <RefreshCw size={18} />
                 刷新统计
               </button>

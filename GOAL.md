@@ -294,3 +294,18 @@ User selected the third improvement: add visit analytics for the live personal w
 - The analytics implementation is intentionally first-party and privacy-light; it does not store raw IP addresses or individual visitor IDs.
 - Data aggregation uses KV read-modify-write, which is appropriate for a low-traffic personal website. If traffic becomes high, this should move to Durable Objects or Analytics Engine to avoid write contention.
 - The Playwright skill installed in this environment only contains documentation and no `run.js` executor, and the project does not include Playwright. Browser validation was therefore replaced with production HTTP/API checks rather than adding a test dependency to the production project.
+
+### Follow-Up Fix
+
+- User reported that the analytics panel was not visible in `/admin`.
+- Root cause: the password field could be restored from `sessionStorage`, but the admin `unlocked` state was not restored after refresh. In that state, the saved password was visible as dots but the analytics panel stayed hidden until the user clicked login again.
+- Fix:
+  - `/admin` now automatically validates the saved session password on load.
+  - If valid, it restores the unlocked admin state and loads analytics immediately.
+  - Login and refresh-stat handlers no longer receive mouse events as implicit password arguments.
+- Validation:
+  - `npm run lint`: passed.
+  - `npm run build`: passed.
+  - Deployed Worker version `077ccef6-bd7e-4906-8617-189a73926136`.
+  - Production `/admin` JS contains `adminPassword`, `/api/admin-check`, `/api/analytics/summary`, and `Analytics`.
+  - Main routes `/`, `/admin`, `/design-system`, and `/skills`: all return HTTP 200.
