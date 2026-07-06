@@ -241,6 +241,57 @@ This confirms the blocker is at the Netlify account/deploy permission level, not
 
 Do not sync this work to Obsidian unless the user explicitly says to sync.
 
+## Current Goal: Add GitHub Projects To Portfolio
+
+User asked to add projects from the GitHub account to the personal website.
+
+### Source
+
+- GitHub user: `zaz52`.
+- Public repositories were read from `https://api.github.com/users/zaz52/repos?per_page=100&sort=updated`.
+- Existing portfolio items already covered:
+  - `yulesuangua`
+  - `magic-resume`
+
+### Added Projects
+
+- `github-portfolio-site`: 个人网站源码.
+- `github-xianyu-auto-reply`: 闲鱼自动回复管理系统.
+- `github-xianyu-super-butler`: 闲鱼超级管家.
+- `github-novel-workbench`: 小说工作台.
+- `github-style-advisor`: 个人形象顾问 Skill.
+- `github-agent-reach`: Agent Reach.
+- `github-genius-fkoai`: GeniusFKoai.
+- `github-yulesuangua-deploy`: 乾坤之道部署脚本.
+- `github-pages-archive`: GitHub Pages 作品集备份.
+
+### Implementation
+
+- Added 6 reusable GitHub-style cover assets under `public/covers/`.
+- Updated live Cloudflare KV project data to contain 14 projects total, including 9 GitHub-derived projects.
+- Updated fallback/default data in:
+  - `src/data/projects.ts`
+  - `worker/default-projects.json`
+  - `worker/index.js`
+- Used the UTF-8 local JSON file as the source of truth when writing KV to avoid PowerShell Chinese encoding corruption.
+- Removed static `public/sitemap.xml` and `public/robots.txt` so the Worker dynamic handlers can return fresh project-aware data.
+- Changed dynamic HTML and sitemap responses to `no-store` so project/admin edits are reflected immediately.
+
+### Validation
+
+- `npm run lint`: passed.
+- `npm run build`: passed.
+- Cloudflare deploy with new cover assets: `2e272383-6c50-400d-b220-8fd62de10b75`.
+- Final deploy after dynamic sitemap fix: `bf915752-4c58-4fca-a002-ea37d53029f5`.
+- Production `/api/projects` returns 14 projects, including 9 IDs starting with `github-`.
+- Production detail pages return HTTP 200, including:
+  - `/projects/github-portfolio-site`
+  - `/projects/github-xianyu-auto-reply`
+  - `/projects/github-style-advisor`
+- New cover assets return HTTP 200.
+- Dynamic `sitemap.xml` includes all 9 GitHub project detail URLs.
+- `robots.txt` includes the sitemap location and disallows `/admin`.
+
 ## Current Goal: SEO And Share Cards
 
 User approved the next step: improve SEO and social sharing for the personal website.

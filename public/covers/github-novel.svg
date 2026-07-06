@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900">
+  <rect width="1200" height="900" rx="48" fill="#fff4e1"/>
+  <rect x="160" y="110" width="880" height="680" rx="34" fill="#8a6f5a"/>
+  <rect x="225" y="175" width="330" height="550" rx="22" fill="#fffaf0"/>
+  <rect x="610" y="175" width="365" height="550" rx="22" fill="#123026"/>
+  <path d="M665 250h220M665 328h165M665 406h240M665 484h190" stroke="#fff4e1" stroke-width="28" stroke-linecap="round"/>
+  <text x="245" y="290" fill="#123026" font-family="Inter,Arial" font-size="56" font-weight="900">Novel</text>
+  <text x="245" y="360" fill="#123026" font-family="Inter,Arial" font-size="56" font-weight="900">Desk</text>
+</svg>

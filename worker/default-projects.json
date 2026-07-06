@@ -58,5 +58,113 @@
     "tags": ["资料库", "素材整理", "云端分享"],
     "palette": "cyan",
     "featured": false
+  },
+  {
+    "id": "github-portfolio-site",
+    "iconKey": "sparkles",
+    "name": "个人网站源码",
+    "type": "React + Cloudflare 个人品牌网站",
+    "description": "当前个人网站的 GitHub 仓库，包含首页、作品详情、后台管理、访问统计、SEO 分享卡片和 Cloudflare Worker 部署配置。",
+    "href": "https://github.com/zaz52/-",
+    "cover": "/covers/github-portfolio.svg",
+    "tags": ["React", "Cloudflare", "Portfolio"],
+    "palette": "emerald",
+    "featured": false
+  },
+  {
+    "id": "github-xianyu-auto-reply",
+    "iconKey": "cloud",
+    "name": "闲鱼自动回复管理系统",
+    "type": "Python + FastAPI 自动化客服",
+    "description": "面向闲鱼平台的自动化客服与虚拟商品流程系统，覆盖消息处理、自动回复、自动发货、评价和商品维护等场景。",
+    "href": "https://github.com/zaz52/xianyu-auto-reply",
+    "cover": "/covers/github-xianyu.svg",
+    "tags": ["Python", "FastAPI", "Automation"],
+    "palette": "cyan",
+    "featured": false
+  },
+  {
+    "id": "github-xianyu-super-butler",
+    "iconKey": "cloud",
+    "name": "闲鱼超级管家",
+    "type": "自动化工具二次开发",
+    "description": "基于闲鱼自动回复系统的二次开发版本，重点重构前端 UI 和使用体验，让自动化管理工具更现代、更清晰。",
+    "href": "https://github.com/zaz52/xianyu-super-butler",
+    "cover": "/covers/github-xianyu.svg",
+    "tags": ["Automation", "UI", "Tooling"],
+    "palette": "mint",
+    "featured": false
+  },
+  {
+    "id": "github-novel-workbench",
+    "iconKey": "fileText",
+    "name": "小说工作台",
+    "type": "TypeScript 创作工具",
+    "description": "面向小说创作流程的工作台项目，用于沉淀写作、设定、素材和内容生产相关能力。",
+    "href": "https://github.com/zaz52/wei-yi",
+    "cover": "/covers/github-novel.svg",
+    "tags": ["TypeScript", "Writing", "Workbench"],
+    "palette": "orange",
+    "featured": false
+  },
+  {
+    "id": "github-style-advisor",
+    "iconKey": "sparkles",
+    "name": "个人形象顾问 Skill",
+    "type": "Hermes Agent 形象升级提示词",
+    "description": "用于个人穿搭、眼镜、色彩诊断、发型和形象升级报告的 Agent skill 与提示词集合。",
+    "href": "https://github.com/zaz52/personal-style-advisor",
+    "cover": "/covers/github-style.svg",
+    "tags": ["Agent Skill", "Style", "Prompt"],
+    "palette": "violet",
+    "featured": false
+  },
+  {
+    "id": "github-agent-reach",
+    "iconKey": "sparkles",
+    "name": "Agent Reach",
+    "type": "AI Agent 网络信息读取工具",
+    "description": "为 AI Agent 提供跨平台读取和搜索能力，覆盖 Twitter、Reddit、YouTube、GitHub、Bilibili、小红书等公开信息源。",
+    "href": "https://github.com/zaz52/Agent-Reach",
+    "cover": "/covers/github-agent.svg",
+    "tags": ["Agent", "Search", "CLI"],
+    "palette": "blue",
+    "featured": false
+  },
+  {
+    "id": "github-genius-fkoai",
+    "iconKey": "fileText",
+    "name": "GeniusFKoai",
+    "type": "Python GitHub 项目",
+    "description": "GitHub 上沉淀的 Python 项目，用于记录和整理 AI、自动化或实验性代码能力。",
+    "href": "https://github.com/zaz52/GeniusFKoai",
+    "cover": "/covers/github-code.svg",
+    "tags": ["Python", "AI", "GitHub"],
+    "palette": "cyan",
+    "featured": false
+  },
+  {
+    "id": "github-yulesuangua-deploy",
+    "iconKey": "sparkles",
+    "name": "乾坤之道部署脚本",
+    "type": "Python 部署辅助项目",
+    "description": "围绕乾坤之道项目沉淀的部署与辅助脚本仓库，方便后续维护算卦相关站点和发布流程。",
+    "href": "https://github.com/zaz52/yulesuangua-deploy",
+    "cover": "/covers/github-code.svg",
+    "tags": ["Python", "Deploy", "Divination"],
+    "palette": "emerald",
+    "featured": false
+  },
+  {
+    "id": "github-pages-archive",
+    "iconKey": "sparkles",
+    "name": "GitHub Pages 作品集备份",
+    "type": "HTML 静态站点备份",
+    "description": "早期 GitHub Pages 个人网站仓库，作为个人网站迁移过程中的静态部署备份和历史版本。",
+    "href": "https://github.com/zaz52/zaz52.github.io",
+    "cover": "/covers/github-portfolio.svg",
+    "tags": ["HTML", "GitHub Pages", "Archive"],
+    "palette": "mint",
+    "featured": false
   }
 ]
