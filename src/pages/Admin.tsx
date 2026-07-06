@@ -1,5 +1,5 @@
 import { ArrowDown, ArrowUp, BarChart3, Eye, Plus, RefreshCw, Save, Star, Trash2, Upload } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { defaultProjects } from '../data/projects';
 import type { ProjectIconKey, ProjectPalette, ProjectRecord } from '../data/projectTypes';
 
@@ -62,6 +62,7 @@ async function compressImage(file: File) {
 }
 
 export function Admin() {
+  const passwordInputRef = useRef<HTMLInputElement>(null);
   const [password, setPassword] = useState(() => sessionStorage.getItem('adminPassword') ?? '');
   const [unlocked, setUnlocked] = useState(false);
   const [projects, setProjects] = useState<ProjectRecord[]>(defaultProjects);
@@ -71,6 +72,7 @@ export function Admin() {
   const [analyticsLoading, setAnalyticsLoading] = useState(false);
 
   const featuredId = useMemo(() => projects.find((project) => project.featured)?.id ?? projects[0]?.id, [projects]);
+  const getPassword = () => passwordInputRef.current?.value || password;
 
   useEffect(() => {
     fetch('/api/projects')
@@ -81,7 +83,7 @@ export function Admin() {
       .catch(() => setMessage('云端数据暂时不可用，正在显示本地默认作品。'));
   }, []);
 
-  const loadAnalytics = async (authPassword = password) => {
+  const loadAnalytics = async (authPassword = getPassword()) => {
     setAnalyticsLoading(true);
     try {
       const response = await fetch('/api/analytics/summary', {
@@ -96,7 +98,7 @@ export function Admin() {
     }
   };
 
-  const login = async (authPassword = password) => {
+  const login = async (authPassword = getPassword()) => {
     const response = await fetch('/api/admin-check', {
       headers: { authorization: `Bearer ${authPassword}` },
     });
@@ -104,6 +106,7 @@ export function Admin() {
       setMessage('密码不正确。');
       return;
     }
+    setPassword(authPassword);
     sessionStorage.setItem('adminPassword', authPassword);
     setUnlocked(true);
     await loadAnalytics(authPassword);
@@ -200,6 +203,7 @@ export function Admin() {
         <section className="mt-8 rounded-[1.5rem] border border-[rgba(18,48,38,0.12)] bg-white/72 p-5 shadow-[0_18px_48px_rgba(11,61,46,0.08)]">
           <div className="grid gap-4 md:grid-cols-[1fr_auto_auto]">
             <input
+              ref={passwordInputRef}
               className="ds-input"
               type="password"
               placeholder="后台密码"
@@ -217,8 +221,7 @@ export function Admin() {
           <p className="mt-4 text-sm font-bold text-[#617268]">{message}</p>
         </section>
 
-        {unlocked ? (
-          <section className="mt-8 rounded-[1.5rem] border border-[rgba(18,48,38,0.12)] bg-[#0b3d2e] p-5 text-[#fff4e1] shadow-[0_18px_48px_rgba(11,61,46,0.16)]">
+        <section className="mt-8 rounded-[1.5rem] border border-[rgba(18,48,38,0.12)] bg-[#0b3d2e] p-5 text-[#fff4e1] shadow-[0_18px_48px_rgba(11,61,46,0.16)]">
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <div>
                 <p className="text-sm font-black uppercase tracking-[0.22em] text-[#28c7b7]">Analytics</p>
@@ -227,7 +230,7 @@ export function Admin() {
                   {analytics?.updatedAt ? `最后更新：${new Date(analytics.updatedAt).toLocaleString('zh-CN')}` : '等待第一批访问数据。'}
                 </p>
               </div>
-              <button className="btn-flow bg-[#fff4e1] text-[#123026] disabled:opacity-60" type="button" onClick={() => loadAnalytics()} disabled={analyticsLoading}>
+              <button className="btn-flow bg-[#fff4e1] text-[#123026] disabled:opacity-60" type="button" onClick={() => loadAnalytics()} disabled={!unlocked || analyticsLoading}>
                 <RefreshCw size={18} />
                 刷新统计
               </button>
@@ -306,8 +309,7 @@ export function Admin() {
                 </div>
               </div>
             </div>
-          </section>
-        ) : null}
+        </section>
 
         <div className="mt-8 flex justify-end">
           <button className="btn-flow bg-[var(--coral)] text-white" type="button" onClick={() => setProjects((items) => [...items, emptyProject()])}>

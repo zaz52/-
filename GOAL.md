@@ -309,3 +309,18 @@ User selected the third improvement: add visit analytics for the live personal w
   - Deployed Worker version `077ccef6-bd7e-4906-8617-189a73926136`.
   - Production `/admin` JS contains `adminPassword`, `/api/admin-check`, `/api/analytics/summary`, and `Analytics`.
   - Main routes `/`, `/admin`, `/design-system`, and `/skills`: all return HTTP 200.
+
+### Second Follow-Up Fix
+
+- User still did not see the analytics panel.
+- Root cause: browser password autofill can display dots inside the input without updating React state, and the analytics block was still hidden behind `unlocked`.
+- Fix:
+  - Added a password input ref so login reads the real DOM input value, including browser autofill.
+  - Removed the conditional wrapper around the analytics section so the panel is always visible above the project list.
+  - Kept refresh-stat disabled until admin login succeeds.
+- Validation:
+  - `npm run lint`: passed.
+  - `npm run build`: passed.
+  - Deployed Worker version `937b992e-0760-4603-940c-379eff21fb94`.
+  - Production `/admin` JS asset is `/assets/index-Bi27NAJ_.js` and contains `useRef`, `adminPassword`, and `Analytics`.
+  - Main routes `/`, `/admin`, `/design-system`, and `/skills`: all return HTTP 200.
