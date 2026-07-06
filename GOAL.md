@@ -455,6 +455,44 @@ User approved the next step: improve the portfolio by adding real project detail
 - The current production data now has one cover per project, with no duplicate cover URLs across the 14 projects.
 - Future admin-created projects are protected by `ProjectCover` fallback UI if a cover URL is missing or fails to load.
 - No secrets were committed; the admin API was used only to update existing project cover URLs in KV.
+
+## Goal: Strengthen Personal Introduction
+
+### Task
+
+Rewrite the personal introduction so the website feels like a real personal brand site, not only a project wall or UI showcase.
+
+### Success Criteria
+
+- Homepage About section clearly explains who Weiyi is, what kind of work he does, and what direction the site represents.
+- The introduction keeps the existing "retro + tech + youth + nature" style but becomes more personal and concrete.
+- Contact CTA reinforces collaboration intent instead of generic placeholder copy.
+- Build, lint, deploy, production checks, commit, and push complete.
+
+### Architecture
+
+- Keep the change scoped to copy and presentation in `src/components/sections/About.tsx`, `src/components/sections/Contact.tsx`, and shared profile copy in `src/data/site.ts`.
+- Do not add new CMS/database behavior for this small copy pass.
+
+### Progress
+
+- Started on 2026-07-07 after user asked: "个人介绍不做了吗".
+- Updated shared hero intro in `src/data/site.ts` to describe Weiyi as a creator exploring AI tools, personal brand websites, mobile UI, and visual systems.
+- Rewrote homepage About section to explain:
+  - who Weiyi is
+  - what kind of projects he is building
+  - why the current visual direction exists
+  - what visitors can understand from the portfolio
+- Updated Contact CTA to reinforce that the site is a living project archive and personal brand entry.
+- Local validation:
+  - `npm run lint`: passed.
+  - `npm run build`: passed.
+- Deployed to Cloudflare Worker:
+  - Version `2c752d29-300d-46d1-859a-0873fca17a59`.
+- Production validation:
+  - `/`: HTTP 200.
+  - Production HTML references the new JS bundle `/assets/index-Bo0senmt.js`.
+  - Built bundle contains the new About and Contact copy.
 - Deployed to Cloudflare Worker version `78ddc0dc-8c86-4faf-a6d8-12f795498dbb`.
 - Final deploy after removing the public admin CTA from detail pages: `7105991a-82c0-4c7d-9208-80ab7d3636a9`.
 - Production validation:

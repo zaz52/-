@@ -16,7 +16,7 @@ export const siteProfile = {
   label: 'Nature Future Youth',
   headlineLines: ['复古科技，', '青春自然。', '用设计连接真实与未来。'],
   intro:
-    '我专注于打造兼具自然气息、复古质感与现代交互体验的个人品牌网页、移动端界面和视觉系统。',
+    '我是 Weiyi，一个持续探索 AI 工具、个人品牌网站、移动端界面和视觉系统的创作者。我喜欢把复古电脑、自然植物、奶油纸张和轻科技动效放进界面里，让作品既有功能，也有记忆点。',
   avatar: '/avatar.jpg',
 };
 

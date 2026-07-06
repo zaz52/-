@@ -14,10 +14,10 @@ export function Contact() {
             <div>
               <p className="mb-4 text-sm font-black uppercase tracking-[0.32em] text-[var(--green)]">Contact</p>
               <h2 className="max-w-3xl text-5xl font-black leading-tight tracking-[-0.05em] text-[var(--deep)] md:text-7xl">
-                一起做一个有生命力的界面。
+                如果你想了解我，先从这些作品开始。
               </h2>
               <p className="mt-6 max-w-2xl text-lg leading-8 text-[#617268]">
-                如果你喜欢复古、自然、科技和青春感融合的视觉方向，欢迎联系我。
+                我会继续把 AI 工具、自动化项目、移动端界面和个人品牌实验整理到这里。如果你喜欢这种复古、自然、科技和青春感融合的方向，可以直接联系我。
               </p>
               <div className="mt-10 flex flex-col gap-4 sm:flex-row">
                 <Button href="mailto:1845779520@qq.com"><Send size={18} />发送邮件</Button>

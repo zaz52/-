@@ -27,15 +27,25 @@ export function About() {
         <div>
           <SectionTitle
             eyebrow="About"
-            title="不是展示规范，而是建立一个有记忆点的个人品牌。"
-            description="我把自然气息、复古质感和轻科技交互结合起来，让个人网页不只是信息集合，而是一个可被记住的体验。"
+            title="我是 Weiyi，正在把想法做成可以被打开的作品。"
+            description="我关注 AI 工具、个人品牌网站、移动端界面和视觉系统，也在持续把自己的项目、审美和学习过程整理成一个长期生长的个人空间。"
           />
           <Card className="mt-10 p-8 md:p-10">
             <p className="text-xl font-black leading-9 text-[var(--deep)]">
-              我关注的是页面的第一印象、滚动节奏、作品可信度和联系转化。视觉要有性格，但交互必须清楚；动效要有生命力，但不能抢走内容。
+              我不是只想做一个“能放链接”的作品集，而是想把每个项目背后的想法、风格和使用场景讲清楚。这个网站是我的个人品牌入口，也是我的作品档案、实验记录和能力展示。
             </p>
             <p className="mt-6 text-base leading-8 text-[#617268]">
-              当前网站围绕“复古科技、青春自然”构建：大标题、复古电脑、植物贴纸、奶油纸张和高留白共同组成品牌识别。
+              我喜欢复古电脑的秩序感、自然植物的生命力、青春感的明亮节奏，以及轻科技界面的效率。现在的视觉方向围绕“复古科技、青春自然”构建：大标题、复古电脑、植物贴纸、奶油纸张、高留白和柔和动效共同形成记忆点。
+            </p>
+            <div className="mt-8 grid gap-3 md:grid-cols-3">
+              {['AI 工具与自动化', '个人品牌网站', '移动端与视觉系统'].map((item) => (
+                <div key={item} className="rounded-2xl bg-[#eef4df] px-4 py-3 text-sm font-black text-[var(--green)]">
+                  {item}
+                </div>
+              ))}
+            </div>
+            <p className="mt-6 text-base leading-8 text-[#617268]">
+              如果你正在看我的作品，可以从这里了解我能做什么：把一个想法整理成产品入口，把一个链接升级成完整展示页，把零散项目变成更可信、更好浏览的个人品牌资产。
             </p>
           </Card>
         </div>
