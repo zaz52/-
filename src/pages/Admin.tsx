@@ -117,6 +117,7 @@ export function Admin() {
   const [collapsedIds, setCollapsedIds] = useState<Set<string>>(() => new Set());
   const [coverStatus, setCoverStatus] = useState<Record<string, 'ok' | 'error' | 'missing'>>({});
   const importInputRef = useRef<HTMLInputElement>(null);
+  const mobileCollapseInitializedRef = useRef(false);
 
   const featuredId = useMemo(() => projects.find((project) => project.featured)?.id ?? projects[0]?.id, [projects]);
   const visibleProjects = useMemo(() => {
@@ -132,7 +133,13 @@ export function Admin() {
     fetch('/api/projects')
       .then((response) => response.ok ? response.json() : Promise.reject(new Error('加载失败')))
       .then((data: ProjectRecord[]) => {
-        if (Array.isArray(data) && data.length > 0) setProjects(data);
+        if (Array.isArray(data) && data.length > 0) {
+          setProjects(data);
+          if (!mobileCollapseInitializedRef.current && window.innerWidth < 768) {
+            setCollapsedIds(new Set(data.map((project) => project.id)));
+            mobileCollapseInitializedRef.current = true;
+          }
+        }
       })
       .catch(() => setMessage('云端数据暂时不可用，正在显示本地默认作品。'));
   }, []);
@@ -298,7 +305,7 @@ export function Admin() {
   };
 
   return (
-    <main className="min-h-screen bg-[#fff9ec] px-5 py-10 text-[var(--deep)] md:px-10">
+    <main className="min-h-screen bg-[#fff9ec] px-4 pb-32 pt-8 text-[var(--deep)] md:px-10 md:py-10">
       <div className="mx-auto max-w-[1280px]">
         <div className="flex flex-col gap-5 border-b border-[rgba(18,48,38,0.14)] pb-8 md:flex-row md:items-end md:justify-between">
           <div>
@@ -427,7 +434,7 @@ export function Admin() {
             </div>
         </section>
 
-        <section className="mt-8 rounded-[1.5rem] border border-[rgba(18,48,38,0.12)] bg-white/72 p-5 shadow-[0_18px_48px_rgba(11,61,46,0.08)]">
+        <section className="admin-mobile-tools sticky top-3 z-20 mt-8 rounded-[1.5rem] border border-[rgba(18,48,38,0.12)] bg-white/90 p-5 shadow-[0_18px_48px_rgba(11,61,46,0.08)] backdrop-blur md:static">
           <div className="grid gap-4 lg:grid-cols-[1fr_auto]">
             <label className="flex min-h-14 items-center gap-3 rounded-2xl bg-[#fff9ec] px-4">
               <Search size={19} className="text-[var(--green)]" />
@@ -438,7 +445,7 @@ export function Admin() {
                 placeholder="搜索名称、类型、标签、介绍或链接"
               />
             </label>
-            <div className="flex flex-wrap gap-2">
+            <div className="admin-filter-strip flex flex-wrap gap-2">
               {categoryOptions.map((option) => (
                 <button
                   key={option.value}
@@ -458,7 +465,7 @@ export function Admin() {
             <p className="text-sm font-black text-[#617268]">
               当前显示 {visibleProjects.length} / {projects.length} 个作品
             </p>
-            <div className="flex flex-wrap gap-2">
+            <div className="admin-action-strip flex flex-wrap gap-2">
               <button className="btn-flow min-h-0 bg-[var(--coral)] px-4 py-2 text-sm text-white" type="button" onClick={() => setProjects((items) => [...items, emptyProject()])}>
                 <Plus size={16} />
                 添加作品
@@ -601,6 +608,24 @@ export function Admin() {
             </div>
           ) : null}
         </section>
+      </div>
+
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-[rgba(18,48,38,0.12)] bg-[#fff9ec]/95 p-3 shadow-[0_-18px_45px_rgba(11,61,46,0.12)] backdrop-blur md:hidden">
+        <div className="grid grid-cols-3 gap-2">
+          <button className="btn-flow min-h-12 bg-[var(--green)] px-3 py-2 text-sm text-white disabled:opacity-50" type="button" onClick={save} disabled={!unlocked || saving}>
+            <Save size={16} />
+            保存
+          </button>
+          <button className="btn-flow min-h-12 bg-[var(--coral)] px-3 py-2 text-sm text-white" type="button" onClick={() => setProjects((items) => [...items, emptyProject()])}>
+            <Plus size={16} />
+            新增
+          </button>
+          <button className="btn-flow min-h-12 bg-[#eef4df] px-3 py-2 text-sm text-[var(--deep)]" type="button" onClick={collapseAll}>
+            <ChevronRight size={16} />
+            折叠
+          </button>
+        </div>
+        <p className="mt-2 truncate text-center text-xs font-bold text-[#617268]">{message}</p>
       </div>
     </main>
   );

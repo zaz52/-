@@ -435,6 +435,53 @@ User approved the next step: improve the portfolio by adding real project detail
 - Local validation:
   - `npm run lint`: passed.
   - `npm run build`: passed.
+
+## Goal: Improve Mobile Admin Experience
+
+### Task
+
+Optimize `/admin` for phone usage so the user can manage projects from mobile without fighting a long desktop-style form page.
+
+### Success Criteria
+
+- On mobile, project cards default to collapsed after project data loads.
+- Search/filter tools are easier to reach on small screens.
+- Primary actions such as save and add are available in a fixed mobile bottom bar.
+- Admin content has enough bottom padding so the fixed bar does not cover fields.
+- Touch targets remain large and readable.
+- Build, lint, deploy, production checks, commit, and push complete.
+
+### Architecture
+
+- Keep changes scoped to `src/pages/Admin.tsx` and `src/styles/globals.css`.
+- Use responsive CSS and a small mobile initialization check; no backend changes.
+
+### Progress
+
+- Started on 2026-07-07 after user approved mobile version optimization.
+- Added mobile-only default collapse behavior after project data loads.
+- Added mobile fixed bottom action bar with Save, New, and Collapse actions.
+- Added bottom padding to the admin page so the fixed action bar does not cover content.
+- Made the admin search/filter block sticky on small screens.
+- Added mobile CSS for horizontal category filters and compact two-column action buttons.
+- Local validation:
+  - `git diff --check`: passed.
+  - `npm run lint`: passed.
+  - `npm run build`: passed.
+- Deployed to Cloudflare Worker:
+  - Version `5e53c83c-ab9d-40fa-a934-349226746d83`.
+- Production validation:
+  - `/`: HTTP 200.
+  - `/admin`: HTTP 200.
+  - `/projects`: HTTP 200.
+  - Production JS bundle `/assets/index-BDu42Hqj.js` contains mobile width handling, collapsed-card logic, and mobile bottom actions.
+  - Production CSS bundle `/assets/index-WN08O4md.css` contains `admin-mobile-tools`, `admin-filter-strip`, and `admin-action-strip`.
+
+### Review Notes
+
+- The mobile bottom bar is hidden on desktop with `md:hidden`.
+- The fixed bottom bar is paired with extra page bottom padding so it does not cover the final project fields.
+- Browser screenshot automation was not installed because Playwright browser binaries would write under C drive, which the user asked to avoid.
 - Deployed to Cloudflare Worker:
   - Version `1874e3c1-78fe-419b-89f4-d5771c6acdd8`.
 - Production validation:

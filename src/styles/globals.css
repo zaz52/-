@@ -394,4 +394,38 @@ a:hover .project-cover::before {
   .motion-sidebar {
     display: none;
   }
+
+  .admin-mobile-tools {
+    max-height: 72vh;
+    overflow: auto;
+  }
+
+  .admin-filter-strip {
+    margin-inline: -0.25rem;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding: 0.25rem;
+    scrollbar-width: none;
+  }
+
+  .admin-filter-strip::-webkit-scrollbar {
+    display: none;
+  }
+
+  .admin-filter-strip > button {
+    flex: 0 0 auto;
+  }
+
+  .admin-action-strip {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .admin-action-strip > button,
+  .admin-action-strip > .btn-flow {
+    min-width: 0;
+    width: 100%;
+    padding-inline: 0.75rem;
+  }
 }
