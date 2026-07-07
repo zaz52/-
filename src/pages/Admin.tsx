@@ -1,4 +1,22 @@
-import { ArrowDown, ArrowUp, BarChart3, Eye, Plus, RefreshCw, Save, Star, Trash2, Upload } from 'lucide-react';
+import {
+  ArrowDown,
+  ArrowUp,
+  BarChart3,
+  ChevronDown,
+  ChevronRight,
+  Download,
+  ExternalLink,
+  Eye,
+  LogOut,
+  Plus,
+  RefreshCw,
+  Save,
+  Search,
+  Star,
+  Trash2,
+  Upload,
+  UploadCloud,
+} from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { defaultProjects } from '../data/projects';
 import type { ProjectIconKey, ProjectPalette, ProjectRecord } from '../data/projectTypes';
@@ -19,6 +37,18 @@ const paletteOptions: { value: ProjectPalette; label: string }[] = [
   { value: 'cyan', label: '松石青' },
   { value: 'violet', label: '蓝紫' },
 ];
+
+const categoryOptions = [
+  { value: 'all', label: '全部' },
+  { value: 'featured', label: '主推' },
+  { value: 'github', label: 'GitHub' },
+  { value: 'ai', label: 'AI' },
+  { value: 'web', label: '网站 / UI' },
+  { value: 'automation', label: '自动化' },
+  { value: 'missing-cover', label: '缺封面' },
+] as const;
+
+type ProjectCategory = typeof categoryOptions[number]['value'];
 
 type AnalyticsSummary = {
   total: number;
@@ -42,6 +72,18 @@ const emptyProject = (): ProjectRecord => ({
   tags: ['New'],
   palette: 'emerald',
 });
+
+const projectMatchesCategory = (project: ProjectRecord, category: ProjectCategory) => {
+  const text = `${project.id} ${project.name} ${project.type} ${project.description} ${project.href} ${project.tags.join(' ')}`.toLowerCase();
+  if (category === 'all') return true;
+  if (category === 'featured') return Boolean(project.featured);
+  if (category === 'github') return project.id.startsWith('github-') || text.includes('github.com');
+  if (category === 'ai') return text.includes('ai');
+  if (category === 'web') return /web|ui|portfolio|cloudflare|react|html|网站|界面|移动端/.test(text);
+  if (category === 'automation') return /automation|fastapi|deploy|agent|自动化|部署|脚本/.test(text);
+  if (category === 'missing-cover') return !project.cover?.trim();
+  return true;
+};
 
 async function compressImage(file: File) {
   const image = new Image();
@@ -70,8 +112,20 @@ export function Admin() {
   const [saving, setSaving] = useState(false);
   const [analytics, setAnalytics] = useState<AnalyticsSummary | null>(null);
   const [analyticsLoading, setAnalyticsLoading] = useState(false);
+  const [query, setQuery] = useState('');
+  const [category, setCategory] = useState<ProjectCategory>('all');
+  const [collapsedIds, setCollapsedIds] = useState<Set<string>>(() => new Set());
+  const [coverStatus, setCoverStatus] = useState<Record<string, 'ok' | 'error' | 'missing'>>({});
+  const importInputRef = useRef<HTMLInputElement>(null);
 
   const featuredId = useMemo(() => projects.find((project) => project.featured)?.id ?? projects[0]?.id, [projects]);
+  const visibleProjects = useMemo(() => {
+    const keyword = query.trim().toLowerCase();
+    return projects.filter((project) => {
+      const text = `${project.name} ${project.type} ${project.description} ${project.href} ${project.tags.join(' ')}`.toLowerCase();
+      return projectMatchesCategory(project, category) && (!keyword || text.includes(keyword));
+    });
+  }, [category, projects, query]);
   const getPassword = () => passwordInputRef.current?.value || password;
 
   useEffect(() => {
@@ -158,6 +212,64 @@ export function Admin() {
     });
   };
 
+  const toggleCollapsed = (id: string) => {
+    setCollapsedIds((current) => {
+      const next = new Set(current);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const collapseAll = () => setCollapsedIds(new Set(projects.map((project) => project.id)));
+  const expandAll = () => setCollapsedIds(new Set());
+
+  const logout = () => {
+    sessionStorage.removeItem('adminPassword');
+    setPassword('');
+    setUnlocked(false);
+    setAnalytics(null);
+    setMessage('已退出登录。');
+  };
+
+  const exportProjects = () => {
+    const blob = new Blob([JSON.stringify(projects, null, 2)], { type: 'application/json;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = `weiyiai-projects-${new Date().toISOString().slice(0, 10)}.json`;
+    anchor.click();
+    URL.revokeObjectURL(url);
+    setMessage('已导出当前作品 JSON 备份。');
+  };
+
+  const importProjects = async (file: File) => {
+    try {
+      const text = await file.text();
+      const data = JSON.parse(text) as ProjectRecord[];
+      if (!Array.isArray(data) || data.length === 0) throw new Error('Invalid project backup');
+      const normalized = data.map((project, index) => ({
+        ...project,
+        id: project.id || crypto.randomUUID(),
+        iconKey: project.iconKey || 'sparkles',
+        name: project.name || `导入作品 ${index + 1}`,
+        type: project.type || '项目类型',
+        description: project.description || '写一句清楚的作品介绍。',
+        href: project.href || 'https://',
+        cover: project.cover || '/covers/resource-vault.svg',
+        tags: Array.isArray(project.tags) ? project.tags : ['Imported'],
+        palette: project.palette || 'emerald',
+      }));
+      setProjects(normalized);
+      setCollapsedIds(new Set());
+      setMessage(`已导入 ${normalized.length} 个作品，确认无误后请点击“保存作品”。`);
+    } catch {
+      setMessage('导入失败，请确认文件是从后台导出的 JSON。');
+    } finally {
+      if (importInputRef.current) importInputRef.current.value = '';
+    }
+  };
+
   const save = async () => {
     setSaving(true);
     setMessage('正在保存...');
@@ -201,7 +313,7 @@ export function Admin() {
         </div>
 
         <section className="mt-8 rounded-[1.5rem] border border-[rgba(18,48,38,0.12)] bg-white/72 p-5 shadow-[0_18px_48px_rgba(11,61,46,0.08)]">
-          <div className="grid gap-4 md:grid-cols-[1fr_auto_auto]">
+          <div className="grid gap-4 md:grid-cols-[1fr_auto_auto_auto]">
             <input
               ref={passwordInputRef}
               className="ds-input"
@@ -212,6 +324,10 @@ export function Admin() {
             />
             <button className="btn-flow bg-[var(--deep)] text-[var(--cream)]" type="button" onClick={() => login()}>
               登录
+            </button>
+            <button className="btn-flow border border-[rgba(18,48,38,0.16)] bg-white text-[var(--deep)] disabled:opacity-50" type="button" onClick={logout} disabled={!unlocked}>
+              <LogOut size={18} />
+              退出
             </button>
             <button className="btn-flow bg-[var(--green)] text-white disabled:opacity-50" type="button" onClick={save} disabled={!unlocked || saving}>
               <Save size={18} />
@@ -311,19 +427,95 @@ export function Admin() {
             </div>
         </section>
 
-        <div className="mt-8 flex justify-end">
-          <button className="btn-flow bg-[var(--coral)] text-white" type="button" onClick={() => setProjects((items) => [...items, emptyProject()])}>
-            <Plus size={18} />
-            添加作品
-          </button>
-        </div>
+        <section className="mt-8 rounded-[1.5rem] border border-[rgba(18,48,38,0.12)] bg-white/72 p-5 shadow-[0_18px_48px_rgba(11,61,46,0.08)]">
+          <div className="grid gap-4 lg:grid-cols-[1fr_auto]">
+            <label className="flex min-h-14 items-center gap-3 rounded-2xl bg-[#fff9ec] px-4">
+              <Search size={19} className="text-[var(--green)]" />
+              <input
+                className="w-full bg-transparent text-base font-bold outline-none placeholder:text-[#8a9a90]"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="搜索名称、类型、标签、介绍或链接"
+              />
+            </label>
+            <div className="flex flex-wrap gap-2">
+              {categoryOptions.map((option) => (
+                <button
+                  key={option.value}
+                  type="button"
+                  className={`rounded-full px-4 py-3 text-sm font-black transition ${
+                    category === option.value ? 'bg-[var(--deep)] text-[var(--cream)]' : 'bg-[#eef4df] text-[var(--deep)] hover:bg-[#e0edd2]'
+                  }`}
+                  onClick={() => setCategory(option.value)}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
+            <p className="text-sm font-black text-[#617268]">
+              当前显示 {visibleProjects.length} / {projects.length} 个作品
+            </p>
+            <div className="flex flex-wrap gap-2">
+              <button className="btn-flow min-h-0 bg-[var(--coral)] px-4 py-2 text-sm text-white" type="button" onClick={() => setProjects((items) => [...items, emptyProject()])}>
+                <Plus size={16} />
+                添加作品
+              </button>
+              <button className="btn-flow min-h-0 border border-[rgba(18,48,38,0.16)] bg-white px-4 py-2 text-sm text-[var(--deep)]" type="button" onClick={exportProjects}>
+                <Download size={16} />
+                导出备份
+              </button>
+              <button className="btn-flow min-h-0 border border-[rgba(18,48,38,0.16)] bg-white px-4 py-2 text-sm text-[var(--deep)]" type="button" onClick={() => importInputRef.current?.click()}>
+                <UploadCloud size={16} />
+                导入恢复
+              </button>
+              <input
+                ref={importInputRef}
+                className="hidden"
+                type="file"
+                accept="application/json,.json"
+                onChange={(event) => {
+                  const file = event.target.files?.[0];
+                  if (file) void importProjects(file);
+                }}
+              />
+              <button className="btn-flow min-h-0 bg-[#eef4df] px-4 py-2 text-sm text-[var(--deep)]" type="button" onClick={collapseAll}>
+                全部折叠
+              </button>
+              <button className="btn-flow min-h-0 bg-[#eef4df] px-4 py-2 text-sm text-[var(--deep)]" type="button" onClick={expandAll}>
+                全部展开
+              </button>
+            </div>
+          </div>
+        </section>
 
         <section className="mt-6 grid gap-5">
-          {projects.map((project, index) => (
+          {visibleProjects.map((project) => {
+            const index = projects.findIndex((item) => item.id === project.id);
+            const collapsed = collapsedIds.has(project.id);
+            const status = project.cover?.trim() ? coverStatus[project.id] ?? 'missing' : 'missing';
+            return (
             <article key={project.id} className="grid gap-5 rounded-[1.5rem] border border-[rgba(18,48,38,0.12)] bg-white/82 p-5 shadow-[0_18px_48px_rgba(11,61,46,0.08)] lg:grid-cols-[280px_1fr]">
               <div>
                 <div className="relative aspect-[4/3] overflow-hidden rounded-[1.2rem] bg-[#e7ddc9]">
-                  <img className="h-full w-full object-cover" src={project.cover} alt={`${project.name} 封面`} />
+                  {project.cover?.trim() ? (
+                    <img
+                      className="h-full w-full object-cover"
+                      src={project.cover}
+                      alt={`${project.name} 封面`}
+                      onLoad={() => setCoverStatus((current) => ({ ...current, [project.id]: 'ok' }))}
+                      onError={() => setCoverStatus((current) => ({ ...current, [project.id]: 'error' }))}
+                    />
+                  ) : (
+                    <div className="grid h-full place-items-center bg-[#f1eadb] p-5 text-center text-sm font-black text-[#8a6f5a]">缺少封面</div>
+                  )}
+                  <span className={`absolute left-3 top-3 rounded-full px-3 py-1 text-xs font-black ${
+                    status === 'ok' ? 'bg-[#dff5df] text-[#176b4f]' : status === 'error' ? 'bg-[#ffe4df] text-[#8a2d22]' : 'bg-[#fff4e1] text-[#8a6f5a]'
+                  }`}>
+                    {status === 'ok' ? '封面正常' : status === 'error' ? '封面失败' : '等待检测'}
+                  </span>
                 </div>
                 <label className="btn-flow mt-4 w-full cursor-pointer bg-[var(--deep)] text-[var(--cream)]">
                   <Upload size={18} />
@@ -345,6 +537,18 @@ export function Admin() {
               <div className="grid gap-4">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div className="flex flex-wrap gap-2">
+                    <button className="btn-flow min-h-0 bg-[#eef4df] px-4 py-2 text-sm text-[var(--deep)]" type="button" onClick={() => toggleCollapsed(project.id)}>
+                      {collapsed ? <ChevronRight size={16} /> : <ChevronDown size={16} />}
+                      {collapsed ? '展开' : '折叠'}
+                    </button>
+                    <a className="btn-flow min-h-0 border border-[rgba(18,48,38,0.16)] bg-white px-4 py-2 text-sm text-[var(--deep)]" href={`/projects/${project.id}`} target="_blank" rel="noreferrer">
+                      <Eye size={16} />
+                      预览
+                    </a>
+                    <a className="btn-flow min-h-0 border border-[rgba(18,48,38,0.16)] bg-white px-4 py-2 text-sm text-[var(--deep)]" href={project.href} target="_blank" rel="noreferrer">
+                      <ExternalLink size={16} />
+                      外链
+                    </a>
                     <button className="btn-flow min-h-0 px-4 py-2 text-sm" type="button" onClick={() => setFeatured(project.id)}>
                       <Star size={16} />
                       {project.featured ? '当前主推' : '设为主推'}
@@ -364,7 +568,16 @@ export function Admin() {
                   </button>
                 </div>
 
-                <div className="grid gap-4 md:grid-cols-2">
+                <div className="grid gap-2 rounded-2xl bg-[#fff9ec] px-4 py-3">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <span className="text-lg font-black text-[var(--deep)]">{project.name}</span>
+                    {project.featured ? <span className="rounded-full bg-[#ffe4df] px-3 py-1 text-xs font-black text-[#8a2d22]">主推</span> : null}
+                    <span className="rounded-full bg-[#eef4df] px-3 py-1 text-xs font-black text-[var(--green)]">第 {index + 1} 位</span>
+                  </div>
+                  <p className="text-sm font-bold leading-6 text-[#617268]">{project.type} · {project.tags.join(' / ')}</p>
+                </div>
+
+                {!collapsed ? <div className="grid gap-4 md:grid-cols-2">
                   <input className="ds-input" value={project.name} onChange={(event) => updateProject(project.id, { name: event.target.value })} placeholder="项目名称" />
                   <input className="ds-input" value={project.type} onChange={(event) => updateProject(project.id, { type: event.target.value })} placeholder="项目类型" />
                   <input className="ds-input md:col-span-2" value={project.href} onChange={(event) => updateProject(project.id, { href: event.target.value })} placeholder="项目链接" />
@@ -377,10 +590,16 @@ export function Admin() {
                   <select className="ds-input" value={project.palette} onChange={(event) => updateProject(project.id, { palette: event.target.value as ProjectPalette })}>
                     {paletteOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
                   </select>
-                </div>
+                </div> : null}
               </div>
             </article>
-          ))}
+            );
+          })}
+          {visibleProjects.length === 0 ? (
+            <div className="rounded-[1.5rem] border border-[rgba(18,48,38,0.12)] bg-white/82 p-8 text-center font-black text-[#617268]">
+              没有匹配的作品，可以换个关键词或筛选条件。
+            </div>
+          ) : null}
         </section>
       </div>
     </main>

@@ -436,6 +436,25 @@ User approved the next step: improve the portfolio by adding real project detail
   - `npm run lint`: passed.
   - `npm run build`: passed.
 - Deployed to Cloudflare Worker:
+  - Version `1874e3c1-78fe-419b-89f4-d5771c6acdd8`.
+- Production validation:
+  - `/`: HTTP 200.
+  - `/admin`: HTTP 200.
+  - `/projects`: HTTP 200.
+  - Production admin JS bundle `/assets/index-D3zAuaW_.js` contains the new admin controls:
+    - 导出备份
+    - 导入恢复
+    - 全部折叠
+    - 封面正常
+    - 搜索名称、类型、标签、介绍或链接
+    - 退出
+
+### Review Notes
+
+- No admin password or secret was committed.
+- Import/export stays client-side and requires an explicit save before imported data affects production.
+- The existing `/api/projects` endpoint remains unchanged, reducing backend risk.
+- Deployed to Cloudflare Worker:
   - First cover deploy: `c2a50597-b06e-41be-aa08-0af1e31e8c2b`.
   - Final redeploy after CSS review: `0f931257-43f7-4624-8da9-eabc57ad9e89`.
 - Production validation:
@@ -489,6 +508,53 @@ Use the Chinese personal brand name "唯一" across the public website while pre
   - `/design-system`: HTTP 200, title `设计系统 | 唯一`.
   - `/admin`: HTTP 200, title `后台管理 | 唯一`.
   - `/og-image.svg`: contains `唯一` and no visible `Weiyi` text.
+
+## Goal: Upgrade Admin Project Management
+
+### Task
+
+Make `/admin` easier for a non-technical user to manage many portfolio projects.
+
+### Success Criteria
+
+- Admin can search projects by name, type, description, tag, or link.
+- Admin can filter projects by all, featured, GitHub, AI, web/UI, automation, and missing cover.
+- Project cards can be collapsed and expanded so the page is not overwhelmingly long.
+- Each project has "preview detail page" and "open external link" actions.
+- Admin can export current projects as a JSON backup and import a JSON backup to restore/edit.
+- Admin can log out cleanly.
+- Cover preview shows whether the image loaded successfully, failed, or is missing.
+- Build, lint, deploy, production checks, commit, and push complete.
+
+### Architecture
+
+- Keep management state local to `src/pages/Admin.tsx`.
+- Use existing `/api/projects` save endpoint; do not change Worker API unless necessary.
+- Export/import is client-side JSON only, avoiding secret or backend changes.
+
+### Progress
+
+- Started on 2026-07-07 after user said "继续做" for admin management upgrade.
+- Added local admin management state for search, category filter, collapsed cards, cover status, JSON import, and JSON export.
+- Added top admin toolbar:
+  - search by project text
+  - category filters
+  - add project
+  - export JSON backup
+  - import JSON backup
+  - collapse all / expand all
+- Added login session logout button.
+- Added per-project actions:
+  - collapse / expand
+  - preview detail page
+  - open external link
+  - set featured
+  - move up/down
+  - delete
+- Added cover status badges for loaded, failed, and missing covers.
+- Local validation:
+  - `npm run lint`: passed.
+  - `npm run build`: passed.
 
 ## Goal: Strengthen Personal Introduction
 
