@@ -100,7 +100,7 @@ export default function App() {
         <div className="max-w-5xl mx-auto px-4 py-3.5 flex items-center justify-between">
           <div className="flex items-center gap-3 font-bold text-base tracking-tight">
             <span className="w-5 h-5 bg-indigo-600 rounded-md inline-block shadow-sm animate-bounce"></span>
-            <span>WEIYI / MOTION UI</span>
+            <span>壹隅 / YI CORNER</span>
             <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 text-xs font-semibold bg-indigo-50 text-indigo-700 rounded-full border border-indigo-100">
               <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 animate-ping"></span>
               LIVE MOTION v3.5
@@ -143,7 +143,7 @@ export default function App() {
               {copied ? '动效规范已复制' : '复制核心交互规范'}
             </button>
             <a
-              href="https://github.com/zaz52/-"
+              href="https://github.com/zaz52/yi-corner"
               target="_blank"
               rel="noreferrer"
               className="flex items-center gap-2 px-5 py-2.5 font-bold text-sm bg-white hover:bg-slate-50 hover:shadow-md active:scale-95 text-slate-700 border border-slate-200 rounded-xl shadow-sm transition-all"
@@ -487,9 +487,9 @@ export default function App() {
 
         {/* 底部版权 */}
         <footer className="border-t border-slate-200 pt-8 pb-4 text-center">
-          <h3 className="text-sm font-bold text-slate-900">WEIYI MOTION UI DESIGN SYSTEM</h3>
+          <h3 className="text-sm font-bold text-slate-900">壹隅 YI CORNER</h3>
           <p className="text-xs text-slate-500 mt-1">
-            Crafted with Fluid Motion Light UI & React 18
+            一隅之地 · Crafted with Motion & React
           </p>
         </footer>
       </main>
