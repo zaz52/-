@@ -1,47 +1,167 @@
-import React, { useState } from 'react';
-import { 
-  Check, 
-  Search, 
-  Layers, 
-  Type, 
-  Sparkles, 
-  Github, 
-  ExternalLink, 
-  TrendingUp, 
-  Sliders, 
-  Copy, 
-  CheckCheck,
-  Activity,
+import { useState } from 'react';
+import {
+  Github,
+  ExternalLink,
+  Sparkles,
+  Mail,
+  MessageCircle,
+  ArrowUpRight,
   Zap,
-  Volume2
+  Volume2,
+  Palette,
+  FolderKanban,
+  Send,
 } from 'lucide-react';
 
+/* ================= 数据 ================= */
+
+const NAV = [
+  { label: '作品', href: '#projects' },
+  { label: '设计', href: '#design' },
+  { label: '关于', href: '#about' },
+  { label: '联系', href: '#contact' },
+];
+
+const profile = {
+  name: '唯一',
+  headline: ['复古科技，', '青春自然。'],
+  sub: '用设计连接真实与未来。',
+  intro:
+    '我是唯一，一个持续探索 AI 工具、个人品牌网站、移动端界面和视觉系统的创作者。喜欢把复古电脑、自然植物、奶油纸张和轻科技动效放进界面里，让作品既有功能，也有记忆点。',
+};
+
+const marqueeTags = [
+  'React', 'TypeScript', 'AI 工具', 'UI 设计', '动效交互', 'Tailwind CSS',
+  'Vite', '开源工具', '移动端体验', '提示词工程', '产品思维', '视觉系统',
+];
+
+const projects = [
+  {
+    name: '乾坤之道', type: '东方术数 + AI 问事平台',
+    desc: '融合周易起卦、八字、奇门、六爻与 AI 解读的东方问事工具台，围绕问题、术法和结果生成结构化洞察。',
+    href: 'https://suangua.weiyiai.top/',
+    tags: ['AI 问卦', '周易', 'Cloudflare'], featured: true,
+  },
+  {
+    name: '魔方简历', type: 'AI 简历编辑器',
+    desc: '免费、隐私优先的在线简历编辑器，支持 AI 润色、语法检查、本地数据存储和 PDF / JSON 导出。',
+    href: 'https://magic-resume-weiyi.netlify.app/',
+    tags: ['AI 简历', '本地存储', '开源工具'], featured: true,
+  },
+  {
+    name: 'PPT Master', type: 'AI 原生 PPTX 生成器',
+    desc: '把 PDF、DOCX、URL 或 Markdown 转成真正可编辑的 PowerPoint，保留原生形状、图表、讲稿和模板风格。',
+    href: 'https://ppt-master-weiyi.netlify.app/',
+    tags: ['AI 文档', 'PPTX', '可编辑'], featured: true,
+  },
+  {
+    name: '银龄守护', type: '长辈健康关怀小程序界面',
+    desc: '面向老年健康管理的移动端体验，整合饮水、睡眠、心率、药箱、语音、电台、AI 晨报和报告分析入口。',
+    href: 'https://elder-health.netlify.app/#/pages/index/index',
+    tags: ['移动端', '健康关怀', '适老化'], featured: true,
+  },
+  {
+    name: '虚拟资源库', type: '学习资料与素材集合',
+    desc: '沉淀学习资源、设计素材、工具文件和项目资料的云端入口，方便集中整理、检索和分享。',
+    href: 'https://pan.quark.cn/s/bc839cf401af#/list/share',
+    tags: ['资料库', '素材整理', '云端分享'], featured: false,
+  },
+  {
+    name: '壹隅 YI CORNER', type: '个人网站（本站）',
+    desc: '本站——基于 React + Tailwind 的个人网站，灵动流体浅色 UI 与 60fps 微交互设计系统。',
+    href: 'https://github.com/zaz52/yi-corner',
+    tags: ['React', 'Portfolio', 'Motion'], featured: false,
+  },
+  {
+    name: '闲鱼自动回复管理系统', type: 'Python + FastAPI 自动化客服',
+    desc: '面向闲鱼平台的自动化客服与虚拟商品流程系统，覆盖消息处理、自动回复、自动发货、评价和商品维护。',
+    href: 'https://github.com/zaz52/xianyu-auto-reply',
+    tags: ['Python', 'FastAPI', 'Automation'], featured: false,
+  },
+  {
+    name: '闲鱼超级管家', type: '自动化工具二次开发',
+    desc: '基于闲鱼自动回复系统的二次开发版本，重点重构前端 UI 和使用体验，让自动化管理工具更现代、更清晰。',
+    href: 'https://github.com/zaz52/xianyu-super-butler',
+    tags: ['Automation', 'UI', 'Tooling'], featured: false,
+  },
+  {
+    name: '小说工作台', type: 'TypeScript 创作工具',
+    desc: '面向小说创作流程的工作台项目，用于沉淀写作、设定、素材和内容生产相关能力。',
+    href: 'https://github.com/zaz52/wei-yi',
+    tags: ['TypeScript', 'Writing', 'Workbench'], featured: false,
+  },
+  {
+    name: '个人形象顾问 Skill', type: 'Agent 形象升级提示词',
+    desc: '用于个人穿搭、眼镜、色彩诊断、发型和形象升级报告的 Agent skill 与提示词集合。',
+    href: 'https://github.com/zaz52/personal-style-advisor',
+    tags: ['Agent Skill', 'Style', 'Prompt'], featured: false,
+  },
+  {
+    name: 'Agent Reach', type: 'AI Agent 网络信息读取工具',
+    desc: '为 AI Agent 提供跨平台读取和搜索能力，覆盖 Twitter、Reddit、YouTube、GitHub、Bilibili、小红书等公开信息源。',
+    href: 'https://github.com/zaz52/Agent-Reach',
+    tags: ['Agent', 'Search', 'CLI'], featured: false,
+  },
+  {
+    name: 'GeniusFKoai', type: 'Python 实验项目',
+    desc: 'GitHub 上沉淀的 Python 项目，用于记录和整理 AI、自动化或实验性代码能力。',
+    href: 'https://github.com/zaz52/GeniusFKoai',
+    tags: ['Python', 'AI', 'GitHub'], featured: false,
+  },
+  {
+    name: '乾坤之道部署脚本', type: 'Python 部署辅助',
+    desc: '围绕乾坤之道项目沉淀的部署与辅助脚本仓库，方便后续维护算卦相关站点和发布流程。',
+    href: 'https://github.com/zaz52/yulesuangua-deploy',
+    tags: ['Python', 'Deploy'], featured: false,
+  },
+  {
+    name: 'GitHub Pages 作品集备份', type: 'HTML 静态站点备份',
+    desc: '早期 GitHub Pages 个人网站仓库，作为个人网站迁移过程中的静态部署备份和历史版本。',
+    href: 'https://github.com/zaz52/zaz52.github.io',
+    tags: ['HTML', 'Archive'], featured: false,
+  },
+];
+
+const stats = [
+  { value: '14', suffix: '', label: '作品项目' },
+  { value: '120', suffix: '+', label: '设计组件' },
+  { value: '30', suffix: '+', label: '创意练习' },
+  { value: '100', suffix: '%', label: '关注体验' },
+];
+
+const contacts = [
+  { icon: Mail, label: 'Email', value: '1845779520@qq.com', href: 'mailto:1845779520@qq.com' },
+  { icon: Github, label: 'GitHub', value: 'github.com/zaz52', href: 'https://github.com/zaz52' },
+  { icon: Sparkles, label: 'X', value: '@Weiyi_Learn', href: 'https://x.com/Weiyi_Learn' },
+  { icon: MessageCircle, label: '微信', value: 'Z3_March' },
+];
+
 const TABS = [
-  { id: 'preview', label: '预览' },
+  { id: 'feel', label: '手感' },
   { id: 'motion', label: '动效' },
-  { id: 'code', label: '代码' },
+  { id: 'rhythm', label: '节奏' },
 ] as const;
 
+function SectionHead({ icon, zh, en, note }: { icon: React.ReactNode; zh: string; en: string; note: string }) {
+  return (
+    <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+      <h2 className="text-lg font-bold flex items-center gap-2 text-slate-900">
+        <span className="text-indigo-600">{icon}</span> {zh} <span className="text-slate-400 font-semibold text-sm">{en}</span>
+      </h2>
+      <span className="text-xs text-slate-500 font-medium">{note}</span>
+    </div>
+  );
+}
+
 export default function App() {
-  const [switchOn, setSwitchOn] = useState(true);
-  const [checkedA, setCheckedA] = useState(true);
-  const [checkedB, setCheckedB] = useState(false);
-  const [inputValue, setInputValue] = useState('');
-  const [clickCount, setClickCount] = useState(0);
-  const [copied, setCopied] = useState(false);
-  const [activeTab, setActiveTab] = useState<'preview' | 'motion' | 'code'>('preview');
+  const [activeTab, setActiveTab] = useState<'feel' | 'motion' | 'rhythm'>('feel');
+  const [pressCount, setPressCount] = useState(0);
   const [isBeating, setIsBeating] = useState(true);
-
-  const handleCopy = () => {
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
   const activeTabIndex = TABS.findIndex((t) => t.id === activeTab);
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 font-sans pb-24 selection:bg-indigo-500 selection:text-white relative overflow-x-hidden">
-      {/* 嵌入原生关键帧动画样式 */}
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 font-sans pb-24 selection:bg-indigo-500 selection:text-white relative overflow-x-hidden scroll-smooth">
+      {/* 动效关键帧 */}
       <style>{`
         @keyframes marquee {
           0% { transform: translateX(0%); }
@@ -49,12 +169,10 @@ export default function App() {
         }
         .animate-marquee {
           display: flex;
-          width: 200%;
-          animation: marquee 22s linear infinite;
+          width: max-content;
+          animation: marquee 26s linear infinite;
         }
-        .animate-marquee:hover {
-          animation-play-state: paused;
-        }
+        .animate-marquee:hover { animation-play-state: paused; }
         @keyframes equalizer {
           0%, 100% { height: 6px; }
           50% { height: 26px; }
@@ -64,7 +182,6 @@ export default function App() {
         .animate-eq-3 { animation: equalizer 1.4s ease-in-out infinite 0.4s; }
         .animate-eq-4 { animation: equalizer 0.9s ease-in-out infinite 0.1s; }
         .animate-eq-5 { animation: equalizer 1.2s ease-in-out infinite 0.3s; }
-        /* 流动边框光效：悬浮时边框有微光流转 */
         @keyframes border-flow {
           0% { background-position: 0% 50%; }
           50% { background-position: 100% 50%; }
@@ -91,406 +208,254 @@ export default function App() {
         .flow-border-xl::before { border-radius: 20px; }
       `}</style>
 
-      {/* 背景动态呼吸微光斑 */}
+      {/* 背景呼吸微光 */}
       <div className="absolute top-10 right-10 w-96 h-96 bg-purple-200/40 rounded-full blur-3xl pointer-events-none animate-pulse"></div>
       <div className="absolute top-96 left-[-100px] w-96 h-96 bg-cyan-200/40 rounded-full blur-3xl pointer-events-none animate-pulse"></div>
 
-      {/* 顶部现代化纯白导航 */}
+      {/* 顶栏 */}
       <header className="border-b border-slate-200 bg-white/80 backdrop-blur-md sticky top-0 z-50">
         <div className="max-w-5xl mx-auto px-4 py-3.5 flex items-center justify-between">
-          <div className="flex items-center gap-3 font-bold text-base tracking-tight">
+          <a href="#top" className="flex items-center gap-3 font-bold text-base tracking-tight">
             <span className="w-5 h-5 bg-indigo-600 rounded-md inline-block shadow-sm animate-bounce"></span>
             <span>壹隅 / YI CORNER</span>
             <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 text-xs font-semibold bg-indigo-50 text-indigo-700 rounded-full border border-indigo-100">
               <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 animate-ping"></span>
-              LIVE MOTION v3.5
+              个人网站
             </span>
-          </div>
+          </a>
           <nav className="flex items-center gap-5 text-sm font-semibold text-slate-600">
-            <a href="#marquee" className="hover:text-indigo-600 transition-colors">流动流</a>
-            <a href="#buttons" className="hover:text-indigo-600 transition-colors">动态控件</a>
-            <a href="#cards" className="hover:text-indigo-600 transition-colors">交互卡片</a>
-            <a
-              href="#preview"
-              className="px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white rounded-lg shadow-sm transition-all text-xs font-bold"
-            >
-              实战控制台
-            </a>
+            {NAV.map((n) => (
+              <a key={n.href} href={n.href} className="hover:text-indigo-600 transition-colors">{n.label}</a>
+            ))}
           </nav>
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-4 pt-10 space-y-14 relative z-10">
-        {/* Hero 区域 */}
+      <main id="top" className="max-w-5xl mx-auto px-4 pt-10 space-y-14 relative z-10">
+        {/* Hero：个人介绍 */}
         <section className="bg-white/90 backdrop-blur-sm border border-slate-200/80 rounded-2xl p-6 md:p-10 shadow-sm relative overflow-hidden">
-          <div className="inline-flex items-center gap-2 px-3 py-1 mb-4 text-xs font-semibold rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/60">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            60FPS FLUID MICRO-INTERACTIONS
+          <div className="inline-flex items-center gap-2 px-3 py-1 mb-4 text-xs font-semibold rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200/60">
+            <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
+            你好，我是{profile.name} 👋
           </div>
           <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-slate-900 leading-tight">
-            灵动流体浅色 UI 设计系统
+            {profile.headline[0]}<br />{profile.headline[1]}
           </h1>
-          <p className="mt-4 text-base md:text-lg text-slate-600 font-normal leading-relaxed max-w-3xl">
-            融入弹性动力学、丝滑跑马灯流、跳动波形与实时微交互。在纯净浅色的通透基底上，让每一个按钮、开关与卡片都充满“活着”的动感。
-          </p>
-
-          <div className="flex flex-wrap gap-4 pt-5 mt-1">
-            <button
-              onClick={handleCopy}
+          <p className="mt-3 text-lg md:text-xl font-semibold text-indigo-600">{profile.sub}</p>
+          <p className="mt-4 text-base text-slate-600 leading-relaxed max-w-3xl">{profile.intro}</p>
+          <div className="flex flex-wrap gap-4 pt-6">
+            <a
+              href="#projects"
               className="flow-border flex items-center gap-2 px-5 py-2.5 font-bold text-sm bg-indigo-600 hover:bg-indigo-700 hover:shadow-indigo-200 hover:shadow-lg active:scale-90 text-white rounded-xl shadow-sm transition-all duration-200"
             >
-              {copied ? <CheckCheck size={16} /> : <Copy size={16} />}
-              {copied ? '动效规范已复制' : '复制核心交互规范'}
-            </button>
+              <FolderKanban size={16} /> 浏览作品
+            </a>
             <a
-              href="https://github.com/zaz52/yi-corner"
-              target="_blank"
-              rel="noreferrer"
+              href="#contact"
               className="flex items-center gap-2 px-5 py-2.5 font-bold text-sm bg-white hover:bg-slate-50 hover:shadow-md active:scale-95 text-slate-700 border border-slate-200 rounded-xl shadow-sm transition-all"
             >
-              <Github size={16} /> 仓库源码
+              <Send size={16} /> 联系我
             </a>
           </div>
         </section>
 
-        {/* 动态亮点 1：无限平滑水平跑马灯 (Infinite Marquee) */}
-        <section id="marquee" className="bg-white border border-slate-200/80 rounded-2xl py-3.5 px-2 overflow-hidden shadow-sm">
+        {/* 跑马灯：技能标签 */}
+        <section className="bg-white border border-slate-200/80 rounded-2xl py-3.5 px-2 overflow-hidden shadow-sm">
           <div className="animate-marquee gap-4">
-            {[
-              { text: '⚡ 弹性按压按钮', bg: 'bg-indigo-50 text-indigo-700 border-indigo-100' },
-              { text: '✦ iOS 流体开关', bg: 'bg-amber-50 text-amber-700 border-amber-100' },
-              { text: '▲ 实时波形均衡器', bg: 'bg-emerald-50 text-emerald-700 border-emerald-100' },
-              { text: '● 聚焦光晕输入框', bg: 'bg-purple-50 text-purple-700 border-purple-100' },
-              { text: '★ 平滑选项卡滑块', bg: 'bg-sky-50 text-sky-700 border-sky-100' },
-              { text: '■ 动态微悬浮卡片', bg: 'bg-rose-50 text-rose-700 border-rose-100' },
-              { text: '⚡ 弹性按压按钮', bg: 'bg-indigo-50 text-indigo-700 border-indigo-100' },
-              { text: '✦ iOS 流体开关', bg: 'bg-amber-50 text-amber-700 border-amber-100' },
-              { text: '▲ 实时波形均衡器', bg: 'bg-emerald-50 text-emerald-700 border-emerald-100' },
-              { text: '● 聚焦光晕输入框', bg: 'bg-purple-50 text-purple-700 border-purple-100' },
-              { text: '★ 平滑选项卡滑块', bg: 'bg-sky-50 text-sky-700 border-sky-100' },
-              { text: '■ 动态微悬浮卡片', bg: 'bg-rose-50 text-rose-700 border-rose-100' },
-            ].map((item, idx) => (
+            {[...marqueeTags, ...marqueeTags].map((tag, idx) => (
               <span
                 key={idx}
-                className={`whitespace-nowrap px-4 py-1.5 rounded-full text-xs font-bold border ${item.bg} shadow-xs cursor-default hover:scale-105 transition-transform`}
+                className="whitespace-nowrap px-4 py-1.5 rounded-full text-xs font-bold border bg-indigo-50 text-indigo-700 border-indigo-100 shadow-xs cursor-default hover:scale-105 transition-transform"
               >
-                {item.text}
+                {tag}
               </span>
             ))}
           </div>
         </section>
 
-        {/* 1. 色彩与设计令牌 Tokens */}
-        <section id="tokens" className="space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-200 pb-3">
-            <h2 className="text-lg font-bold flex items-center gap-2 text-slate-900">
-              <Layers size={18} className="text-indigo-600" /> 01 / COLOR TOKENS 设计色彩系统
-            </h2>
-            <span className="text-xs text-slate-500 font-medium">通透高亮色阶</span>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
-            {[
-              { name: '电光靛蓝 Brand', hex: '#4F46E5', bg: 'bg-indigo-600', text: 'text-white' },
-              { name: '皇家蓝 Accent', hex: '#2563EB', bg: 'bg-blue-600', text: 'text-white' },
-              { name: '薄荷绿 Success', hex: '#10B981', bg: 'bg-emerald-500', text: 'text-white' },
-              { name: '深石板主字 Text', hex: '#0F172A', bg: 'bg-slate-900', text: 'text-white' },
-              { name: '浅石板底板 Slate', hex: '#F1F5F9', bg: 'bg-slate-100', text: 'text-slate-800' },
-              { name: '纯白表面 Surface', hex: '#FFFFFF', bg: 'bg-white border border-slate-200', text: 'text-slate-800' },
-            ].map((col, idx) => (
-              <div key={idx} className="border border-slate-200/80 p-3 bg-white rounded-xl shadow-sm hover:-translate-y-1 hover:shadow-md transition-all">
-                <div className={`h-14 ${col.bg} rounded-lg flex items-end p-2 mb-2`}>
-                  <span className={`text-[10px] font-bold ${col.text}`}>{col.hex}</span>
+        {/* 作品 */}
+        <section id="projects" className="space-y-5 scroll-mt-24">
+          <SectionHead icon={<FolderKanban size={18} />} zh="作品" en="PROJECTS" note="点击卡片访问线上地址 / 仓库" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {projects.map((p) => (
+              <a
+                key={p.name}
+                href={p.href}
+                target="_blank"
+                rel="noreferrer"
+                className={`group bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm hover:-translate-y-1.5 hover:shadow-lg hover:shadow-indigo-100 transition-all duration-300 flex flex-col ${p.featured ? 'flow-border flow-border-xl' : ''}`}
+              >
+                <div className="flex items-start justify-between gap-2 mb-2">
+                  <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${p.featured ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600'}`}>
+                    {p.featured ? '★ 精选' : p.type}
+                  </span>
+                  <ArrowUpRight size={16} className="text-slate-300 group-hover:text-indigo-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0 mt-0.5" />
                 </div>
-                <div className="text-xs font-bold text-slate-800">{col.name}</div>
-              </div>
+                {p.featured && <div className="text-[11px] font-semibold text-slate-400 mb-1">{p.type}</div>}
+                <h3 className="font-extrabold text-slate-900 text-base group-hover:text-indigo-700 transition-colors">{p.name}</h3>
+                <p className="text-xs text-slate-500 leading-relaxed mt-2 flex-1">{p.desc}</p>
+                <div className="flex flex-wrap gap-1.5 mt-3">
+                  {p.tags.map((t) => (
+                    <span key={t} className="px-2 py-0.5 text-[10px] font-semibold bg-slate-50 text-slate-500 border border-slate-100 rounded">#{t}</span>
+                  ))}
+                </div>
+              </a>
             ))}
           </div>
         </section>
 
-        {/* 2. 动态按钮控件体系 Buttons */}
-        <section id="buttons" className="space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-200 pb-3">
-            <h2 className="text-lg font-bold flex items-center gap-2 text-slate-900">
-              <Sparkles size={18} className="text-indigo-600" /> 02 / BUTTONS 动态弹性按钮体系
-            </h2>
-            <span className="text-xs text-slate-500 font-medium">支持点击缩放与触感回弹</span>
-          </div>
+        {/* 设计：动效语言 */}
+        <section id="design" className="space-y-5 scroll-mt-24">
+          <SectionHead icon={<Palette size={18} />} zh="设计" en="MOTION LANGUAGE" note="这个站点的母语：五种招牌动效" />
+          <p className="text-sm text-slate-500 leading-relaxed">
+            界面动效是壹隅的设计语言——下面五种微交互贯穿全站，悬浮、按压、切换都可以亲手试试。
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {/* 1. 跑马灯 */}
+            <div className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm overflow-hidden">
+              <div className="text-xs font-bold text-slate-400 mb-3">01 / 无限跑马灯</div>
+              <div className="overflow-hidden -mx-5">
+                <div className="animate-marquee gap-2 px-5">
+                  {['流畅', '无缝', '60fps', '悬停暂停', '流畅', '无缝', '60fps', '悬停暂停'].map((t, i) => (
+                    <span key={i} className="whitespace-nowrap px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-100">{t}</span>
+                  ))}
+                </div>
+              </div>
+              <p className="text-[11px] text-slate-400 mt-3">首尾相接的无缝循环，鼠标悬停即暂停</p>
+            </div>
 
-          <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm">
-            <div className="flex flex-wrap items-center gap-4">
+            {/* 2. 流动边框 */}
+            <div className="flow-border flow-border-xl bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm">
+              <div className="text-xs font-bold text-slate-400 mb-3">02 / 流动边框光效</div>
+              <div className="h-16 flex items-center justify-center text-sm font-bold text-slate-500">
+                把鼠标悬浮上来 ✨
+              </div>
+              <p className="text-[11px] text-slate-400 mt-1">渐变微光沿边框缓缓流转</p>
+            </div>
+
+            {/* 3. 弹性按压 */}
+            <div className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm">
+              <div className="text-xs font-bold text-slate-400 mb-3">03 / 弹性按压反馈</div>
               <button
-                onClick={() => setClickCount(c => c + 1)}
-                className="px-5 py-2.5 font-bold text-sm bg-indigo-600 hover:bg-indigo-700 hover:scale-105 active:scale-90 text-white rounded-xl shadow-sm hover:shadow-indigo-200 hover:shadow-lg transition-all flex items-center gap-2"
+                onClick={() => setPressCount((c) => c + 1)}
+                className="w-full py-2.5 font-bold text-sm bg-indigo-600 hover:bg-indigo-700 hover:scale-[1.02] active:scale-90 text-white rounded-xl shadow-sm transition-all flex items-center justify-center gap-2"
               >
-                <Zap size={16} /> 弹性按压 (触发计数: {clickCount})
+                <Zap size={15} /> 按我试试（{pressCount}）
               </button>
-
-              <button className="px-5 py-2.5 font-bold text-sm bg-white hover:bg-slate-50 hover:scale-105 active:scale-95 text-slate-700 border border-slate-200 rounded-xl shadow-sm transition-all">
-                微悬浮提升按钮
-              </button>
-
-              <button className="px-5 py-2.5 font-bold text-sm bg-emerald-600 hover:bg-emerald-700 hover:scale-105 active:scale-95 text-white rounded-xl shadow-sm transition-all flex items-center gap-1.5">
-                <Check size={16} strokeWidth={2.5} /> 成功保存态
-              </button>
-
-              <button className="px-5 py-2.5 font-bold text-sm bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl transition-all">
-                幽灵底色按钮
-              </button>
-
-              <button className="px-4 py-2 font-bold text-sm bg-rose-50 text-rose-600 hover:bg-rose-100 active:scale-95 border border-rose-200 rounded-xl transition-all">
-                危险操作
-              </button>
-
-              <button disabled className="px-4 py-2 font-bold text-sm bg-slate-100 text-slate-400 rounded-xl cursor-not-allowed">
-                已禁用状态
-              </button>
-            </div>
-          </div>
-        </section>
-
-        {/* 3. 动态表单与实时跳动波形 Form Controls */}
-        <section id="inputs" className="space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-200 pb-3">
-            <h2 className="text-lg font-bold flex items-center gap-2 text-slate-900">
-              <Sliders size={18} className="text-indigo-600" /> 03 / FORM CONTROLS 动效输入与实时音波
-            </h2>
-            <span className="text-xs text-slate-500 font-medium">平滑聚焦环、实时波形均衡器</span>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm">
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-slate-600 uppercase tracking-wider block">发光聚焦输入框</label>
-              <input
-                type="text"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                placeholder="在此输入文本试试..."
-                className="w-full px-4 py-2.5 font-medium text-sm bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-sm"
-              />
-              <span className="text-[11px] text-slate-400 font-medium">当前值: {inputValue || '(空)'}</span>
+              <p className="text-[11px] text-slate-400 mt-3">按下回弹、悬浮上浮，有“活着”的手感</p>
             </div>
 
-            {/* 带实时音波波形图的模块 */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <label className="text-xs font-bold text-slate-600 uppercase tracking-wider block">实时音频 / 信号波形条</label>
-                <button 
-                  onClick={() => setIsBeating(!isBeating)}
-                  className="text-[11px] font-bold text-indigo-600 hover:underline flex items-center gap-1"
-                >
-                  <Volume2 size={12} /> {isBeating ? '暂停跳动' : '开启跳动'}
+            {/* 4. 实时波形 */}
+            <div className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm">
+              <div className="flex items-center justify-between mb-3">
+                <div className="text-xs font-bold text-slate-400">04 / 实时波形与呼吸</div>
+                <button onClick={() => setIsBeating(!isBeating)} className="text-[11px] font-bold text-indigo-600 hover:underline flex items-center gap-1">
+                  <Volume2 size={12} /> {isBeating ? '暂停' : '播放'}
                 </button>
               </div>
-              <div className="h-[42px] border border-slate-200 bg-slate-50/80 rounded-xl px-4 flex items-center justify-between">
-                <span className="text-xs font-semibold text-slate-500 flex items-center gap-2">
-                  <span className={`w-2 h-2 rounded-full ${isBeating ? 'bg-emerald-500 animate-ping' : 'bg-slate-400'}`}></span>
-                  AUDIO SPECTRUM:
-                </span>
-                <div className="flex items-center gap-1 h-7">
-                  <div className={`w-1.5 bg-indigo-600 rounded-full ${isBeating ? 'animate-eq-1' : 'h-3'}`}></div>
-                  <div className={`w-1.5 bg-indigo-500 rounded-full ${isBeating ? 'animate-eq-2' : 'h-4'}`}></div>
-                  <div className={`w-1.5 bg-indigo-600 rounded-full ${isBeating ? 'animate-eq-3' : 'h-2'}`}></div>
-                  <div className={`w-1.5 bg-indigo-500 rounded-full ${isBeating ? 'animate-eq-4' : 'h-5'}`}></div>
-                  <div className={`w-1.5 bg-indigo-600 rounded-full ${isBeating ? 'animate-eq-5' : 'h-2'}`}></div>
-                </div>
+              <div className="h-16 border border-slate-100 bg-slate-50/80 rounded-xl flex items-center justify-center gap-1.5">
+                <div className={`w-2 bg-indigo-600 rounded-full ${isBeating ? 'animate-eq-1' : 'h-3'}`}></div>
+                <div className={`w-2 bg-indigo-500 rounded-full ${isBeating ? 'animate-eq-2' : 'h-4'}`}></div>
+                <div className={`w-2 bg-indigo-600 rounded-full ${isBeating ? 'animate-eq-3' : 'h-2'}`}></div>
+                <div className={`w-2 bg-indigo-500 rounded-full ${isBeating ? 'animate-eq-4' : 'h-5'}`}></div>
+                <div className={`w-2 bg-indigo-600 rounded-full ${isBeating ? 'animate-eq-5' : 'h-2'}`}></div>
+                <div className={`w-2 bg-cyan-500 rounded-full ${isBeating ? 'animate-eq-2' : 'h-3'}`}></div>
+                <div className={`w-2 bg-violet-500 rounded-full ${isBeating ? 'animate-eq-4' : 'h-4'}`}></div>
               </div>
+              <p className="text-[11px] text-slate-400 mt-3">纯 CSS 关键帧驱动的均衡器律动</p>
             </div>
 
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-slate-600 uppercase tracking-wider block">带图标搜索框</label>
-              <div className="relative">
-                <Search size={18} className="absolute left-3.5 top-3 text-slate-400 pointer-events-none" />
-                <input
-                  type="text"
-                  placeholder="搜索动态组件..."
-                  className="w-full pl-10 pr-4 py-2.5 font-medium text-sm bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-sm"
-                />
-              </div>
-            </div>
-
-            <div className="space-y-3 pt-1">
-              <label className="text-xs font-bold text-slate-600 uppercase tracking-wider block">选择与切换</label>
-              <div className="flex flex-wrap items-center gap-6">
-                <div
-                  onClick={() => setSwitchOn(!switchOn)}
-                  className={`w-12 h-7 rounded-full p-1 cursor-pointer transition-colors duration-300 ease-in-out flex items-center ${
-                    switchOn ? 'bg-indigo-600' : 'bg-slate-200'
-                  }`}
-                >
-                  <div
-                    className={`w-5 h-5 bg-white rounded-full shadow-md transition-transform duration-300 ease-in-out ${
-                      switchOn ? 'translate-x-5' : 'translate-x-0'
-                    }`}
-                  ></div>
-                </div>
-                <span className="text-xs font-bold text-slate-700">实时广播: {switchOn ? '运行中' : '已暂停'}</span>
-
-                <label className="flex items-center gap-2 cursor-pointer font-medium text-sm text-slate-700">
-                  <div
-                    onClick={() => setCheckedA(!checkedA)}
-                    className={`w-5 h-5 rounded-md border flex items-center justify-center transition-all ${
-                      checkedA ? 'bg-indigo-600 border-indigo-600 text-white scale-105' : 'bg-white border-slate-300'
-                    }`}
-                  >
-                    {checkedA && <Check size={14} strokeWidth={3} />}
-                  </div>
-                  <span>自动推流</span>
-                </label>
-
-                <label className="flex items-center gap-2 cursor-pointer font-medium text-sm text-slate-700">
-                  <div
-                    onClick={() => setCheckedB(!checkedB)}
-                    className={`w-5 h-5 rounded-md border flex items-center justify-center transition-all ${
-                      checkedB ? 'bg-indigo-600 border-indigo-600 text-white scale-105' : 'bg-white border-slate-300'
-                    }`}
-                  >
-                    {checkedB && <Check size={14} strokeWidth={3} />}
-                  </div>
-                  <span>震动反馈</span>
-                </label>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* 4. 动态卡片与选项卡 Tabs */}
-        <section id="cards" className="space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-200 pb-3">
-            <h2 className="text-lg font-bold flex items-center gap-2 text-slate-900">
-              <Type size={18} className="text-indigo-600" /> 04 / CARDS & TABS 动态卡片与交互选项卡
-            </h2>
-            <span className="text-xs text-slate-500 font-medium">平滑滑块与微悬浮</span>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="flow-border flow-border-xl bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm hover:-translate-y-1.5 hover:shadow-lg hover:shadow-indigo-100 transition-all duration-300">
-              <div className="flex items-center justify-between text-xs font-semibold text-slate-500 mb-2">
-                <span>THROUGHPUT METRIC</span>
-                <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 font-bold rounded-full text-[11px] flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
-                  <TrendingUp size={12} /> +28.4%
-                </span>
-              </div>
-              <div className="text-4xl font-extrabold text-slate-900 tracking-tight">1,420 rps</div>
-              <p className="text-xs text-slate-500 font-medium mt-2">
-                实时网络吞吐量，GPU 硬件加速渲染。
-              </p>
-            </div>
-
-            <div className="flow-border flow-border-xl bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm hover:-translate-y-1.5 hover:shadow-lg hover:shadow-indigo-100 transition-all duration-300">
-              {/* 平滑布局滑块：背景胶囊跟随滑动 */}
-              <div className="relative flex bg-slate-100 p-1 rounded-xl mb-4 text-xs font-bold">
+            {/* 5. Tab 滑块 */}
+            <div className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm sm:col-span-2 lg:col-span-1">
+              <div className="text-xs font-bold text-slate-400 mb-3">05 / 平滑 Tab 滑块</div>
+              <div className="relative flex bg-slate-100 p-1 rounded-xl mb-3 text-xs font-bold">
                 <div
                   aria-hidden
                   className="absolute left-1 top-1 bottom-1 rounded-lg bg-white shadow-xs transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"
-                  style={{
-                    width: 'calc((100% - 0.5rem) / 3)',
-                    transform: `translateX(${activeTabIndex * 100}%)`,
-                  }}
+                  style={{ width: 'calc((100% - 0.5rem) / 3)', transform: `translateX(${activeTabIndex * 100}%)` }}
                 />
                 {TABS.map((t) => (
                   <button
                     key={t.id}
                     onClick={() => setActiveTab(t.id)}
-                    className={`relative z-10 flex-1 py-1.5 rounded-lg transition-colors duration-200 ${
-                      activeTab === t.id ? 'text-indigo-600' : 'text-slate-500 hover:text-slate-700'
-                    }`}
+                    className={`relative z-10 flex-1 py-1.5 rounded-lg transition-colors duration-200 ${activeTab === t.id ? 'text-indigo-600' : 'text-slate-500 hover:text-slate-700'}`}
                   >
                     {t.label}
                   </button>
                 ))}
               </div>
-
-              <div className="bg-slate-50 border border-slate-100 p-3 rounded-xl text-xs font-medium text-slate-700">
-                {activeTab === 'preview' && '🟢 当前处于组件预览模式，无缝响应事件。'}
-                {activeTab === 'motion' && '⚡ 开启弹簧物理动画，提供 60fps 微交互。'}
-                {activeTab === 'code' && '💻 纯净 React 18 + Tailwind，零多余依赖。'}
+              <div className="bg-slate-50 border border-slate-100 p-3 rounded-xl text-xs font-medium text-slate-600 min-h-[52px]">
+                {activeTab === 'feel' && '🖱️ 按压回弹、悬浮上浮——每个控件都有触感。'}
+                {activeTab === 'motion' && '⚡ 60fps 微交互，弹簧曲线，零多余动画库。'}
+                {activeTab === 'rhythm' && '🌊 跑马灯、波形、呼吸光斑，页面有了节奏。'}
               </div>
             </div>
 
-            <div className="flow-border flow-border-xl bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm hover:-translate-y-1.5 hover:shadow-lg hover:shadow-indigo-100 transition-all duration-300">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-full bg-indigo-100 text-indigo-700 font-bold flex items-center justify-center animate-pulse">
-                  唯
-                </div>
-                <div>
-                  <div className="font-bold text-sm text-slate-900">唯一 (Weiyi)</div>
-                  <div className="text-xs text-slate-500 font-medium flex items-center gap-1">
-                    <Activity size={12} className="text-emerald-500" /> Motion & UI Engineer
-                  </div>
-                </div>
+            {/* 6. 呼吸光斑 */}
+            <div className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm relative overflow-hidden">
+              <div className="text-xs font-bold text-slate-400 mb-3 relative z-10">06 / 背景呼吸微光</div>
+              <div className="h-16 relative flex items-center justify-center">
+                <div className="absolute w-24 h-24 bg-purple-300/60 rounded-full blur-2xl animate-pulse"></div>
+                <div className="absolute w-16 h-16 bg-cyan-300/60 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+                <span className="relative text-sm font-bold text-slate-500">本页背景就有 ✨</span>
               </div>
-              <div className="pt-2 border-t border-slate-100 flex gap-2">
-                <span className="px-2 py-0.5 text-[10px] font-semibold bg-indigo-50 text-indigo-700 rounded">#Motion</span>
-                <span className="px-2 py-0.5 text-[10px] font-semibold bg-emerald-50 text-emerald-700 rounded">#Spring</span>
-              </div>
+              <p className="text-[11px] text-slate-400 mt-1 relative z-10">柔光斑块缓慢呼吸，营造通透感</p>
             </div>
           </div>
         </section>
 
-        {/* 5. 动态实战控制台窗口 */}
-        <section id="preview" className="space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-200 pb-3">
-            <h2 className="text-lg font-bold flex items-center gap-2 text-slate-900">
-              <ExternalLink size={18} className="text-indigo-600" /> 05 / ASSEMBLED WORKSPACE 动态控制台实战窗口
-            </h2>
-            <span className="text-xs text-slate-500 font-medium">完整动态装配</span>
-          </div>
-
-          <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden hover:shadow-md transition-shadow">
-            <div className="border-b border-slate-200 px-4 py-3 bg-slate-50/80 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-rose-400"></div>
-                <div className="w-3 h-3 rounded-full bg-amber-400"></div>
-                <div className="w-3 h-3 rounded-full bg-emerald-400"></div>
-              </div>
-              <span className="text-xs font-semibold text-slate-500">MOTION_STUDIO.TSX</span>
-              <span className="text-xs font-bold text-emerald-600 flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span> 
-                ● LIVE
-              </span>
-            </div>
-
-            <div className="p-6 md:p-8 space-y-6">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100 pb-4">
-                <div>
-                  <h3 className="text-2xl font-bold text-slate-900">交互动力学控制中心</h3>
-                  <p className="text-xs text-slate-500 font-medium">统一监控组件帧率、物理弹簧与动画事件</p>
-                </div>
-                <button 
-                  onClick={() => alert('已成功发送模拟信号事件！')}
-                  className="px-4 py-2 font-bold text-xs bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white rounded-lg shadow-sm transition-all"
-                >
-                  + 发送模拟信号事件
-                </button>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="border border-slate-100 p-4 bg-slate-50/60 rounded-xl">
-                  <span className="text-xs font-semibold text-slate-500">渲染帧率表现</span>
-                  <div className="text-2xl font-bold mt-1 text-emerald-600 flex items-center gap-2">
-                    60 FPS <span className="text-xs font-normal text-slate-400">(GPU 硬件加速)</span>
+        {/* 关于 */}
+        <section id="about" className="space-y-5 scroll-mt-24">
+          <SectionHead icon={<Sparkles size={18} />} zh="关于" en="ABOUT" note="数字里的创作轨迹" />
+          <div className="bg-white border border-slate-200/80 rounded-2xl p-6 md:p-8 shadow-sm">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+              {stats.map((s) => (
+                <div key={s.label}>
+                  <div className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">
+                    {s.value}<span className="text-indigo-600">{s.suffix}</span>
                   </div>
-                  <div className="text-[11px] text-slate-500 mt-1">零多余动画库体积，极速流畅</div>
+                  <div className="text-xs font-semibold text-slate-500 mt-1">{s.label}</div>
                 </div>
-
-                <div className="border border-slate-100 p-4 bg-slate-50/60 rounded-xl">
-                  <span className="text-xs font-semibold text-slate-500">动态组件实例</span>
-                  <div className="text-2xl font-bold mt-1 text-indigo-600">32 个动态控件</div>
-                  <div className="text-[11px] text-slate-500 mt-1">涵盖跑马灯、弹性按钮、波形与滑动切换</div>
-                </div>
-              </div>
+              ))}
             </div>
+            <p className="text-sm text-slate-500 leading-relaxed mt-6 max-w-3xl">
+              从 AI 工具、自动化脚本到移动端界面与视觉系统，我习惯把想法快速做成能用的东西，再把过程中沉淀的组件、动效和提示词整理成系统。这个站点既是作品集，也是实验场。
+            </p>
           </div>
         </section>
 
-        {/* 底部版权 */}
+        {/* 联系 */}
+        <section id="contact" className="space-y-5 scroll-mt-24">
+          <SectionHead icon={<Send size={18} />} zh="联系" en="CONTACT" note="欢迎交流合作" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {contacts.map((c) => {
+              const Icon = c.icon;
+              const inner = (
+                <>
+                  <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+                    <Icon size={18} />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="text-xs font-semibold text-slate-400">{c.label}</div>
+                    <div className="text-sm font-bold text-slate-800 truncate">{c.value}</div>
+                  </div>
+                  {c.href && <ExternalLink size={15} className="ml-auto text-slate-300 shrink-0" />}
+                </>
+              );
+              const cls = "flex items-center gap-3 bg-white border border-slate-200/80 rounded-2xl p-4 shadow-sm hover:-translate-y-0.5 hover:shadow-md transition-all";
+              return c.href ? (
+                <a key={c.label} href={c.href} target="_blank" rel="noreferrer" className={cls}>{inner}</a>
+              ) : (
+                <div key={c.label} className={cls}>{inner}</div>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* 页脚 */}
         <footer className="border-t border-slate-200 pt-8 pb-4 text-center">
           <h3 className="text-sm font-bold text-slate-900">壹隅 YI CORNER</h3>
-          <p className="text-xs text-slate-500 mt-1">
-            一隅之地 · Crafted with Motion & React
-          </p>
+          <p className="text-xs text-slate-500 mt-1">一隅之地 · Crafted with Motion & React</p>
         </footer>
       </main>
     </div>
