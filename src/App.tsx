@@ -2,92 +2,181 @@ import React, { useState } from 'react';
 import { 
   Check, 
   Search, 
-  ChevronDown, 
   Layers, 
   Type, 
-  Bell, 
   Sparkles, 
   Github, 
   ExternalLink, 
-  Info, 
-  TrendingUp,
-  Sliders,
-  Copy,
+  TrendingUp, 
+  Sliders, 
+  Copy, 
   CheckCheck,
-  ShieldCheck,
-  Zap
+  Activity,
+  Zap,
+  Volume2
 } from 'lucide-react';
+
+const TABS = [
+  { id: 'preview', label: '预览' },
+  { id: 'motion', label: '动效' },
+  { id: 'code', label: '代码' },
+] as const;
 
 export default function App() {
   const [switchOn, setSwitchOn] = useState(true);
   const [checkedA, setCheckedA] = useState(true);
   const [checkedB, setCheckedB] = useState(false);
   const [inputValue, setInputValue] = useState('');
-  const [selectValue, setSelectValue] = useState('react');
   const [clickCount, setClickCount] = useState(0);
   const [copied, setCopied] = useState(false);
+  const [activeTab, setActiveTab] = useState<'preview' | 'motion' | 'code'>('preview');
+  const [isBeating, setIsBeating] = useState(true);
 
   const handleCopy = () => {
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const activeTabIndex = TABS.findIndex((t) => t.id === activeTab);
+
   return (
-    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 font-sans pb-24 selection:bg-indigo-500 selection:text-white">
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 font-sans pb-24 selection:bg-indigo-500 selection:text-white relative overflow-x-hidden">
+      {/* 嵌入原生关键帧动画样式 */}
+      <style>{`
+        @keyframes marquee {
+          0% { transform: translateX(0%); }
+          100% { transform: translateX(-50%); }
+        }
+        .animate-marquee {
+          display: flex;
+          width: 200%;
+          animation: marquee 22s linear infinite;
+        }
+        .animate-marquee:hover {
+          animation-play-state: paused;
+        }
+        @keyframes equalizer {
+          0%, 100% { height: 6px; }
+          50% { height: 26px; }
+        }
+        .animate-eq-1 { animation: equalizer 1.1s ease-in-out infinite; }
+        .animate-eq-2 { animation: equalizer 0.8s ease-in-out infinite 0.2s; }
+        .animate-eq-3 { animation: equalizer 1.4s ease-in-out infinite 0.4s; }
+        .animate-eq-4 { animation: equalizer 0.9s ease-in-out infinite 0.1s; }
+        .animate-eq-5 { animation: equalizer 1.2s ease-in-out infinite 0.3s; }
+        /* 流动边框光效：悬浮时边框有微光流转 */
+        @keyframes border-flow {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        .flow-border { position: relative; }
+        .flow-border::before {
+          content: "";
+          position: absolute;
+          inset: -2px;
+          border-radius: 14px;
+          padding: 2px;
+          background: linear-gradient(115deg, #4F46E5, #22d3ee, #a78bfa, #f472b6, #4F46E5);
+          background-size: 280% 280%;
+          -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+          -webkit-mask-composite: xor;
+          mask-composite: exclude;
+          opacity: 0;
+          transition: opacity 0.35s ease;
+          animation: border-flow 3.5s linear infinite;
+          pointer-events: none;
+        }
+        .flow-border:hover::before { opacity: 1; }
+        .flow-border-xl::before { border-radius: 20px; }
+      `}</style>
+
+      {/* 背景动态呼吸微光斑 */}
+      <div className="absolute top-10 right-10 w-96 h-96 bg-purple-200/40 rounded-full blur-3xl pointer-events-none animate-pulse"></div>
+      <div className="absolute top-96 left-[-100px] w-96 h-96 bg-cyan-200/40 rounded-full blur-3xl pointer-events-none animate-pulse"></div>
+
       {/* 顶部现代化纯白导航 */}
       <header className="border-b border-slate-200 bg-white/80 backdrop-blur-md sticky top-0 z-50">
         <div className="max-w-5xl mx-auto px-4 py-3.5 flex items-center justify-between">
           <div className="flex items-center gap-3 font-bold text-base tracking-tight">
-            <span className="w-5 h-5 bg-indigo-600 rounded-md inline-block shadow-sm"></span>
-            <span>WEIYI / UI DESIGN SYSTEM</span>
-            <span className="hidden sm:inline-block px-2.5 py-0.5 text-xs font-semibold bg-indigo-50 text-indigo-700 rounded-full border border-indigo-100">
-              v3.0 CLEAN LIGHT
+            <span className="w-5 h-5 bg-indigo-600 rounded-md inline-block shadow-sm animate-bounce"></span>
+            <span>WEIYI / MOTION UI</span>
+            <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 text-xs font-semibold bg-indigo-50 text-indigo-700 rounded-full border border-indigo-100">
+              <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 animate-ping"></span>
+              LIVE MOTION v3.5
             </span>
           </div>
           <nav className="flex items-center gap-5 text-sm font-semibold text-slate-600">
-            <a href="#tokens" className="hover:text-indigo-600 transition-colors">色彩体系</a>
-            <a href="#buttons" className="hover:text-indigo-600 transition-colors">控件组件</a>
-            <a href="#cards" className="hover:text-indigo-600 transition-colors">卡片反馈</a>
+            <a href="#marquee" className="hover:text-indigo-600 transition-colors">流动流</a>
+            <a href="#buttons" className="hover:text-indigo-600 transition-colors">动态控件</a>
+            <a href="#cards" className="hover:text-indigo-600 transition-colors">交互卡片</a>
             <a
               href="#preview"
-              className="px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-sm transition-all text-xs font-bold"
+              className="px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white rounded-lg shadow-sm transition-all text-xs font-bold"
             >
-              实战预览
+              实战控制台
             </a>
           </nav>
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-4 pt-10 space-y-16">
+      <main className="max-w-5xl mx-auto px-4 pt-10 space-y-14 relative z-10">
         {/* Hero 区域 */}
-        <section className="bg-white border border-slate-200/80 rounded-2xl p-6 md:p-10 shadow-sm relative overflow-hidden">
+        <section className="bg-white/90 backdrop-blur-sm border border-slate-200/80 rounded-2xl p-6 md:p-10 shadow-sm relative overflow-hidden">
           <div className="inline-flex items-center gap-2 px-3 py-1 mb-4 text-xs font-semibold rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/60">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            LIGHT MODE · ACCESSIBLE
+            60FPS FLUID MICRO-INTERACTIONS
           </div>
           <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-slate-900 leading-tight">
-            现代纯净浅色 UI 设计系统
+            灵动流体浅色 UI 设计系统
           </h1>
           <p className="mt-4 text-base md:text-lg text-slate-600 font-normal leading-relaxed max-w-3xl">
-            面向现代生产级 Web 应用的组件库体系。纯白表面、细腻圆角、柔和弥散阴影与电光蓝光晕，打造极低认知负荷与清爽的交互体验。
+            融入弹性动力学、丝滑跑马灯流、跳动波形与实时微交互。在纯净浅色的通透基底上，让每一个按钮、开关与卡片都充满“活着”的动感。
           </p>
 
           <div className="flex flex-wrap gap-4 pt-5 mt-1">
             <button
               onClick={handleCopy}
-              className="flex items-center gap-2 px-4 py-2.5 font-bold text-sm bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-sm transition-all"
+              className="flow-border flex items-center gap-2 px-5 py-2.5 font-bold text-sm bg-indigo-600 hover:bg-indigo-700 hover:shadow-indigo-200 hover:shadow-lg active:scale-90 text-white rounded-xl shadow-sm transition-all duration-200"
             >
               {copied ? <CheckCheck size={16} /> : <Copy size={16} />}
-              {copied ? '规范已复制' : '复制核心设计规范'}
+              {copied ? '动效规范已复制' : '复制核心交互规范'}
             </button>
             <a
               href="https://github.com/zaz52/-"
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-2 px-4 py-2.5 font-bold text-sm bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-xl shadow-sm transition-all"
+              className="flex items-center gap-2 px-5 py-2.5 font-bold text-sm bg-white hover:bg-slate-50 hover:shadow-md active:scale-95 text-slate-700 border border-slate-200 rounded-xl shadow-sm transition-all"
             >
               <Github size={16} /> 仓库源码
             </a>
+          </div>
+        </section>
+
+        {/* 动态亮点 1：无限平滑水平跑马灯 (Infinite Marquee) */}
+        <section id="marquee" className="bg-white border border-slate-200/80 rounded-2xl py-3.5 px-2 overflow-hidden shadow-sm">
+          <div className="animate-marquee gap-4">
+            {[
+              { text: '⚡ 弹性按压按钮', bg: 'bg-indigo-50 text-indigo-700 border-indigo-100' },
+              { text: '✦ iOS 流体开关', bg: 'bg-amber-50 text-amber-700 border-amber-100' },
+              { text: '▲ 实时波形均衡器', bg: 'bg-emerald-50 text-emerald-700 border-emerald-100' },
+              { text: '● 聚焦光晕输入框', bg: 'bg-purple-50 text-purple-700 border-purple-100' },
+              { text: '★ 平滑选项卡滑块', bg: 'bg-sky-50 text-sky-700 border-sky-100' },
+              { text: '■ 动态微悬浮卡片', bg: 'bg-rose-50 text-rose-700 border-rose-100' },
+              { text: '⚡ 弹性按压按钮', bg: 'bg-indigo-50 text-indigo-700 border-indigo-100' },
+              { text: '✦ iOS 流体开关', bg: 'bg-amber-50 text-amber-700 border-amber-100' },
+              { text: '▲ 实时波形均衡器', bg: 'bg-emerald-50 text-emerald-700 border-emerald-100' },
+              { text: '● 聚焦光晕输入框', bg: 'bg-purple-50 text-purple-700 border-purple-100' },
+              { text: '★ 平滑选项卡滑块', bg: 'bg-sky-50 text-sky-700 border-sky-100' },
+              { text: '■ 动态微悬浮卡片', bg: 'bg-rose-50 text-rose-700 border-rose-100' },
+            ].map((item, idx) => (
+              <span
+                key={idx}
+                className={`whitespace-nowrap px-4 py-1.5 rounded-full text-xs font-bold border ${item.bg} shadow-xs cursor-default hover:scale-105 transition-transform`}
+              >
+                {item.text}
+              </span>
+            ))}
           </div>
         </section>
 
@@ -97,7 +186,7 @@ export default function App() {
             <h2 className="text-lg font-bold flex items-center gap-2 text-slate-900">
               <Layers size={18} className="text-indigo-600" /> 01 / COLOR TOKENS 设计色彩系统
             </h2>
-            <span className="text-xs text-slate-500 font-medium">AAA 级无障碍高对比度</span>
+            <span className="text-xs text-slate-500 font-medium">通透高亮色阶</span>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
@@ -109,7 +198,7 @@ export default function App() {
               { name: '浅石板底板 Slate', hex: '#F1F5F9', bg: 'bg-slate-100', text: 'text-slate-800' },
               { name: '纯白表面 Surface', hex: '#FFFFFF', bg: 'bg-white border border-slate-200', text: 'text-slate-800' },
             ].map((col, idx) => (
-              <div key={idx} className="border border-slate-200/80 p-3 bg-white rounded-xl shadow-sm">
+              <div key={idx} className="border border-slate-200/80 p-3 bg-white rounded-xl shadow-sm hover:-translate-y-1 hover:shadow-md transition-all">
                 <div className={`h-14 ${col.bg} rounded-lg flex items-end p-2 mb-2`}>
                   <span className={`text-[10px] font-bold ${col.text}`}>{col.hex}</span>
                 </div>
@@ -119,37 +208,37 @@ export default function App() {
           </div>
         </section>
 
-        {/* 2. 按钮控件体系 Buttons */}
+        {/* 2. 动态按钮控件体系 Buttons */}
         <section id="buttons" className="space-y-4">
           <div className="flex items-center justify-between border-b border-slate-200 pb-3">
             <h2 className="text-lg font-bold flex items-center gap-2 text-slate-900">
-              <Sparkles size={18} className="text-indigo-600" /> 02 / BUTTONS 按钮组件体系
+              <Sparkles size={18} className="text-indigo-600" /> 02 / BUTTONS 动态弹性按钮体系
             </h2>
-            <span className="text-xs text-slate-500 font-medium">支持多态与触感微悬浮反馈</span>
+            <span className="text-xs text-slate-500 font-medium">支持点击缩放与触感回弹</span>
           </div>
 
           <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm">
             <div className="flex flex-wrap items-center gap-4">
               <button
                 onClick={() => setClickCount(c => c + 1)}
-                className="px-5 py-2.5 font-bold text-sm bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white rounded-xl shadow-sm transition-all"
+                className="px-5 py-2.5 font-bold text-sm bg-indigo-600 hover:bg-indigo-700 hover:scale-105 active:scale-90 text-white rounded-xl shadow-sm hover:shadow-indigo-200 hover:shadow-lg transition-all flex items-center gap-2"
               >
-                主要操作 (点击计数: {clickCount})
+                <Zap size={16} /> 弹性按压 (触发计数: {clickCount})
               </button>
 
-              <button className="px-5 py-2.5 font-bold text-sm bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-xl shadow-sm transition-all">
-                次要行动按钮
+              <button className="px-5 py-2.5 font-bold text-sm bg-white hover:bg-slate-50 hover:scale-105 active:scale-95 text-slate-700 border border-slate-200 rounded-xl shadow-sm transition-all">
+                微悬浮提升按钮
               </button>
 
-              <button className="px-5 py-2.5 font-bold text-sm bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl shadow-sm transition-all flex items-center gap-1.5">
-                <Check size={16} strokeWidth={2.5} /> 确认并保存
+              <button className="px-5 py-2.5 font-bold text-sm bg-emerald-600 hover:bg-emerald-700 hover:scale-105 active:scale-95 text-white rounded-xl shadow-sm transition-all flex items-center gap-1.5">
+                <Check size={16} strokeWidth={2.5} /> 成功保存态
               </button>
 
               <button className="px-5 py-2.5 font-bold text-sm bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl transition-all">
                 幽灵底色按钮
               </button>
 
-              <button className="px-4 py-2 font-bold text-sm bg-rose-50 text-rose-600 hover:bg-rose-100 border border-rose-200 rounded-xl transition-all">
+              <button className="px-4 py-2 font-bold text-sm bg-rose-50 text-rose-600 hover:bg-rose-100 active:scale-95 border border-rose-200 rounded-xl transition-all">
                 危险操作
               </button>
 
@@ -160,196 +249,236 @@ export default function App() {
           </div>
         </section>
 
-        {/* 3. 表单与输入控件 Form Controls */}
+        {/* 3. 动态表单与实时跳动波形 Form Controls */}
         <section id="inputs" className="space-y-4">
           <div className="flex items-center justify-between border-b border-slate-200 pb-3">
             <h2 className="text-lg font-bold flex items-center gap-2 text-slate-900">
-              <Sliders size={18} className="text-indigo-600" /> 03 / FORM CONTROLS 表单与输入组件
+              <Sliders size={18} className="text-indigo-600" /> 03 / FORM CONTROLS 动效输入与实时音波
             </h2>
-            <span className="text-xs text-slate-500 font-medium">平滑聚焦环、iOS 质感流体开关</span>
+            <span className="text-xs text-slate-500 font-medium">平滑聚焦环、实时波形均衡器</span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm">
             <div className="space-y-2">
-              <label className="text-xs font-bold text-slate-600 uppercase tracking-wider block">文本输入框 (Text Input)</label>
+              <label className="text-xs font-bold text-slate-600 uppercase tracking-wider block">发光聚焦输入框</label>
               <input
                 type="text"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 placeholder="在此输入文本试试..."
-                className="w-full px-4 py-2.5 font-medium text-sm bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-sm"
+                className="w-full px-4 py-2.5 font-medium text-sm bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-sm"
               />
               <span className="text-[11px] text-slate-400 font-medium">当前值: {inputValue || '(空)'}</span>
             </div>
 
+            {/* 带实时音波波形图的模块 */}
             <div className="space-y-2">
-              <label className="text-xs font-bold text-slate-600 uppercase tracking-wider block">带图标搜索框 (Search Box)</label>
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-bold text-slate-600 uppercase tracking-wider block">实时音频 / 信号波形条</label>
+                <button 
+                  onClick={() => setIsBeating(!isBeating)}
+                  className="text-[11px] font-bold text-indigo-600 hover:underline flex items-center gap-1"
+                >
+                  <Volume2 size={12} /> {isBeating ? '暂停跳动' : '开启跳动'}
+                </button>
+              </div>
+              <div className="h-[42px] border border-slate-200 bg-slate-50/80 rounded-xl px-4 flex items-center justify-between">
+                <span className="text-xs font-semibold text-slate-500 flex items-center gap-2">
+                  <span className={`w-2 h-2 rounded-full ${isBeating ? 'bg-emerald-500 animate-ping' : 'bg-slate-400'}`}></span>
+                  AUDIO SPECTRUM:
+                </span>
+                <div className="flex items-center gap-1 h-7">
+                  <div className={`w-1.5 bg-indigo-600 rounded-full ${isBeating ? 'animate-eq-1' : 'h-3'}`}></div>
+                  <div className={`w-1.5 bg-indigo-500 rounded-full ${isBeating ? 'animate-eq-2' : 'h-4'}`}></div>
+                  <div className={`w-1.5 bg-indigo-600 rounded-full ${isBeating ? 'animate-eq-3' : 'h-2'}`}></div>
+                  <div className={`w-1.5 bg-indigo-500 rounded-full ${isBeating ? 'animate-eq-4' : 'h-5'}`}></div>
+                  <div className={`w-1.5 bg-indigo-600 rounded-full ${isBeating ? 'animate-eq-5' : 'h-2'}`}></div>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-slate-600 uppercase tracking-wider block">带图标搜索框</label>
               <div className="relative">
                 <Search size={18} className="absolute left-3.5 top-3 text-slate-400 pointer-events-none" />
                 <input
                   type="text"
-                  placeholder="搜索组件或设计参数..."
-                  className="w-full pl-10 pr-4 py-2.5 font-medium text-sm bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-sm"
+                  placeholder="搜索动态组件..."
+                  className="w-full pl-10 pr-4 py-2.5 font-medium text-sm bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-sm"
                 />
               </div>
             </div>
 
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-slate-600 uppercase tracking-wider block">下拉选单 (Select Menu)</label>
-              <div className="relative">
-                <select
-                  value={selectValue}
-                  onChange={(e) => setSelectValue(e.target.value)}
-                  className="w-full px-4 py-2.5 font-medium text-sm bg-white border border-slate-200 rounded-xl appearance-none focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all cursor-pointer shadow-sm text-slate-700"
-                >
-                  <option value="react">React 18 / 19</option>
-                  <option value="tailwind">Tailwind CSS v3 / v4</option>
-                  <option value="typescript">TypeScript 5.x</option>
-                  <option value="vite">Vite Bundler</option>
-                </select>
-                <ChevronDown size={18} className="absolute right-3.5 top-3 text-slate-400 pointer-events-none" />
-              </div>
-            </div>
-
             <div className="space-y-3 pt-1">
-              <label className="text-xs font-bold text-slate-600 uppercase tracking-wider block">选择与切换 (Switch & Checkbox)</label>
+              <label className="text-xs font-bold text-slate-600 uppercase tracking-wider block">选择与切换</label>
               <div className="flex flex-wrap items-center gap-6">
-                {/* iOS 质感平滑开关 */}
                 <div
                   onClick={() => setSwitchOn(!switchOn)}
-                  className={`w-12 h-7 rounded-full p-1 cursor-pointer transition-colors duration-200 ease-in-out flex items-center ${
+                  className={`w-12 h-7 rounded-full p-1 cursor-pointer transition-colors duration-300 ease-in-out flex items-center ${
                     switchOn ? 'bg-indigo-600' : 'bg-slate-200'
                   }`}
                 >
                   <div
-                    className={`w-5 h-5 bg-white rounded-full shadow-md transition-transform duration-200 ease-in-out ${
+                    className={`w-5 h-5 bg-white rounded-full shadow-md transition-transform duration-300 ease-in-out ${
                       switchOn ? 'translate-x-5' : 'translate-x-0'
                     }`}
                   ></div>
                 </div>
-                <span className="text-xs font-bold text-slate-700">自动同步: {switchOn ? '开启' : '关闭'}</span>
+                <span className="text-xs font-bold text-slate-700">实时广播: {switchOn ? '运行中' : '已暂停'}</span>
 
                 <label className="flex items-center gap-2 cursor-pointer font-medium text-sm text-slate-700">
                   <div
                     onClick={() => setCheckedA(!checkedA)}
                     className={`w-5 h-5 rounded-md border flex items-center justify-center transition-all ${
-                      checkedA ? 'bg-indigo-600 border-indigo-600 text-white' : 'bg-white border-slate-300'
+                      checkedA ? 'bg-indigo-600 border-indigo-600 text-white scale-105' : 'bg-white border-slate-300'
                     }`}
                   >
                     {checkedA && <Check size={14} strokeWidth={3} />}
                   </div>
-                  <span>自动编译</span>
+                  <span>自动推流</span>
                 </label>
 
                 <label className="flex items-center gap-2 cursor-pointer font-medium text-sm text-slate-700">
                   <div
                     onClick={() => setCheckedB(!checkedB)}
                     className={`w-5 h-5 rounded-md border flex items-center justify-center transition-all ${
-                      checkedB ? 'bg-indigo-600 border-indigo-600 text-white' : 'bg-white border-slate-300'
+                      checkedB ? 'bg-indigo-600 border-indigo-600 text-white scale-105' : 'bg-white border-slate-300'
                     }`}
                   >
                     {checkedB && <Check size={14} strokeWidth={3} />}
                   </div>
-                  <span>通知提醒</span>
+                  <span>震动反馈</span>
                 </label>
               </div>
             </div>
           </div>
         </section>
 
-        {/* 4. 卡片与布局体系 Cards */}
+        {/* 4. 动态卡片与选项卡 Tabs */}
         <section id="cards" className="space-y-4">
           <div className="flex items-center justify-between border-b border-slate-200 pb-3">
             <h2 className="text-lg font-bold flex items-center gap-2 text-slate-900">
-              <Type size={18} className="text-indigo-600" /> 04 / CARDS & FEEDBACK 卡片与反馈体系
+              <Type size={18} className="text-indigo-600" /> 04 / CARDS & TABS 动态卡片与交互选项卡
             </h2>
-            <span className="text-xs text-slate-500 font-medium">轻盈高质感</span>
+            <span className="text-xs text-slate-500 font-medium">平滑滑块与微悬浮</span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm">
+            <div className="flow-border flow-border-xl bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm hover:-translate-y-1.5 hover:shadow-lg hover:shadow-indigo-100 transition-all duration-300">
               <div className="flex items-center justify-between text-xs font-semibold text-slate-500 mb-2">
-                <span>SYSTEM PERFORMANCE</span>
-                <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 font-bold rounded-full text-[11px] flex items-center gap-1">
-                  <TrendingUp size={12} /> +14.2%
+                <span>THROUGHPUT METRIC</span>
+                <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 font-bold rounded-full text-[11px] flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
+                  <TrendingUp size={12} /> +28.4%
                 </span>
               </div>
-              <div className="text-4xl font-extrabold text-slate-900 tracking-tight">99.98%</div>
+              <div className="text-4xl font-extrabold text-slate-900 tracking-tight">1,420 rps</div>
               <p className="text-xs text-slate-500 font-medium mt-2">
-                零布局偏移，极快的光滑首屏加载体验。
+                实时网络吞吐量，GPU 硬件加速渲染。
               </p>
             </div>
 
-            <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm">
-              <span className="px-2.5 py-1 text-xs font-bold bg-indigo-50 text-indigo-700 rounded-md">
-                FEATURED
-              </span>
-              <h3 className="text-lg font-bold text-slate-900 mt-3">浅色高对比规范</h3>
-              <p className="text-xs text-slate-500 font-normal mt-2 leading-relaxed">
-                放弃生硬的暗色与粗线，以 1px 精细分界线和柔和漫射阴影打造透气质感。
-              </p>
+            <div className="flow-border flow-border-xl bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm hover:-translate-y-1.5 hover:shadow-lg hover:shadow-indigo-100 transition-all duration-300">
+              {/* 平滑布局滑块：背景胶囊跟随滑动 */}
+              <div className="relative flex bg-slate-100 p-1 rounded-xl mb-4 text-xs font-bold">
+                <div
+                  aria-hidden
+                  className="absolute left-1 top-1 bottom-1 rounded-lg bg-white shadow-xs transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"
+                  style={{
+                    width: 'calc((100% - 0.5rem) / 3)',
+                    transform: `translateX(${activeTabIndex * 100}%)`,
+                  }}
+                />
+                {TABS.map((t) => (
+                  <button
+                    key={t.id}
+                    onClick={() => setActiveTab(t.id)}
+                    className={`relative z-10 flex-1 py-1.5 rounded-lg transition-colors duration-200 ${
+                      activeTab === t.id ? 'text-indigo-600' : 'text-slate-500 hover:text-slate-700'
+                    }`}
+                  >
+                    {t.label}
+                  </button>
+                ))}
+              </div>
+
+              <div className="bg-slate-50 border border-slate-100 p-3 rounded-xl text-xs font-medium text-slate-700">
+                {activeTab === 'preview' && '🟢 当前处于组件预览模式，无缝响应事件。'}
+                {activeTab === 'motion' && '⚡ 开启弹簧物理动画，提供 60fps 微交互。'}
+                {activeTab === 'code' && '💻 纯净 React 18 + Tailwind，零多余依赖。'}
+              </div>
             </div>
 
-            <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm">
+            <div className="flow-border flow-border-xl bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm hover:-translate-y-1.5 hover:shadow-lg hover:shadow-indigo-100 transition-all duration-300">
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-full bg-indigo-100 text-indigo-700 font-bold flex items-center justify-center">
+                <div className="w-10 h-10 rounded-full bg-indigo-100 text-indigo-700 font-bold flex items-center justify-center animate-pulse">
                   唯
                 </div>
                 <div>
                   <div className="font-bold text-sm text-slate-900">唯一 (Weiyi)</div>
-                  <div className="text-xs text-slate-500 font-medium">Frontend & UI Architect</div>
+                  <div className="text-xs text-slate-500 font-medium flex items-center gap-1">
+                    <Activity size={12} className="text-emerald-500" /> Motion & UI Engineer
+                  </div>
                 </div>
               </div>
               <div className="pt-2 border-t border-slate-100 flex gap-2">
-                <span className="px-2 py-0.5 text-[10px] font-semibold bg-slate-100 text-slate-600 rounded">#UI/UX</span>
-                <span className="px-2 py-0.5 text-[10px] font-semibold bg-slate-100 text-slate-600 rounded">#FrontEnd</span>
+                <span className="px-2 py-0.5 text-[10px] font-semibold bg-indigo-50 text-indigo-700 rounded">#Motion</span>
+                <span className="px-2 py-0.5 text-[10px] font-semibold bg-emerald-50 text-emerald-700 rounded">#Spring</span>
               </div>
             </div>
           </div>
         </section>
 
-        {/* 5. 实战界面组装预览 */}
+        {/* 5. 动态实战控制台窗口 */}
         <section id="preview" className="space-y-4">
           <div className="flex items-center justify-between border-b border-slate-200 pb-3">
             <h2 className="text-lg font-bold flex items-center gap-2 text-slate-900">
-              <ExternalLink size={18} className="text-indigo-600" /> 05 / ASSEMBLED WORKSPACE 实战控制台窗口
+              <ExternalLink size={18} className="text-indigo-600" /> 05 / ASSEMBLED WORKSPACE 动态控制台实战窗口
             </h2>
-            <span className="text-xs text-slate-500 font-medium">完整装配预览</span>
+            <span className="text-xs text-slate-500 font-medium">完整动态装配</span>
           </div>
 
-          <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+          <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden hover:shadow-md transition-shadow">
             <div className="border-b border-slate-200 px-4 py-3 bg-slate-50/80 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 rounded-full bg-rose-400"></div>
                 <div className="w-3 h-3 rounded-full bg-amber-400"></div>
                 <div className="w-3 h-3 rounded-full bg-emerald-400"></div>
               </div>
-              <span className="text-xs font-semibold text-slate-500">STUDIO_CONSOLE.TSX</span>
-              <span className="text-xs font-bold text-emerald-600">● ONLINE</span>
+              <span className="text-xs font-semibold text-slate-500">MOTION_STUDIO.TSX</span>
+              <span className="text-xs font-bold text-emerald-600 flex items-center gap-1">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span> 
+                ● LIVE
+              </span>
             </div>
 
             <div className="p-6 md:p-8 space-y-6">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100 pb-4">
                 <div>
-                  <h3 className="text-2xl font-bold text-slate-900">开发控制台</h3>
-                  <p className="text-xs text-slate-500 font-medium">统一监控组件状态与各项设计令牌参数</p>
+                  <h3 className="text-2xl font-bold text-slate-900">交互动力学控制中心</h3>
+                  <p className="text-xs text-slate-500 font-medium">统一监控组件帧率、物理弹簧与动画事件</p>
                 </div>
-                <button className="px-4 py-2 font-bold text-xs bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-sm transition-all">
-                  + 新增组件实例
+                <button 
+                  onClick={() => alert('已成功发送模拟信号事件！')}
+                  className="px-4 py-2 font-bold text-xs bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white rounded-lg shadow-sm transition-all"
+                >
+                  + 发送模拟信号事件
                 </button>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="border border-slate-100 p-4 bg-slate-50/60 rounded-xl">
-                  <span className="text-xs font-semibold text-slate-500">无障碍对比度检测</span>
-                  <div className="text-2xl font-bold mt-1 text-emerald-600">16.5:1 (AAA Pass)</div>
-                  <div className="text-[11px] text-slate-500 mt-1">清晰易读，符合国际 WCAG 2.1 规范</div>
+                  <span className="text-xs font-semibold text-slate-500">渲染帧率表现</span>
+                  <div className="text-2xl font-bold mt-1 text-emerald-600 flex items-center gap-2">
+                    60 FPS <span className="text-xs font-normal text-slate-400">(GPU 硬件加速)</span>
+                  </div>
+                  <div className="text-[11px] text-slate-500 mt-1">零多余动画库体积，极速流畅</div>
                 </div>
 
                 <div className="border border-slate-100 p-4 bg-slate-50/60 rounded-xl">
-                  <span className="text-xs font-semibold text-slate-500">已就绪组件</span>
-                  <div className="text-2xl font-bold mt-1 text-indigo-600">28 个标准控件</div>
-                  <div className="text-[11px] text-slate-500 mt-1">涵盖按钮、表单、提示与布局</div>
+                  <span className="text-xs font-semibold text-slate-500">动态组件实例</span>
+                  <div className="text-2xl font-bold mt-1 text-indigo-600">32 个动态控件</div>
+                  <div className="text-[11px] text-slate-500 mt-1">涵盖跑马灯、弹性按钮、波形与滑动切换</div>
                 </div>
               </div>
             </div>
@@ -357,10 +486,10 @@ export default function App() {
         </section>
 
         {/* 底部版权 */}
-        <footer className="border-t border-slate-200 pt-8 pb-4 text-center">        
-          <h3 className="text-sm font-bold text-slate-900">WEIYI UI DESIGN SYSTEM</h3>
+        <footer className="border-t border-slate-200 pt-8 pb-4 text-center">
+          <h3 className="text-sm font-bold text-slate-900">WEIYI MOTION UI DESIGN SYSTEM</h3>
           <p className="text-xs text-slate-500 mt-1">
-            Crafted with Modern Clean Light UI & React 18
+            Crafted with Fluid Motion Light UI & React 18
           </p>
         </footer>
       </main>
