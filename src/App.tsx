@@ -295,6 +295,31 @@ export default function App() {
           </div>
         </section>
 
+        {/* 小店推广 */}
+        <section>
+          <a
+            href="https://999.lsrai.shop/"
+            target="_blank"
+            rel="noreferrer"
+            className="group relative block overflow-hidden rounded-[2rem] bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 p-8 md:p-10 text-white shadow-xl shadow-orange-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-orange-200"
+          >
+            <div className="pointer-events-none absolute -right-16 -top-16 size-64 rounded-full bg-white/20 blur-2xl" />
+            <div className="pointer-events-none absolute -bottom-20 left-1/3 size-56 rounded-full bg-white/10 blur-2xl" />
+            <div className="relative flex flex-col md:flex-row md:items-center gap-6">
+              <div className="flex-1">
+                <div className="inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-xs font-bold backdrop-blur-sm">
+                  🏪 我的小店
+                </div>
+                <h2 className="mt-3 text-2xl md:text-3xl font-extrabold tracking-tight">AI 代充小店</h2>
+                <p className="mt-2 text-sm text-white/85 leading-relaxed">常用 AI 订阅代充，欢迎光顾。</p>
+              </div>
+              <span className="inline-flex shrink-0 items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-extrabold text-orange-600 shadow-lg transition-all group-hover:scale-105">
+                进店看看 <ArrowUpRight size={16} />
+              </span>
+            </div>
+          </a>
+        </section>
+
         {/* 跑马灯：玻璃条 */}
         <section className={`${glass} rounded-full py-3 px-2 overflow-hidden`}>
           <div className="animate-marquee gap-3">
