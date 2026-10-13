@@ -12,6 +12,7 @@ import {
   FolderKanban,
   Send,
 } from 'lucide-react';
+import { defaultProjects as projects } from './data/siteProjects';
 
 /* ================= 数据 ================= */
 
@@ -35,92 +36,6 @@ const marqueeTags = [
   'Vite', '开源工具', '移动端体验', '提示词工程', '产品思维', '视觉系统',
 ];
 
-const projects = [
-  {
-    name: '乾坤之道', type: '东方术数 + AI 问事平台',
-    desc: '融合周易起卦、八字、奇门、六爻与 AI 解读的东方问事工具台，围绕问题、术法和结果生成结构化洞察。',
-    href: 'https://suangua.weiyiai.top/',
-    tags: ['AI 问卦', '周易', 'Cloudflare'], featured: true,
-  },
-  {
-    name: '魔方简历', type: 'AI 简历编辑器',
-    desc: '免费、隐私优先的在线简历编辑器，支持 AI 润色、语法检查、本地数据存储和 PDF / JSON 导出。',
-    href: 'https://magic-resume-weiyi.netlify.app/',
-    tags: ['AI 简历', '本地存储', '开源工具'], featured: true,
-  },
-  {
-    name: 'PPT Master', type: 'AI 原生 PPTX 生成器',
-    desc: '把 PDF、DOCX、URL 或 Markdown 转成真正可编辑的 PowerPoint，保留原生形状、图表、讲稿和模板风格。',
-    href: 'https://ppt-master-weiyi.netlify.app/',
-    tags: ['AI 文档', 'PPTX', '可编辑'], featured: true,
-  },
-  {
-    name: '银龄守护', type: '长辈健康关怀小程序界面',
-    desc: '面向老年健康管理的移动端体验，整合饮水、睡眠、心率、药箱、语音、电台、AI 晨报和报告分析入口。',
-    href: 'https://elder-health.netlify.app/#/pages/index/index',
-    tags: ['移动端', '健康关怀', '适老化'], featured: true,
-  },
-  {
-    name: '虚拟资源库', type: '学习资料与素材集合',
-    desc: '沉淀学习资源、设计素材、工具文件和项目资料的云端入口，方便集中整理、检索和分享。',
-    href: 'https://pan.quark.cn/s/bc839cf401af#/list/share',
-    tags: ['资料库', '素材整理', '云端分享'], featured: false,
-  },
-  {
-    name: '壹隅 YI CORNER', type: '个人网站（本站）',
-    desc: '本站——基于 React + Tailwind 的个人网站，灵动流体浅色 UI 与 60fps 微交互设计系统。',
-    href: 'https://github.com/zaz52/yi-corner',
-    tags: ['React', 'Portfolio', 'Motion'], featured: false,
-  },
-  {
-    name: '闲鱼自动回复管理系统', type: 'Python + FastAPI 自动化客服',
-    desc: '面向闲鱼平台的自动化客服与虚拟商品流程系统，覆盖消息处理、自动回复、自动发货、评价和商品维护。',
-    href: 'https://github.com/zaz52/xianyu-auto-reply',
-    tags: ['Python', 'FastAPI', 'Automation'], featured: false,
-  },
-  {
-    name: '闲鱼超级管家', type: '自动化工具二次开发',
-    desc: '基于闲鱼自动回复系统的二次开发版本，重点重构前端 UI 和使用体验，让自动化管理工具更现代、更清晰。',
-    href: 'https://github.com/zaz52/xianyu-super-butler',
-    tags: ['Automation', 'UI', 'Tooling'], featured: false,
-  },
-  {
-    name: '小说工作台', type: 'TypeScript 创作工具',
-    desc: '面向小说创作流程的工作台项目，用于沉淀写作、设定、素材和内容生产相关能力。',
-    href: 'https://github.com/zaz52/wei-yi',
-    tags: ['TypeScript', 'Writing', 'Workbench'], featured: false,
-  },
-  {
-    name: '个人形象顾问 Skill', type: 'Agent 形象升级提示词',
-    desc: '用于个人穿搭、眼镜、色彩诊断、发型和形象升级报告的 Agent skill 与提示词集合。',
-    href: 'https://github.com/zaz52/personal-style-advisor',
-    tags: ['Agent Skill', 'Style', 'Prompt'], featured: false,
-  },
-  {
-    name: 'Agent Reach', type: 'AI Agent 网络信息读取工具',
-    desc: '为 AI Agent 提供跨平台读取和搜索能力，覆盖 Twitter、Reddit、YouTube、GitHub、Bilibili、小红书等公开信息源。',
-    href: 'https://github.com/zaz52/Agent-Reach',
-    tags: ['Agent', 'Search', 'CLI'], featured: false,
-  },
-  {
-    name: 'GeniusFKoai', type: 'Python 实验项目',
-    desc: 'GitHub 上沉淀的 Python 项目，用于记录和整理 AI、自动化或实验性代码能力。',
-    href: 'https://github.com/zaz52/GeniusFKoai',
-    tags: ['Python', 'AI', 'GitHub'], featured: false,
-  },
-  {
-    name: '乾坤之道部署脚本', type: 'Python 部署辅助',
-    desc: '围绕乾坤之道项目沉淀的部署与辅助脚本仓库，方便后续维护算卦相关站点和发布流程。',
-    href: 'https://github.com/zaz52/yulesuangua-deploy',
-    tags: ['Python', 'Deploy'], featured: false,
-  },
-  {
-    name: 'GitHub Pages 作品集备份', type: 'HTML 静态站点备份',
-    desc: '早期 GitHub Pages 个人网站仓库，作为个人网站迁移过程中的静态部署备份和历史版本。',
-    href: 'https://github.com/zaz52/zaz52.github.io',
-    tags: ['HTML', 'Archive'], featured: false,
-  },
-];
 
 const stats = [
   { value: '14', suffix: '', label: '作品项目' },
