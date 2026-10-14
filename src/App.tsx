@@ -1,10 +1,7 @@
 import { useState } from 'react';
 import {
-  Github,
   ExternalLink,
   Sparkles,
-  Mail,
-  MessageCircle,
   ArrowUpRight,
   Zap,
   Volume2,
@@ -13,6 +10,7 @@ import {
   Send,
 } from 'lucide-react';
 import { defaultProjects as projects } from './data/siteProjects';
+import { defaultContacts as contacts } from './data/siteContacts';
 
 /* ================= 数据 ================= */
 
@@ -42,13 +40,6 @@ const stats = [
   { value: '120', suffix: '+', label: '设计组件' },
   { value: '30', suffix: '+', label: '创意练习' },
   { value: '100', suffix: '%', label: '关注体验' },
-];
-
-const contacts = [
-  { icon: Mail, label: 'Email', value: '1845779520@qq.com', href: 'mailto:1845779520@qq.com' },
-  { icon: Github, label: 'GitHub', value: 'github.com/zaz52', href: 'https://github.com/zaz52' },
-  { icon: Sparkles, label: 'X', value: '@Weiyi_Learn', href: 'https://x.com/Weiyi_Learn' },
-  { icon: MessageCircle, label: '微信', value: 'Z3_March' },
 ];
 
 const TABS = [
