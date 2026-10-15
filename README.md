@@ -49,11 +49,11 @@ npm run build
 
 头像文件位于 `public/avatar.jpg`。替换头像时保持同名文件即可。
 
-## 联系方式
+## 🔗 联系方式
 
-- Email: 1845779520@qq.com
-- WeChat: Z3_March
-- X: https://x.com/Weiyi_Learn
-- QQ: 1845779520
-- Telegram: https://t.me/Weiyiusername
-- GitHub: https://github.com/zaz52
+- 邮箱：1845779520@qq.com
+- 微信：Z3_March
+- X：https://x.com/Weiyi_Learn
+- QQ：1845779520
+- Telegram：https://t.me/Weiyiusername
+- GitHub：https://github.com/zaz52
