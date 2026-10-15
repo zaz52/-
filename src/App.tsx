@@ -79,8 +79,11 @@ function MusicToggle() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
+    // Worker 对不存在的路径会兜底返回 index.html（200 + text/html），所以必须校验 content-type
     fetch('/bgm.mp3', { method: 'HEAD' })
-      .then((r) => setHasMusic(r.ok))
+      .then((r) =>
+        setHasMusic(r.ok && (r.headers.get('content-type') || '').startsWith('audio/'))
+      )
       .catch(() => setHasMusic(false));
   }, []);
 
