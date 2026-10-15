@@ -101,6 +101,8 @@ function MusicPlayer() {
       .catch(() => {});
   }, []);
 
+  const autoPlayed = useRef(false);
+
   const playAt = async (i: number) => {
     const a = audioRef.current;
     if (!a || !tracks[i]) return;
@@ -139,6 +141,24 @@ function MusicPlayer() {
     a.addEventListener('ended', onEnded);
     return () => a.removeEventListener('ended', onEnded);
   });
+
+  /* 首次交互（点任意位置/按键）自动开始播放，无需专门点音乐按钮 */
+  useEffect(() => {
+    if (!tracks.length || autoPlayed.current) return;
+    const kick = () => {
+      autoPlayed.current = true;
+      playAt(0);
+      window.removeEventListener('pointerdown', kick);
+      window.removeEventListener('keydown', kick);
+    };
+    window.addEventListener('pointerdown', kick);
+    window.addEventListener('keydown', kick);
+    return () => {
+      window.removeEventListener('pointerdown', kick);
+      window.removeEventListener('keydown', kick);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tracks]);
 
   if (!tracks.length) return null;
   const q = query.trim().toLowerCase();
