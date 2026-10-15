@@ -72,7 +72,7 @@ export const defaultProjects: ProjectRecord[] = [
     name: '个人网站源码',
     type: 'React + Cloudflare 个人品牌网站',
     description: '当前个人网站的 GitHub 仓库，包含首页、作品详情、后台管理、访问统计、SEO 分享卡片和 Cloudflare Worker 部署配置。',
-    href: 'https://github.com/zaz52/-',
+    href: 'https://github.com/zaz52/yi-corner',
     cover: '/covers/github-portfolio.svg',
     tags: ['React', 'Cloudflare', 'Portfolio'],
     palette: 'emerald',
