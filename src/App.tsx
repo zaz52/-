@@ -478,26 +478,29 @@ export default function App() {
         {/* 我的站点 */}
         <section>
           <SectionHead icon={<Globe size={18} />} zh="我的站点" en="SITES" note="自建与收藏" />
-          <div className="mt-6 grid gap-5 md:grid-cols-2">
-            {/* 小店 */}
+          <div className="mt-6 space-y-5">
+            {/* 小店：单独一排通栏 */}
             <a
               href="https://999.lsrai.shop/"
               target="_blank"
               rel="noreferrer"
-              className="group relative flex flex-col overflow-hidden rounded-[1.75rem] bg-gradient-to-br from-amber-500 via-orange-500 to-rose-500 p-7 text-white shadow-xl shadow-orange-200 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-orange-200"
+              className="group relative flex flex-col md:flex-row md:items-center gap-4 overflow-hidden rounded-[1.75rem] bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 p-7 md:px-9 md:py-8 text-white shadow-xl shadow-orange-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-orange-300"
             >
-              <div className="pointer-events-none absolute -right-12 -top-12 size-48 rounded-full bg-white/20 blur-2xl" />
-              <div className="relative">
-                <div className="inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-xs font-bold backdrop-blur-sm">
-                  🏪 我的小店
+              <div className="pointer-events-none absolute -right-16 -top-16 size-64 rounded-full bg-white/20 blur-2xl" />
+              <div className="pointer-events-none absolute -left-10 -bottom-20 size-56 rounded-full bg-yellow-300/30 blur-2xl" />
+              <div className="relative flex-1">
+                <div className="inline-flex items-center gap-1.5 rounded-full bg-white/25 px-3 py-1 text-xs font-bold backdrop-blur-sm">
+                  🏪 我的小店 · 🔥 主推
                 </div>
-                <h3 className="mt-3 text-xl font-extrabold tracking-tight">AI 代充小店</h3>
-                <p className="mt-2 text-sm leading-relaxed text-white/85">常用 AI 订阅代充，欢迎光顾。</p>
+                <h3 className="mt-3 text-2xl md:text-3xl font-extrabold tracking-tight">AI 代充小店</h3>
+                <p className="mt-2 text-sm md:text-base leading-relaxed text-white/85">常用 AI 订阅代充，价格实惠，欢迎光顾。</p>
               </div>
-              <span className="relative mt-auto inline-flex items-center gap-1.5 pt-6 text-sm font-extrabold">
+              <span className="relative inline-flex shrink-0 items-center gap-2 self-start md:self-center rounded-full bg-white px-7 py-3.5 text-sm font-extrabold text-orange-600 shadow-lg transition-transform duration-300 group-hover:scale-105">
                 进店看看 <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </span>
             </a>
+            {/* 其他三张 */}
+            <div className="grid gap-5 md:grid-cols-3">
             {/* X-Deck 创作台 */}
             <a
               href="https://x.weiyi.indevs.in/"
@@ -555,6 +558,7 @@ export default function App() {
                 去下载 <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </span>
             </a>
+            </div>
           </div>
         </section>
 
