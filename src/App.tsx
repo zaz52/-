@@ -102,6 +102,10 @@ function MusicPlayer() {
   }, []);
 
   const autoPlayed = useRef(false);
+  const tracksRef = useRef(tracks);
+  useEffect(() => {
+    tracksRef.current = tracks;
+  }, [tracks]);
 
   const playAt = async (i: number) => {
     const a = audioRef.current;
@@ -142,12 +146,21 @@ function MusicPlayer() {
     return () => a.removeEventListener('ended', onEnded);
   });
 
-  /* 首次交互（点任意位置/按键）自动开始播放，无需专门点音乐按钮 */
+  /* 首次交互（点任意位置/按键）自动开始播放，无需专门点音乐按钮；
+     监听器挂载即加（不等歌单加载），歌单未就绪时的点击不消耗一次性触发 */
   useEffect(() => {
-    if (!tracks.length || autoPlayed.current) return;
     const kick = () => {
+      if (autoPlayed.current || tracksRef.current.length === 0) return;
       autoPlayed.current = true;
-      playAt(0);
+      const a = audioRef.current;
+      const t = tracksRef.current[0];
+      if (a && t) {
+        if (!a.src) a.src = t.file;
+        setCurrent(0);
+        a.play()
+          .then(() => setPlaying(true))
+          .catch(() => {});
+      }
       window.removeEventListener('pointerdown', kick);
       window.removeEventListener('keydown', kick);
     };
@@ -157,8 +170,7 @@ function MusicPlayer() {
       window.removeEventListener('pointerdown', kick);
       window.removeEventListener('keydown', kick);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tracks]);
+  }, []);
 
   if (!tracks.length) return null;
   const q = query.trim().toLowerCase();
