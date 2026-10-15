@@ -3,9 +3,6 @@ import {
   ExternalLink,
   Sparkles,
   ArrowUpRight,
-  Zap,
-  Volume2,
-  Palette,
   FolderKanban,
   Send,
   Music,
@@ -22,6 +19,7 @@ import {
   Gamepad2,
   RotateCcw,
   Trophy,
+  Wrench,
 } from 'lucide-react';
 import { defaultProjects as projects } from './data/siteProjects';
 import { defaultContacts as contacts } from './data/siteContacts';
@@ -56,11 +54,51 @@ const stats = [
   { value: '100', suffix: '%', label: '关注体验' },
 ];
 
-const TABS = [
-  { id: 'feel', label: '手感' },
-  { id: 'motion', label: '动效' },
-  { id: 'rhythm', label: '节奏' },
-] as const;
+/* ================= 工具箱数据 ================= */
+const toolbox = [
+  {
+    emoji: '🤖', name: 'AI 效率',
+    tools: [
+      { name: 'PDFMathTranslate', desc: 'PDF 论文一键翻译，公式表格不乱码', url: 'https://github.com/PDFMathTranslate/PDFMathTranslate' },
+      { name: 'ppt-master', desc: '输入文档或主题，AI 生成原生 PPT', url: 'https://github.com/hugohe3/ppt-master' },
+      { name: 'OfficeCLI', desc: '命令行里的 Office 套件，极客范', url: 'https://github.com/iOfficeAI/OfficeCLI' },
+      { name: 'ChatGPT 中文调教指南', desc: '各种场景的提示词玩法，学让 AI 听话', url: 'https://github.com/PlexPt/awesome-chatgpt-prompts-zh' },
+    ],
+  },
+  {
+    emoji: '✍️', name: 'AI 写作',
+    tools: [
+      { name: 'Humanizer-zh', desc: '消除文本中的 AI 痕迹，改得更像人写的', url: 'https://github.com/op7418/Humanizer-zh' },
+      { name: 'ai-flavor-remover', desc: '一键去除 AI 味，文字更自然', url: 'https://github.com/hylarucoder/ai-flavor-remover' },
+      { name: 'writing-dna-skill', desc: '蒸馏复刻任意写作风格，Agent 技能', url: 'https://github.com/larashero3-dotcom/writing-dna-skill' },
+    ],
+  },
+  {
+    emoji: '📱', name: '内容创作',
+    tools: [
+      { name: '抖音下载器', desc: '批量下载抖音视频，无水印', url: 'https://github.com/jiji262/douyin-downloader' },
+      { name: 'MultiPost', desc: '一篇文章，多平台一键发布', url: 'https://github.com/leaperone/MultiPost-Extension' },
+      { name: 'lieflat-cards', desc: '把文字变成克制编辑感的图文卡片', url: 'https://github.com/larashero3-dotcom/lieflat-cards' },
+      { name: 'creatorhub', desc: '多平台内容监控采集，一个面板管起', url: 'https://github.com/3441293738/creatorhub' },
+    ],
+  },
+  {
+    emoji: '🎬', name: '影音娱乐',
+    tools: [
+      { name: 'lx-music-desktop', desc: '免费开源音乐播放器，全网搜歌随便听', url: 'https://github.com/lyswhut/lx-music-desktop' },
+      { name: 'LibreTV', desc: '一分钟搭建自己的影视站', url: 'https://github.com/LibreSpark/LibreTV' },
+      { name: '追剧资源指南', desc: '免费无广告追剧资源，人工精选', url: 'https://github.com/laoma528/awesome-zhuiju-free' },
+    ],
+  },
+  {
+    emoji: '🧰', name: '实用小工具',
+    tools: [
+      { name: '闲鱼自动回复', desc: '闲鱼客服自动回复系统，解放双手', url: 'https://github.com/zhinianboke/xianyu-auto-reply' },
+      { name: '微信 AI 记忆库', desc: '微信聊天记录筛选归档，可追溯', url: 'https://github.com/ikevss/wechat-ai-memory' },
+      { name: 'QzoneArchive', desc: 'QQ 空间历史动态照片视频一键备份', url: 'https://github.com/Gaoshu705/QzoneArchive' },
+    ],
+  },
+];
 
 /* ============ AURA 玻璃拟态 ============ */
 
@@ -623,11 +661,6 @@ function MemoryGame() {
 }
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'feel' | 'motion' | 'rhythm'>('feel');
-  const [pressCount, setPressCount] = useState(0);
-  const [isBeating, setIsBeating] = useState(true);
-  const activeTabIndex = TABS.findIndex((t) => t.id === activeTab);
-
   return (
     <div className="min-h-screen text-slate-900 font-sans pb-24 selection:bg-indigo-500 selection:text-white relative overflow-x-hidden scroll-smooth">
       {/* 动效关键帧 */}
@@ -900,105 +933,34 @@ export default function App() {
           </div>
         </section>
 
-        {/* 设计 */}
-        <section id="design" className="space-y-6 scroll-mt-28">
-          <SectionHead icon={<Palette size={18} />} zh="设计" en="MOTION LANGUAGE" note="这个站点的母语：五种招牌动效" />
-          <p className={`rounded-[1.75rem] p-5 text-sm text-slate-500 leading-relaxed ${glassSoft}`}>
-            界面动效是壹隅的设计语言——下面五种微交互贯穿全站，悬浮、按压、切换都可以亲手试试。
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-6 gap-5">
-            {/* 1. 跑马灯 */}
-            <div className={`${glass} rounded-[1.75rem] p-6 overflow-hidden md:col-span-4`}>
-              <div className="text-xs font-bold text-slate-400 mb-4">01 / 无限跑马灯</div>
-              <div className="overflow-hidden -mx-6">
-                <div className="animate-marquee gap-2 px-6">
-                  {['流畅', '无缝', '60fps', '悬停暂停', '流畅', '无缝', '60fps', '悬停暂停'].map((t, i) => (
-                    <span key={i} className="whitespace-nowrap px-3 py-1 rounded-full text-[11px] font-bold bg-indigo-500/10 text-indigo-700 border border-indigo-200/50">{t}</span>
+        {/* 工具箱 */}
+        <section id="toolbox" className="space-y-6 scroll-mt-28">
+          <SectionHead icon={<Wrench size={18} />} zh="工具箱" en="TOOLBOX" note="我常用的好东西 · 持续补充" />
+          <div className="space-y-5">
+            {toolbox.map((cat) => (
+              <div key={cat.name} className={`${glass} rounded-[1.75rem] p-6`}>
+                <div className="mb-4 flex items-center gap-2">
+                  <span className="text-xl">{cat.emoji}</span>
+                  <h3 className="text-base font-extrabold tracking-tight text-slate-800">{cat.name}</h3>
+                  <span className="rounded-full bg-white/70 px-2 py-0.5 text-[11px] font-bold text-slate-400">{cat.tools.length} 款</span>
+                </div>
+                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                  {cat.tools.map((t) => (
+                    <a key={t.name} href={t.url} target="_blank" rel="noreferrer"
+                      className="group rounded-2xl border border-white/60 bg-white/50 p-4 transition-all duration-200 hover:-translate-y-0.5 hover:bg-white/80 hover:shadow-lg hover:shadow-indigo-100">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="text-sm font-extrabold tracking-tight text-slate-800">{t.name}</div>
+                        <ExternalLink size={13} className="mt-0.5 shrink-0 text-slate-300 transition-colors group-hover:text-indigo-500" />
+                      </div>
+                      <p className="mt-1.5 text-xs leading-relaxed text-slate-500">{t.desc}</p>
+                    </a>
                   ))}
                 </div>
               </div>
-              <p className="text-[11px] text-slate-400 mt-4">首尾相接的无缝循环，鼠标悬停即暂停</p>
-            </div>
-
-            {/* 2. 流动边框 */}
-            <div className={`flow-border ${glass} rounded-[1.75rem] p-6 md:col-span-2`}>
-              <div className="text-xs font-bold text-slate-400 mb-4">02 / 流动边框光效</div>
-              <div className="h-16 flex items-center justify-center text-sm font-bold text-slate-500">
-                把鼠标悬浮上来 ✨
-              </div>
-              <p className="text-[11px] text-slate-400 mt-2">渐变微光沿边框缓缓流转</p>
-            </div>
-
-            {/* 3. 弹性按压 */}
-            <div className={`${glass} rounded-[1.75rem] p-6 md:col-span-2`}>
-              <div className="text-xs font-bold text-slate-400 mb-4">03 / 弹性按压反馈</div>
-              <button
-                onClick={() => setPressCount((c) => c + 1)}
-                className="w-full py-3 font-bold text-sm bg-gradient-to-r from-indigo-600 to-violet-600 hover:shadow-xl hover:shadow-indigo-200 hover:scale-[1.02] active:scale-90 text-white rounded-full shadow-lg shadow-indigo-200 transition-all flex items-center justify-center gap-2"
-              >
-                <Zap size={15} /> 按我试试（{pressCount}）
-              </button>
-              <p className="text-[11px] text-slate-400 mt-4">按下回弹、悬浮上浮，有"活着"的手感</p>
-            </div>
-
-            {/* 4. 实时波形 */}
-            <div className={`${glass} rounded-[1.75rem] p-6 md:col-span-4`}>
-              <div className="flex items-center justify-between mb-4">
-                <div className="text-xs font-bold text-slate-400">04 / 实时波形与呼吸</div>
-                <button onClick={() => setIsBeating(!isBeating)} className="text-[11px] font-bold text-indigo-600 hover:underline flex items-center gap-1">
-                  <Volume2 size={12} /> {isBeating ? '暂停' : '播放'}
-                </button>
-              </div>
-              <div className="h-16 rounded-2xl bg-white/50 border border-white/70 flex items-center justify-center gap-1.5">
-                <div className={`w-2 bg-indigo-600 rounded-full ${isBeating ? 'animate-eq-1' : 'h-3'}`}></div>
-                <div className={`w-2 bg-indigo-500 rounded-full ${isBeating ? 'animate-eq-2' : 'h-4'}`}></div>
-                <div className={`w-2 bg-indigo-600 rounded-full ${isBeating ? 'animate-eq-3' : 'h-2'}`}></div>
-                <div className={`w-2 bg-indigo-500 rounded-full ${isBeating ? 'animate-eq-4' : 'h-5'}`}></div>
-                <div className={`w-2 bg-indigo-600 rounded-full ${isBeating ? 'animate-eq-5' : 'h-2'}`}></div>
-                <div className={`w-2 bg-indigo-400 rounded-full ${isBeating ? 'animate-eq-2' : 'h-3'}`}></div>
-                <div className={`w-2 bg-indigo-300 rounded-full ${isBeating ? 'animate-eq-4' : 'h-4'}`}></div>
-              </div>
-              <p className="text-[11px] text-slate-400 mt-4">纯 CSS 关键帧驱动的均衡器律动</p>
-            </div>
-
-            {/* 5. Tab 滑块 */}
-            <div className={`${glass} rounded-[1.75rem] p-6 md:col-span-3`}>
-              <div className="text-xs font-bold text-slate-400 mb-4">05 / 平滑 Tab 滑块</div>
-              <div className="relative flex bg-white/50 border border-white/60 p-1 rounded-full mb-4 text-xs font-bold">
-                <div
-                  aria-hidden
-                  className="absolute left-1 top-1 bottom-1 rounded-full bg-white shadow-md transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"
-                  style={{ width: 'calc((100% - 0.5rem) / 3)', transform: `translateX(${activeTabIndex * 100}%)` }}
-                />
-                {TABS.map((t) => (
-                  <button
-                    key={t.id}
-                    onClick={() => setActiveTab(t.id)}
-                    className={`relative z-10 flex-1 py-2 rounded-full transition-colors duration-200 ${activeTab === t.id ? 'text-indigo-600' : 'text-slate-500 hover:text-slate-700'}`}
-                  >
-                    {t.label}
-                  </button>
-                ))}
-              </div>
-              <div className="bg-white/50 border border-white/60 p-4 rounded-2xl text-xs font-medium text-slate-600 min-h-[52px]">
-                {activeTab === 'feel' && '🖱️ 按压回弹、悬浮上浮——每个控件都有触感。'}
-                {activeTab === 'motion' && '⚡ 60fps 微交互，弹簧曲线，零多余动画库。'}
-                {activeTab === 'rhythm' && '🌊 跑马灯、波形、呼吸光斑，页面有了节奏。'}
-              </div>
-            </div>
-
-            {/* 6. 呼吸光斑 */}
-            <div className={`${glass} rounded-[1.75rem] p-6 relative overflow-hidden md:col-span-3`}>
-              <div className="text-xs font-bold text-slate-400 mb-4 relative z-10">06 / 背景呼吸微光</div>
-              <div className="h-16 relative flex items-center justify-center">
-                <div className="absolute w-24 h-24 bg-violet-300/60 rounded-full blur-2xl animate-pulse"></div>
-                <div className="absolute w-16 h-16 bg-indigo-300/60 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-                <span className="relative text-sm font-bold text-slate-500">本页背景就有 ✨</span>
-              </div>
-              <p className="text-[11px] text-slate-400 mt-2 relative z-10">柔光斑块缓慢呼吸，营造通透感</p>
-            </div>
+            ))}
           </div>
         </section>
+
 
         {/* 小游戏 */}
         <section id="games" className="space-y-6 scroll-mt-28">
