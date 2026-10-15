@@ -377,115 +377,159 @@ function Guestbook() {
   );
 }
 
-/* ================= 小游戏：贪吃蛇 ================= */
-function SnakeGame() {
+/* ================= 小游戏：星尘躲避（解压休闲） ================= */
+function DodgeGame() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [score, setScore] = useState(0);
   const [best, setBest] = useState(() => {
-    try { return Number(localStorage.getItem('yi-snake-best') || 0); } catch { return 0; }
+    try { return Number(localStorage.getItem('yi-dodge-best') || 0); } catch { return 0; }
   });
   const [status, setStatus] = useState<'idle' | 'playing' | 'over'>('idle');
-  const N = 15, CELL = 20;
+  const W = 300, H = 340;
   const g = useRef({
-    snake: [{ x: 7, y: 7 }, { x: 6, y: 7 }, { x: 5, y: 7 }],
-    dir: { x: 1, y: 0 },
-    queue: [] as { x: number; y: number }[],
-    food: { x: 11, y: 7 },
-    score: 0,
+    px: W / 2, py: H - 60, tx: W / 2, ty: H - 60,
+    obstacles: [] as { x: number; y: number; w: number; h: number; vy: number }[],
+    stars: [] as { x: number; y: number; vy: number; r: number }[],
+    trail: [] as { x: number; y: number }[],
+    score: 0, shown: -1, time: 0, last: 0, spawnT: 0, starT: 1,
   });
-  const timer = useRef(0);
-
-  const rndFood = (snake: { x: number; y: number }[]) => {
-    for (;;) {
-      const f = { x: (Math.random() * N) | 0, y: (Math.random() * N) | 0 };
-      if (!snake.some((s) => s.x === f.x && s.y === f.y)) return f;
-    }
-  };
+  const raf = useRef(0);
 
   const draw = () => {
     const cv = canvasRef.current;
     const ctx = cv?.getContext('2d');
     if (!cv || !ctx) return;
-    const { snake, food } = g.current;
-    ctx.clearRect(0, 0, N * CELL, N * CELL);
-    ctx.fillStyle = '#f43f5e';
+    const st = g.current;
+    ctx.clearRect(0, 0, W, H);
+    // stars
+    for (const s of st.stars) {
+      ctx.save();
+      ctx.translate(s.x, s.y);
+      ctx.rotate(s.r);
+      ctx.fillStyle = '#fbbf24';
+      ctx.font = '16px serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('✦', 0, 0);
+      ctx.restore();
+    }
+    // obstacles
+    for (const o of st.obstacles) {
+      ctx.fillStyle = 'rgba(244,63,94,0.75)';
+      ctx.beginPath();
+      if (typeof (ctx as unknown as { roundRect?: unknown }).roundRect === 'function') {
+        (ctx as unknown as { roundRect: (x: number, y: number, w: number, h: number, r: number) => void })
+          .roundRect(o.x, o.y, o.w, o.h, 7);
+      } else {
+        ctx.rect(o.x, o.y, o.w, o.h);
+      }
+      ctx.fill();
+    }
+    // trail
+    st.trail.forEach((p, i) => {
+      ctx.fillStyle = `rgba(129,140,248,${(i / st.trail.length) * 0.35})`;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 4 + (i / st.trail.length) * 5, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    // player
+    const grd = ctx.createRadialGradient(st.px, st.py, 2, st.px, st.py, 18);
+    grd.addColorStop(0, '#c7d2fe');
+    grd.addColorStop(1, '#4f46e5');
+    ctx.fillStyle = grd;
     ctx.beginPath();
-    ctx.arc(food.x * CELL + CELL / 2, food.y * CELL + CELL / 2, CELL / 2 - 2, 0, Math.PI * 2);
+    ctx.arc(st.px, st.py, 10, 0, Math.PI * 2);
     ctx.fill();
-    snake.forEach((s, i) => {
-      ctx.fillStyle = i === 0 ? '#4f46e5' : '#a5b4fc';
-      ctx.fillRect(s.x * CELL + 2, s.y * CELL + 2, CELL - 4, CELL - 4);
+  };
+
+  const gameOver = () => {
+    cancelAnimationFrame(raf.current);
+    setStatus('over');
+    const s = Math.floor(g.current.score);
+    setBest((b) => {
+      const nb = Math.max(b, s);
+      try { localStorage.setItem('yi-dodge-best', String(nb)); } catch { /* ignore */ }
+      return nb;
     });
   };
 
-  const stop = () => window.clearInterval(timer.current);
-
-  const tick = () => {
+  /* eslint-disable react-hooks/purity -- 游戏主循环天然是命令式的，不在渲染期执行 */
+  const loop = (t: number) => {
     const st = g.current;
-    if (st.queue.length) {
-      const d = st.queue.shift()!;
-      if (d.x !== -st.dir.x || d.y !== -st.dir.y) st.dir = d;
-    }
-    const h = { x: st.snake[0].x + st.dir.x, y: st.snake[0].y + st.dir.y };
-    if (h.x < 0 || h.y < 0 || h.x >= N || h.y >= N || st.snake.some((s) => s.x === h.x && s.y === h.y)) {
-      stop();
-      setStatus('over');
-      setBest((b) => {
-        const nb = Math.max(b, st.score);
-        try { localStorage.setItem('yi-snake-best', String(nb)); } catch { /* ignore */ }
-        return nb;
+    const dt = Math.min(0.05, (t - (st.last || t)) / 1000);
+    st.last = t;
+    st.time += dt;
+    // 跟随
+    const k = Math.min(1, dt * 14);
+    st.px += (st.tx - st.px) * k;
+    st.py += (st.ty - st.py) * k;
+    st.trail.push({ x: st.px, y: st.py });
+    if (st.trail.length > 14) st.trail.shift();
+    // 难度随时间提升
+    const diff = Math.min(1, st.time / 75);
+    // 障碍
+    st.spawnT -= dt;
+    if (st.spawnT <= 0) {
+      st.spawnT = 0.85 - diff * 0.45 + Math.random() * 0.35;
+      const w = 26 + Math.random() * 44;
+      st.obstacles.push({
+        x: Math.random() * (W - w), y: -30, w,
+        h: 13 + Math.random() * 16,
+        vy: (110 + diff * 170) * (0.8 + Math.random() * 0.4),
       });
-      return;
     }
-    st.snake.unshift(h);
-    if (h.x === st.food.x && h.y === st.food.y) {
-      st.score += 1;
-      setScore(st.score);
-      st.food = rndFood(st.snake);
-    } else {
-      st.snake.pop();
+    // 星星
+    st.starT -= dt;
+    if (st.starT <= 0) {
+      st.starT = 1.8 + Math.random() * 2.5;
+      st.stars.push({ x: 24 + Math.random() * (W - 48), y: -20, vy: 95, r: 0 });
     }
+    for (const o of st.obstacles) o.y += o.vy * dt;
+    st.obstacles = st.obstacles.filter((o) => o.y < H + 40);
+    for (const s of st.stars) { s.y += s.vy * dt; s.r += dt * 5; }
+    // 碰撞
+    const pr = 9;
+    for (const o of st.obstacles) {
+      const cx = Math.max(o.x, Math.min(st.px, o.x + o.w));
+      const cy = Math.max(o.y, Math.min(st.py, o.y + o.h));
+      if ((st.px - cx) ** 2 + (st.py - cy) ** 2 < pr * pr) { draw(); gameOver(); return; }
+    }
+    // 吃星
+    st.stars = st.stars.filter((s) => {
+      if ((st.px - s.x) ** 2 + (st.py - s.y) ** 2 < 22 * 22) { st.score += 5; return false; }
+      return s.y < H + 30;
+    });
+    // 存活加分
+    st.score += dt * 8;
+    const is = Math.floor(st.score);
+    if (is !== st.shown) { st.shown = is; setScore(is); }
     draw();
+    raf.current = requestAnimationFrame(loop);
   };
+  /* eslint-enable react-hooks/purity */
 
   const start = () => {
-    stop();
+    cancelAnimationFrame(raf.current);
     g.current = {
-      snake: [{ x: 7, y: 7 }, { x: 6, y: 7 }, { x: 5, y: 7 }],
-      dir: { x: 1, y: 0 }, queue: [],
-      food: { x: 11, y: 7 }, score: 0,
+      px: W / 2, py: H - 60, tx: W / 2, ty: H - 60,
+      obstacles: [], stars: [], trail: [],
+      score: 0, shown: -1, time: 0, last: 0, spawnT: 0.6, starT: 1,
     };
     setScore(0);
     setStatus('playing');
-    draw();
-    timer.current = window.setInterval(tick, 130);
+    raf.current = requestAnimationFrame(loop);
   };
 
-  const turn = (d: { x: number; y: number }) => {
-    const st = g.current;
-    const last = st.queue[st.queue.length - 1] || st.dir;
-    if ((d.x !== -last.x || d.y !== -last.y) && st.queue.length < 3) st.queue.push(d);
+  useEffect(() => () => cancelAnimationFrame(raf.current), []);
+
+  const point = (e: React.PointerEvent) => {
+    const cv = canvasRef.current;
+    if (!cv) return;
+    const r = cv.getBoundingClientRect();
+    g.current.tx = Math.max(10, Math.min(W - 10, ((e.clientX - r.left) / r.width) * W));
+    g.current.ty = Math.max(10, Math.min(H - 10, ((e.clientY - r.top) / r.height) * H));
   };
 
-  useEffect(() => {
-    draw();
-    const onKey = (e: KeyboardEvent) => {
-      const m: Record<string, { x: number; y: number }> = {
-        ArrowUp: { x: 0, y: -1 }, ArrowDown: { x: 0, y: 1 },
-        ArrowLeft: { x: -1, y: 0 }, ArrowRight: { x: 1, y: 0 },
-        w: { x: 0, y: -1 }, s: { x: 0, y: 1 }, a: { x: -1, y: 0 }, d: { x: 1, y: 0 },
-        W: { x: 0, y: -1 }, S: { x: 0, y: 1 }, A: { x: -1, y: 0 }, D: { x: 1, y: 0 },
-      };
-      const dir = m[e.key];
-      if (dir && status === 'playing') { e.preventDefault(); turn(dir); }
-      if (e.key === ' ' && status !== 'playing') { e.preventDefault(); start(); }
-    };
-    window.addEventListener('keydown', onKey);
-    return () => { window.removeEventListener('keydown', onKey); stop(); };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status]);
-
-  const padBtn = 'grid size-11 place-items-center rounded-xl bg-white/70 text-lg font-bold text-indigo-600 shadow-sm active:scale-90 transition-transform';
   return (
     <div className="flex flex-col items-center gap-3">
       <div className="flex w-full items-center justify-between text-sm">
@@ -493,26 +537,20 @@ function SnakeGame() {
         <span className="inline-flex items-center gap-1 font-bold text-slate-400"><Trophy size={14} /> {best}</span>
       </div>
       <div className="relative">
-        <canvas ref={canvasRef} width={N * CELL} height={N * CELL}
-          className="rounded-2xl bg-white/60 shadow-inner" />
+        <canvas ref={canvasRef} width={W} height={H}
+          onPointerMove={point} onPointerDown={point}
+          className="rounded-2xl bg-gradient-to-b from-indigo-50/80 to-white/60 shadow-inner"
+          style={{ touchAction: 'none' }} />
         {status !== 'playing' && (
           <button onClick={start}
             className="absolute inset-0 grid place-items-center rounded-2xl bg-slate-900/45 text-white backdrop-blur-[2px]">
             <span className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-extrabold text-indigo-600 shadow-lg">
-              <RotateCcw size={15} /> {status === 'over' ? `再来一局（${score}分）` : '开始游戏'}
+              <RotateCcw size={15} /> {status === 'over' ? `再来一局（${score}分）` : '开始躲避'}
             </span>
           </button>
         )}
       </div>
-      <div className="grid grid-cols-3 gap-1.5 md:hidden">
-        <span />
-        <button className={padBtn} onClick={() => turn({ x: 0, y: -1 })}>↑</button>
-        <span />
-        <button className={padBtn} onClick={() => turn({ x: -1, y: 0 })}>←</button>
-        <button className={padBtn} onClick={() => turn({ x: 0, y: 1 })}>↓</button>
-        <button className={padBtn} onClick={() => turn({ x: 1, y: 0 })}>→</button>
-      </div>
-      <p className="hidden text-[11px] text-slate-400 md:block">方向键 / WASD 控制，空格开始</p>
+      <p className="text-[11px] text-slate-400">鼠标 / 手指带着小球走，躲红块、吃星星 ✦</p>
     </div>
   );
 }
@@ -967,8 +1005,8 @@ export default function App() {
           <SectionHead icon={<Gamepad2 size={18} />} zh="小游戏" en="GAMES" note="摸鱼专用 · 还会加" />
           <div className="grid gap-5 md:grid-cols-2">
             <div className={`${glass} rounded-[1.75rem] p-6`}>
-              <div className="mb-4 text-xs font-bold text-slate-400">🐍 贪吃蛇</div>
-              <SnakeGame />
+              <div className="mb-4 text-xs font-bold text-slate-400">✦ 星尘躲避</div>
+              <DodgeGame />
             </div>
             <div className={`${glass} rounded-[1.75rem] p-6`}>
               <div className="mb-4 text-xs font-bold text-slate-400">🃏 记忆翻牌</div>
