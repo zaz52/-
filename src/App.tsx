@@ -19,6 +19,9 @@ import {
   AtSign,
   Smile,
   MessageSquare,
+  Gamepad2,
+  RotateCcw,
+  Trophy,
 } from 'lucide-react';
 import { defaultProjects as projects } from './data/siteProjects';
 import { defaultContacts as contacts } from './data/siteContacts';
@@ -370,6 +373,213 @@ function Guestbook() {
           </div>
         ))}
       </div>
+    </div>
+  );
+}
+
+/* ================= 小游戏：贪吃蛇 ================= */
+function SnakeGame() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [score, setScore] = useState(0);
+  const [best, setBest] = useState(() => {
+    try { return Number(localStorage.getItem('yi-snake-best') || 0); } catch { return 0; }
+  });
+  const [status, setStatus] = useState<'idle' | 'playing' | 'over'>('idle');
+  const N = 15, CELL = 20;
+  const g = useRef({
+    snake: [{ x: 7, y: 7 }, { x: 6, y: 7 }, { x: 5, y: 7 }],
+    dir: { x: 1, y: 0 },
+    queue: [] as { x: number; y: number }[],
+    food: { x: 11, y: 7 },
+    score: 0,
+  });
+  const timer = useRef(0);
+
+  const rndFood = (snake: { x: number; y: number }[]) => {
+    for (;;) {
+      const f = { x: (Math.random() * N) | 0, y: (Math.random() * N) | 0 };
+      if (!snake.some((s) => s.x === f.x && s.y === f.y)) return f;
+    }
+  };
+
+  const draw = () => {
+    const cv = canvasRef.current;
+    const ctx = cv?.getContext('2d');
+    if (!cv || !ctx) return;
+    const { snake, food } = g.current;
+    ctx.clearRect(0, 0, N * CELL, N * CELL);
+    ctx.fillStyle = '#f43f5e';
+    ctx.beginPath();
+    ctx.arc(food.x * CELL + CELL / 2, food.y * CELL + CELL / 2, CELL / 2 - 2, 0, Math.PI * 2);
+    ctx.fill();
+    snake.forEach((s, i) => {
+      ctx.fillStyle = i === 0 ? '#4f46e5' : '#a5b4fc';
+      ctx.fillRect(s.x * CELL + 2, s.y * CELL + 2, CELL - 4, CELL - 4);
+    });
+  };
+
+  const stop = () => window.clearInterval(timer.current);
+
+  const tick = () => {
+    const st = g.current;
+    if (st.queue.length) {
+      const d = st.queue.shift()!;
+      if (d.x !== -st.dir.x || d.y !== -st.dir.y) st.dir = d;
+    }
+    const h = { x: st.snake[0].x + st.dir.x, y: st.snake[0].y + st.dir.y };
+    if (h.x < 0 || h.y < 0 || h.x >= N || h.y >= N || st.snake.some((s) => s.x === h.x && s.y === h.y)) {
+      stop();
+      setStatus('over');
+      setBest((b) => {
+        const nb = Math.max(b, st.score);
+        try { localStorage.setItem('yi-snake-best', String(nb)); } catch { /* ignore */ }
+        return nb;
+      });
+      return;
+    }
+    st.snake.unshift(h);
+    if (h.x === st.food.x && h.y === st.food.y) {
+      st.score += 1;
+      setScore(st.score);
+      st.food = rndFood(st.snake);
+    } else {
+      st.snake.pop();
+    }
+    draw();
+  };
+
+  const start = () => {
+    stop();
+    g.current = {
+      snake: [{ x: 7, y: 7 }, { x: 6, y: 7 }, { x: 5, y: 7 }],
+      dir: { x: 1, y: 0 }, queue: [],
+      food: { x: 11, y: 7 }, score: 0,
+    };
+    setScore(0);
+    setStatus('playing');
+    draw();
+    timer.current = window.setInterval(tick, 130);
+  };
+
+  const turn = (d: { x: number; y: number }) => {
+    const st = g.current;
+    const last = st.queue[st.queue.length - 1] || st.dir;
+    if ((d.x !== -last.x || d.y !== -last.y) && st.queue.length < 3) st.queue.push(d);
+  };
+
+  useEffect(() => {
+    draw();
+    const onKey = (e: KeyboardEvent) => {
+      const m: Record<string, { x: number; y: number }> = {
+        ArrowUp: { x: 0, y: -1 }, ArrowDown: { x: 0, y: 1 },
+        ArrowLeft: { x: -1, y: 0 }, ArrowRight: { x: 1, y: 0 },
+        w: { x: 0, y: -1 }, s: { x: 0, y: 1 }, a: { x: -1, y: 0 }, d: { x: 1, y: 0 },
+        W: { x: 0, y: -1 }, S: { x: 0, y: 1 }, A: { x: -1, y: 0 }, D: { x: 1, y: 0 },
+      };
+      const dir = m[e.key];
+      if (dir && status === 'playing') { e.preventDefault(); turn(dir); }
+      if (e.key === ' ' && status !== 'playing') { e.preventDefault(); start(); }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => { window.removeEventListener('keydown', onKey); stop(); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status]);
+
+  const padBtn = 'grid size-11 place-items-center rounded-xl bg-white/70 text-lg font-bold text-indigo-600 shadow-sm active:scale-90 transition-transform';
+  return (
+    <div className="flex flex-col items-center gap-3">
+      <div className="flex w-full items-center justify-between text-sm">
+        <span className="font-bold text-slate-600">得分 <span className="text-indigo-600">{score}</span></span>
+        <span className="inline-flex items-center gap-1 font-bold text-slate-400"><Trophy size={14} /> {best}</span>
+      </div>
+      <div className="relative">
+        <canvas ref={canvasRef} width={N * CELL} height={N * CELL}
+          className="rounded-2xl bg-white/60 shadow-inner" />
+        {status !== 'playing' && (
+          <button onClick={start}
+            className="absolute inset-0 grid place-items-center rounded-2xl bg-slate-900/45 text-white backdrop-blur-[2px]">
+            <span className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-extrabold text-indigo-600 shadow-lg">
+              <RotateCcw size={15} /> {status === 'over' ? `再来一局（${score}分）` : '开始游戏'}
+            </span>
+          </button>
+        )}
+      </div>
+      <div className="grid grid-cols-3 gap-1.5 md:hidden">
+        <span />
+        <button className={padBtn} onClick={() => turn({ x: 0, y: -1 })}>↑</button>
+        <span />
+        <button className={padBtn} onClick={() => turn({ x: -1, y: 0 })}>←</button>
+        <button className={padBtn} onClick={() => turn({ x: 0, y: 1 })}>↓</button>
+        <button className={padBtn} onClick={() => turn({ x: 1, y: 0 })}>→</button>
+      </div>
+      <p className="hidden text-[11px] text-slate-400 md:block">方向键 / WASD 控制，空格开始</p>
+    </div>
+  );
+}
+
+/* ================= 小游戏：记忆翻牌 ================= */
+function MemoryGame() {
+  const ICONS = ['🎮', '🎲', '🎯', '🎨', '🚀', '🌙', '⚡', '🔥'];
+  const shuffle = (a: string[]) => {
+    const r = [...a];
+    for (let i = r.length - 1; i > 0; i--) {
+      const j = (Math.random() * (i + 1)) | 0;
+      [r[i], r[j]] = [r[j], r[i]];
+    }
+    return r;
+  };
+  const [deck, setDeck] = useState<string[]>(() => shuffle([...ICONS, ...ICONS]));
+  const [open, setOpen] = useState<number[]>([]);
+  const [done, setDone] = useState<number[]>([]);
+  const [moves, setMoves] = useState(0);
+  const [won, setWon] = useState(false);
+  const lock = useRef(false);
+
+  const flip = (i: number) => {
+    if (lock.current || open.includes(i) || done.includes(i)) return;
+    const no = [...open, i];
+    setOpen(no);
+    if (no.length === 2) {
+      setMoves((m) => m + 1);
+      if (deck[no[0]] === deck[no[1]]) {
+        const nd = [...done, ...no];
+        setDone(nd);
+        setOpen([]);
+        if (nd.length === 16) setWon(true);
+      } else {
+        lock.current = true;
+        window.setTimeout(() => { setOpen([]); lock.current = false; }, 650);
+      }
+    }
+  };
+
+  const reset = () => {
+    setDeck(shuffle([...ICONS, ...ICONS]));
+    setOpen([]); setDone([]); setMoves(0); setWon(false);
+  };
+
+  return (
+    <div className="flex flex-col items-center gap-3">
+      <div className="flex w-full items-center justify-between text-sm">
+        <span className="font-bold text-slate-600">步数 <span className="text-indigo-600">{moves}</span></span>
+        <button onClick={reset} className="inline-flex items-center gap-1 rounded-full bg-white/70 px-3 py-1 text-xs font-bold text-slate-500 shadow-sm active:scale-95 transition-transform">
+          <RotateCcw size={12} /> 重开
+        </button>
+      </div>
+      <div className="grid w-full max-w-[300px] grid-cols-4 gap-2">
+        {deck.map((icon, i) => {
+          const face = open.includes(i) || done.includes(i);
+          return (
+            <button key={i} onClick={() => flip(i)}
+              className={`aspect-square rounded-xl text-2xl shadow-sm transition-all duration-300 active:scale-95 ${
+                face ? 'bg-white scale-100' : 'bg-gradient-to-br from-indigo-400 to-violet-500 hover:scale-105'
+              } ${done.includes(i) ? 'opacity-60' : ''}`}>
+              {face ? icon : ''}
+            </button>
+          );
+        })}
+      </div>
+      {won && <p className="text-sm font-extrabold text-indigo-600">🎉 通关！用了 {moves} 步</p>}
     </div>
   );
 }
@@ -748,6 +958,21 @@ export default function App() {
                 <span className="relative text-sm font-bold text-slate-500">本页背景就有 ✨</span>
               </div>
               <p className="text-[11px] text-slate-400 mt-2 relative z-10">柔光斑块缓慢呼吸，营造通透感</p>
+            </div>
+          </div>
+        </section>
+
+        {/* 小游戏 */}
+        <section id="games" className="space-y-6 scroll-mt-28">
+          <SectionHead icon={<Gamepad2 size={18} />} zh="小游戏" en="GAMES" note="摸鱼专用 · 还会加" />
+          <div className="grid gap-5 md:grid-cols-2">
+            <div className={`${glass} rounded-[1.75rem] p-6`}>
+              <div className="mb-4 text-xs font-bold text-slate-400">🐍 贪吃蛇</div>
+              <SnakeGame />
+            </div>
+            <div className={`${glass} rounded-[1.75rem] p-6`}>
+              <div className="mb-4 text-xs font-bold text-slate-400">🃏 记忆翻牌</div>
+              <MemoryGame />
             </div>
           </div>
         </section>
