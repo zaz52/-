@@ -539,6 +539,48 @@ const handleApi = async (request, env, url, ctx) => {
     return json(projects);
   }
 
+  /* 留言板：存在 KV，无需登录 */
+  if (url.pathname === '/api/guestbook' && request.method === 'GET') {
+    let list = [];
+    try {
+      const raw = await env.PROJECTS_KV?.get('guestbook:v1');
+      list = JSON.parse(raw || '[]');
+    } catch {
+      list = [];
+    }
+    return json({ messages: Array.isArray(list) ? list.slice(0, 50) : [] });
+  }
+
+  if (url.pathname === '/api/guestbook' && request.method === 'POST') {
+    let body = {};
+    try {
+      body = await request.json();
+    } catch {
+      body = {};
+    }
+    const name = String(body.name || '').trim().slice(0, 20);
+    const message = String(body.message || '').trim().slice(0, 200);
+    if (!name || !message) return json({ error: '昵称和留言都不能为空' }, { status: 400 });
+    /* 简单限流：同一 IP 60 秒只能留一次 */
+    const ip = request.headers.get('cf-connecting-ip') || 'unknown';
+    if (await env.PROJECTS_KV?.get(`gb:rl:${ip}`)) {
+      return json({ error: '发言太快了，喝口水再来' }, { status: 429 });
+    }
+    const esc = (s) =>
+      s.replace(/[<>&"]/g, (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c]));
+    let list = [];
+    try {
+      list = JSON.parse((await env.PROJECTS_KV?.get('guestbook:v1')) || '[]');
+    } catch {
+      list = [];
+    }
+    if (!Array.isArray(list)) list = [];
+    list.unshift({ name: esc(name), message: esc(message), at: Date.now() });
+    await env.PROJECTS_KV?.put('guestbook:v1', JSON.stringify(list.slice(0, 100)));
+    await env.PROJECTS_KV?.put(`gb:rl:${ip}`, '1', { expirationTtl: 60 });
+    return json({ ok: true });
+  }
+
   return json({ error: 'Not found' }, { status: 404 });
 };
 

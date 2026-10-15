@@ -16,6 +16,9 @@ import {
   SkipForward,
   Play,
   Pause,
+  AtSign,
+  Smile,
+  MessageSquare,
 } from 'lucide-react';
 import { defaultProjects as projects } from './data/siteProjects';
 import { defaultContacts as contacts } from './data/siteContacts';
@@ -225,6 +228,119 @@ function MusicPlayer() {
   );
 }
 
+
+/* ================= 留言板 ================= */
+
+type GBMsg = { name: string; message: string; at: number };
+
+function Guestbook() {
+  const [msgs, setMsgs] = useState<GBMsg[]>([]);
+  const [name, setName] = useState('');
+  const [text, setText] = useState('');
+  const [sending, setSending] = useState(false);
+  const [hint, setHint] = useState('');
+
+  const fetchMsgs = async (): Promise<GBMsg[]> => {
+    try {
+      const r = await fetch('/api/guestbook');
+      const d = await r.json();
+      return Array.isArray(d.messages) ? d.messages : [];
+    } catch {
+      return [];
+    }
+  };
+
+  useEffect(() => {
+    let alive = true;
+    fetchMsgs().then((list) => {
+      if (alive) setMsgs(list);
+    });
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name.trim() || !text.trim() || sending) return;
+    setSending(true);
+    setHint('');
+    try {
+      const r = await fetch('/api/guestbook', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ name: name.trim(), message: text.trim() }),
+      });
+      const d = await r.json();
+      if (r.ok) {
+        setText('');
+        setHint('留言成功，已上墙！');
+        setMsgs(await fetchMsgs());
+      } else {
+        setHint(d.error || '发送失败，稍后再试');
+      }
+    } catch {
+      setHint('网络开小差了，稍后再试');
+    } finally {
+      setSending(false);
+    }
+  };
+
+  const fmt = (t: number) => {
+    try {
+      return new Date(t).toLocaleString('zh-CN', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+    } catch {
+      return '';
+    }
+  };
+
+  return (
+    <div className="grid gap-5 lg:grid-cols-5">
+      <form onSubmit={submit} className={`${glass} rounded-[1.75rem] p-6 lg:col-span-2`}>
+        <div className="text-sm font-extrabold text-slate-800">写点什么</div>
+        <input
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="你的昵称"
+          maxLength={20}
+          className="mt-4 w-full rounded-2xl border border-white/70 bg-white/70 px-4 py-2.5 text-sm text-slate-700 outline-none placeholder:text-slate-400 focus:border-indigo-300"
+        />
+        <textarea
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder="想对我说的话..."
+          maxLength={200}
+          rows={4}
+          className="mt-3 w-full resize-none rounded-2xl border border-white/70 bg-white/70 px-4 py-2.5 text-sm text-slate-700 outline-none placeholder:text-slate-400 focus:border-indigo-300"
+        />
+        <button
+          type="submit"
+          disabled={sending || !name.trim() || !text.trim()}
+          className="mt-4 w-full rounded-full bg-gradient-to-r from-indigo-500 to-violet-500 py-2.5 text-sm font-extrabold text-white shadow-lg shadow-indigo-200 transition-all hover:shadow-xl active:scale-95 disabled:opacity-40"
+        >
+          {sending ? '发送中...' : '上墙'}
+        </button>
+        {hint && <p className="mt-3 text-center text-xs font-semibold text-slate-500">{hint}</p>}
+      </form>
+      <div className="space-y-3 lg:col-span-3">
+        {msgs.length === 0 && (
+          <div className={`${glassSoft} rounded-[1.75rem] p-8 text-center text-sm text-slate-400`}>
+            还没有留言，来抢沙发吧
+          </div>
+        )}
+        {msgs.map((m, i) => (
+          <div key={`${m.at}-${i}`} className={`${glassSoft} rounded-[1.5rem] px-5 py-4`}>
+            <div className="flex items-baseline gap-2">
+              <span className="text-sm font-extrabold text-slate-800">{m.name}</span>
+              <span className="text-xs text-slate-400">{fmt(m.at)}</span>
+            </div>
+            <p className="mt-1.5 text-sm leading-relaxed text-slate-600">{m.message}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<'feel' | 'motion' | 'rhythm'>('feel');
@@ -600,6 +716,63 @@ export default function App() {
               ))}
             </div>
           </div>
+        </section>
+
+        {/* 自我介绍 */}
+        <section id="intro" className="space-y-6 scroll-mt-28">
+          <SectionHead icon={<Smile size={18} />} zh="自我介绍" en="HELLO" note="认识一下" />
+          <div className={`${glass} rounded-[2rem] p-8 md:p-10`}>
+            <div className="flex items-center gap-5">
+              <div className="grid size-16 shrink-0 place-items-center rounded-3xl bg-gradient-to-br from-indigo-500 to-violet-500 text-2xl font-extrabold text-white shadow-lg shadow-indigo-200">
+                苍
+              </div>
+              <div>
+                <h3 className="text-xl font-extrabold tracking-tight text-slate-900">你好，我是苍柏</h3>
+                <p className="mt-1 text-sm font-semibold text-slate-500">AI 工具玩家 · 独立开发者</p>
+              </div>
+            </div>
+            <p className="mt-6 text-sm leading-relaxed text-slate-600">
+              折腾 AI 工具、薅羊毛、搞钱，也做个人网站和小产品。习惯把想法快速做成能用的东西——这个站、小店、创作台、导航站都是这么长出来的。晚上在 X 上锐评中文互联网，欢迎来找我玩。
+            </p>
+            <div className="mt-6 flex flex-wrap gap-2">
+              {['AI 工具', '薅羊毛', '搞钱', '独立开发', 'X 创作', '网站搭建'].map((t) => (
+                <span key={t} className="rounded-full border border-white/80 bg-white/70 px-4 py-1.5 text-xs font-bold text-indigo-700 shadow-sm">#{t}</span>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* X 导流 */}
+        <section id="follow" className="space-y-6 scroll-mt-28">
+          <SectionHead icon={<AtSign size={18} />} zh="来 X 找我" en="FOLLOW ME" note="@Cangbaic" />
+          <a
+            href="https://x.com/Cangbaic"
+            target="_blank"
+            rel="noreferrer"
+            className="group relative block overflow-hidden rounded-[2rem] bg-neutral-950 p-8 text-white shadow-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl md:p-10"
+          >
+            <div className="pointer-events-none absolute -right-16 -top-16 size-64 rounded-full bg-white/10 blur-2xl" />
+            <div className="relative flex flex-col gap-6 md:flex-row md:items-center">
+              <svg viewBox="0 0 24 24" className="size-12 shrink-0 fill-white" aria-hidden="true">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+              </svg>
+              <div className="flex-1">
+                <div className="text-lg font-extrabold tracking-tight">苍柏 @Cangbaic</div>
+                <p className="mt-2 text-sm leading-relaxed text-white/70">
+                  在 X 上分享 AI 工具、薅羊毛和搞钱信息，偶尔锐评。来互关，一起玩。
+                </p>
+              </div>
+              <span className="inline-flex shrink-0 items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-extrabold text-neutral-950 transition-all group-hover:scale-105">
+                关注我 <ArrowUpRight size={16} />
+              </span>
+            </div>
+          </a>
+        </section>
+
+        {/* 留言板 */}
+        <section id="guestbook" className="space-y-6 scroll-mt-28">
+          <SectionHead icon={<MessageSquare size={18} />} zh="留言板" en="GUESTBOOK" note="来都来了，说点什么" />
+          <Guestbook />
         </section>
 
         {/* 联系 */}
