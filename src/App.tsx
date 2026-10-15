@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   ExternalLink,
   Sparkles,
@@ -8,6 +8,8 @@ import {
   Palette,
   FolderKanban,
   Send,
+  Music,
+  Globe,
 } from 'lucide-react';
 import { defaultProjects as projects } from './data/siteProjects';
 import { defaultContacts as contacts } from './data/siteContacts';
@@ -65,6 +67,61 @@ function SectionHead({ icon, zh, en, note }: { icon: React.ReactNode; zh: string
       </h2>
       <span className={`hidden sm:inline-block rounded-full px-3 py-1 text-xs font-semibold text-slate-500 ${glassSoft}`}>{note}</span>
     </div>
+  );
+}
+
+/* ================= 背景音乐悬浮按钮 ================= */
+/* 音频文件放 public/bgm.mp3；不存在时按钮自动隐藏 */
+
+function MusicToggle() {
+  const [playing, setPlaying] = useState(false);
+  const [hasMusic, setHasMusic] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    fetch('/bgm.mp3', { method: 'HEAD' })
+      .then((r) => setHasMusic(r.ok))
+      .catch(() => setHasMusic(false));
+  }, []);
+
+  const toggle = async () => {
+    const a = audioRef.current;
+    if (!a) return;
+    if (playing) {
+      a.pause();
+      setPlaying(false);
+    } else {
+      try {
+        await a.play();
+        setPlaying(true);
+      } catch {
+        /* 浏览器拦截未交互的播放，保持暂停态 */
+      }
+    }
+  };
+
+  if (!hasMusic) return null;
+  return (
+    <>
+      <audio ref={audioRef} src="/bgm.mp3" loop preload="none" />
+      <button
+        onClick={toggle}
+        aria-label={playing ? '暂停背景音乐' : '播放背景音乐'}
+        title={playing ? '暂停背景音乐' : '播放背景音乐'}
+        className="fixed bottom-6 right-6 z-50 flex size-12 items-center justify-center rounded-full border border-white/70 bg-white/50 text-slate-700 shadow-lg shadow-indigo-100 backdrop-blur-xl transition-all hover:scale-105 active:scale-95"
+      >
+        {playing ? (
+          <span className="flex h-5 items-end gap-[3px]">
+            <span className="animate-eq-1 w-[3px] rounded-full bg-indigo-500" />
+            <span className="animate-eq-2 w-[3px] rounded-full bg-violet-500" />
+            <span className="animate-eq-3 w-[3px] rounded-full bg-indigo-500" />
+            <span className="animate-eq-4 w-[3px] rounded-full bg-violet-500" />
+          </span>
+        ) : (
+          <Music size={20} />
+        )}
+      </button>
+    </>
   );
 }
 
@@ -201,54 +258,68 @@ export default function App() {
           </div>
         </section>
 
-        {/* 小店推广 */}
+        {/* 我的站点 */}
         <section>
-          <a
-            href="https://999.lsrai.shop/"
-            target="_blank"
-            rel="noreferrer"
-            className="group relative block overflow-hidden rounded-[2rem] bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 p-8 md:p-10 text-white shadow-xl shadow-orange-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-orange-200"
-          >
-            <div className="pointer-events-none absolute -right-16 -top-16 size-64 rounded-full bg-white/20 blur-2xl" />
-            <div className="pointer-events-none absolute -bottom-20 left-1/3 size-56 rounded-full bg-white/10 blur-2xl" />
-            <div className="relative flex flex-col md:flex-row md:items-center gap-6">
-              <div className="flex-1">
+          <SectionHead icon={<Globe size={18} />} zh="我的站点" en="SITES" note="都是我的" />
+          <div className="mt-6 grid gap-5 md:grid-cols-3">
+            {/* 小店 */}
+            <a
+              href="https://999.lsrai.shop/"
+              target="_blank"
+              rel="noreferrer"
+              className="group relative flex flex-col overflow-hidden rounded-[1.75rem] bg-gradient-to-br from-amber-500 via-orange-500 to-rose-500 p-7 text-white shadow-xl shadow-orange-200 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-orange-200"
+            >
+              <div className="pointer-events-none absolute -right-12 -top-12 size-48 rounded-full bg-white/20 blur-2xl" />
+              <div className="relative">
                 <div className="inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-xs font-bold backdrop-blur-sm">
                   🏪 我的小店
                 </div>
-                <h2 className="mt-3 text-2xl md:text-3xl font-extrabold tracking-tight">AI 代充小店</h2>
-                <p className="mt-2 text-sm text-white/85 leading-relaxed">常用 AI 订阅代充，欢迎光顾。</p>
+                <h3 className="mt-3 text-xl font-extrabold tracking-tight">AI 代充小店</h3>
+                <p className="mt-2 text-sm leading-relaxed text-white/85">常用 AI 订阅代充，欢迎光顾。</p>
               </div>
-              <span className="inline-flex shrink-0 items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-extrabold text-orange-600 shadow-lg transition-all group-hover:scale-105">
-                进店看看 <ArrowUpRight size={16} />
+              <span className="relative mt-auto inline-flex items-center gap-1.5 pt-6 text-sm font-extrabold">
+                进店看看 <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </span>
-            </div>
-          </a>
-        </section>
-
-        {/* X-Deck 创作台推广 */}
-        <section>
-          <a
-            href="https://x.weiyi.indevs.in/"
-            target="_blank"
-            rel="noreferrer"
-            className="group relative block overflow-hidden rounded-[2rem] bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 p-8 md:p-10 text-white shadow-xl shadow-indigo-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-indigo-200"
-          >
-            <div className="pointer-events-none absolute -right-16 -top-16 size-64 rounded-full bg-indigo-500/25 blur-2xl" />
-            <div className="pointer-events-none absolute -bottom-20 left-1/3 size-56 rounded-full bg-violet-500/15 blur-2xl" />
-            <div className="relative flex flex-col md:flex-row md:items-center gap-6">
-              <div className="flex-1">
-                <div className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-xs font-bold backdrop-blur-sm border border-white/15">
+            </a>
+            {/* X-Deck 创作台 */}
+            <a
+              href="https://x.weiyi.indevs.in/"
+              target="_blank"
+              rel="noreferrer"
+              className="group relative flex flex-col overflow-hidden rounded-[1.75rem] bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 p-7 text-white shadow-xl shadow-indigo-200 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-indigo-200"
+            >
+              <div className="pointer-events-none absolute -right-12 -top-12 size-48 rounded-full bg-indigo-500/25 blur-2xl" />
+              <div className="relative">
+                <div className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-bold backdrop-blur-sm">
                   ⚡ 我的创作台
                 </div>
-                <h2 className="mt-3 text-2xl md:text-3xl font-extrabold tracking-tight">X-Deck 实时创作台</h2>
-                <p className="mt-2 text-sm text-white/70 leading-relaxed">聚合热点、收集灵感、打磨下一条推文。</p>
+                <h3 className="mt-3 text-xl font-extrabold tracking-tight">X-Deck 实时创作台</h3>
+                <p className="mt-2 text-sm leading-relaxed text-white/70">聚合热点、收集灵感、打磨下一条推文。</p>
               </div>
-              <span className="inline-flex shrink-0 items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-extrabold text-slate-900 shadow-lg transition-all group-hover:scale-105">
-                打开创作台 <ArrowUpRight size={16} />
+              <span className="relative mt-auto inline-flex items-center gap-1.5 pt-6 text-sm font-extrabold">
+                打开创作台 <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </span>
-            </div>
-          </a>
+            </a>
+            {/* 唯影导航 */}
+            <a
+              href="https://weiyi.indevs.in/"
+              target="_blank"
+              rel="noreferrer"
+              className="group relative flex flex-col overflow-hidden rounded-[1.75rem] bg-gradient-to-br from-cyan-500 via-sky-500 to-blue-600 p-7 text-white shadow-xl shadow-sky-200 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-sky-200"
+            >
+              <div className="pointer-events-none absolute -right-12 -top-12 size-48 rounded-full bg-white/20 blur-2xl" />
+              <div className="relative">
+                <div className="inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-xs font-bold backdrop-blur-sm">
+                  🎬 视频导航
+                </div>
+                <h3 className="mt-3 text-xl font-extrabold tracking-tight">唯影导航</h3>
+                <p className="mt-2 text-sm leading-relaxed text-white/85">全类型视频网站导航库，已收录 143 个平台。</p>
+              </div>
+              <span className="relative mt-auto inline-flex items-center gap-1.5 pt-6 text-sm font-extrabold">
+                去逛逛 <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </span>
+            </a>
+          </div>
         </section>
 
         {/* 跑马灯：玻璃条 */}
@@ -465,6 +536,7 @@ export default function App() {
             <p className="text-xs text-slate-500">一隅之地 · Crafted with Motion & React</p>
           </div>
         </footer>
+        <MusicToggle />
       </main>
     </div>
   );
