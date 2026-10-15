@@ -226,6 +226,31 @@ export default function App() {
           </a>
         </section>
 
+        {/* X-Deck 创作台推广 */}
+        <section>
+          <a
+            href="https://x.weiyi.indevs.in/"
+            target="_blank"
+            rel="noreferrer"
+            className="group relative block overflow-hidden rounded-[2rem] bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 p-8 md:p-10 text-white shadow-xl shadow-indigo-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-indigo-200"
+          >
+            <div className="pointer-events-none absolute -right-16 -top-16 size-64 rounded-full bg-indigo-500/25 blur-2xl" />
+            <div className="pointer-events-none absolute -bottom-20 left-1/3 size-56 rounded-full bg-violet-500/15 blur-2xl" />
+            <div className="relative flex flex-col md:flex-row md:items-center gap-6">
+              <div className="flex-1">
+                <div className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-xs font-bold backdrop-blur-sm border border-white/15">
+                  ⚡ 我的创作台
+                </div>
+                <h2 className="mt-3 text-2xl md:text-3xl font-extrabold tracking-tight">X-Deck 实时创作台</h2>
+                <p className="mt-2 text-sm text-white/70 leading-relaxed">聚合热点、收集灵感、打磨下一条推文。</p>
+              </div>
+              <span className="inline-flex shrink-0 items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-extrabold text-slate-900 shadow-lg transition-all group-hover:scale-105">
+                打开创作台 <ArrowUpRight size={16} />
+              </span>
+            </div>
+          </a>
+        </section>
+
         {/* 跑马灯：玻璃条 */}
         <section className={`${glass} rounded-full py-3 px-2 overflow-hidden`}>
           <div className="animate-marquee gap-3">
