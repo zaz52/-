@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import { defaultProjects as projects } from './data/siteProjects';
 import { defaultContacts as contacts } from './data/siteContacts';
+import { cinemaPoster } from './data/cinemaPoster';
 
 /* ================= 数据 ================= */
 
@@ -962,7 +963,7 @@ export default function App() {
           >
             <div className="relative aspect-[21/9] w-full overflow-hidden">
               <img
-                src="/cinema-poster.webp"
+                src={cinemaPoster}
                 alt="苍柏影院"
                 className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                 loading="lazy"
