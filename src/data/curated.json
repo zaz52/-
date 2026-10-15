@@ -1,1 +1,198 @@
-[{"desc":"融合周易起卦、八字、奇门、六爻与 AI 解读的东方问事工具台，围绕问题、术法和结果生成结构化洞察。","featured":true,"github":null,"href":"https://suangua.weiyiai.top/","name":"乾坤之道","tags":["AI 问卦","周易","Cloudflare"],"type":"东方术数 + AI 问事平台"},{"desc":"免费、隐私优先的在线简历编辑器，支持 AI 润色、语法检查、本地数据存储和 PDF / JSON 导出。","featured":true,"github":null,"href":"https://magic-resume-weiyi.netlify.app/","name":"魔方简历","tags":["AI 简历","本地存储","开源工具"],"type":"AI 简历编辑器"},{"desc":"把 PDF、DOCX、URL 或 Markdown 转成真正可编辑的 PowerPoint，保留原生形状、图表、讲稿和模板风格。","featured":true,"github":null,"href":"https://ppt-master-weiyi.netlify.app/","name":"PPT Master","tags":["AI 文档","PPTX","可编辑"],"type":"AI 原生 PPTX 生成器"},{"desc":"面向老年健康管理的移动端体验，整合饮水、睡眠、心率、药箱、语音、电台、AI 晨报和报告分析入口。","featured":true,"github":null,"href":"https://elder-health.netlify.app/#/pages/index/index","name":"银龄守护","tags":["移动端","健康关怀","适老化"],"type":"长辈健康关怀小程序界面"},{"desc":"沉淀学习资源、设计素材、工具文件和项目资料的云端入口，方便集中整理、检索和分享。","featured":false,"github":null,"href":"https://pan.quark.cn/s/bc839cf401af#/list/share","name":"虚拟资源库","tags":["资料库","素材整理","云端分享"],"type":"学习资料与素材集合"},{"desc":"本站——基于 React + Tailwind 的个人网站，灵动流体浅色 UI 与 60fps 微交互设计系统。","featured":false,"github":"https://github.com/zaz52/-","href":"https://github.com/zaz52/yi-corner","name":"壹隅 YI CORNER","tags":["React","Portfolio","Motion"],"type":"个人网站（本站）"},{"desc":"面向闲鱼平台的自动化客服与虚拟商品流程系统，覆盖消息处理、自动回复、自动发货、评价和商品维护。","featured":false,"github":"https://github.com/zaz52/xianyu-auto-reply","href":"https://github.com/zaz52/xianyu-auto-reply","name":"闲鱼自动回复管理系统","tags":["Python","FastAPI","Automation"],"type":"Python + FastAPI 自动化客服"},{"desc":"基于闲鱼自动回复系统的二次开发版本，重点重构前端 UI 和使用体验，让自动化管理工具更现代、更清晰。","featured":false,"github":"https://github.com/zaz52/xianyu-super-butler","href":"https://github.com/zaz52/xianyu-super-butler","name":"闲鱼超级管家","tags":["Automation","UI","Tooling"],"type":"自动化工具二次开发"},{"desc":"面向小说创作流程的工作台项目，用于沉淀写作、设定、素材和内容生产相关能力。","featured":false,"github":"https://github.com/zaz52/wei-yi","href":"https://github.com/zaz52/wei-yi","name":"小说工作台","tags":["TypeScript","Writing","Workbench"],"type":"TypeScript 创作工具"},{"desc":"用于个人穿搭、眼镜、色彩诊断、发型和形象升级报告的 Agent skill 与提示词集合。","featured":false,"github":"https://github.com/zaz52/personal-style-advisor","href":"https://github.com/zaz52/personal-style-advisor","name":"个人形象顾问 Skill","tags":["Agent Skill","Style","Prompt"],"type":"Agent 形象升级提示词"},{"desc":"为 AI Agent 提供跨平台读取和搜索能力，覆盖 Twitter、Reddit、YouTube、GitHub、Bilibili、小红书等公开信息源。","featured":false,"github":"https://github.com/zaz52/Agent-Reach","href":"https://github.com/zaz52/Agent-Reach","name":"Agent Reach","tags":["Agent","Search","CLI"],"type":"AI Agent 网络信息读取工具"},{"desc":"GitHub 上沉淀的 Python 项目，用于记录和整理 AI、自动化或实验性代码能力。","featured":false,"github":"https://github.com/zaz52/GeniusFKoai","href":"https://github.com/zaz52/GeniusFKoai","name":"GeniusFKoai","tags":["Python","AI","GitHub"],"type":"Python 实验项目"},{"desc":"围绕乾坤之道项目沉淀的部署与辅助脚本仓库，方便后续维护算卦相关站点和发布流程。","featured":false,"github":"https://github.com/zaz52/yulesuangua-deploy","href":"https://github.com/zaz52/yulesuangua-deploy","name":"乾坤之道部署脚本","tags":["Python","Deploy"],"type":"Python 部署辅助"},{"desc":"早期 GitHub Pages 个人网站仓库，作为个人网站迁移过程中的静态部署备份和历史版本。","featured":false,"github":"https://github.com/zaz52/zaz52.github.io","href":"https://github.com/zaz52/zaz52.github.io","name":"GitHub Pages 作品集备份","tags":["HTML","Archive"],"type":"HTML 静态站点备份"}]
+[
+  {
+    "desc": "融合周易起卦、八字、奇门、六爻与 AI 解读的东方问事工具台，围绕问题、术法和结果生成结构化洞察。",
+    "featured": true,
+    "github": null,
+    "href": "https://suangua.weiyiai.top/",
+    "name": "乾坤之道",
+    "tags": [
+      "AI 问卦",
+      "周易",
+      "Cloudflare"
+    ],
+    "type": "东方术数 + AI 问事平台"
+  },
+  {
+    "desc": "免费、隐私优先的在线简历编辑器，支持 AI 润色、语法检查、本地数据存储和 PDF / JSON 导出。",
+    "featured": true,
+    "github": null,
+    "href": "https://magic-resume-weiyi.netlify.app/",
+    "name": "魔方简历",
+    "tags": [
+      "AI 简历",
+      "本地存储",
+      "开源工具"
+    ],
+    "type": "AI 简历编辑器"
+  },
+  {
+    "desc": "把 PDF、DOCX、URL 或 Markdown 转成真正可编辑的 PowerPoint，保留原生形状、图表、讲稿和模板风格。",
+    "featured": true,
+    "github": null,
+    "href": "https://ppt-master-weiyi.netlify.app/",
+    "name": "PPT Master",
+    "tags": [
+      "AI 文档",
+      "PPTX",
+      "可编辑"
+    ],
+    "type": "AI 原生 PPTX 生成器"
+  },
+  {
+    "desc": "面向老年健康管理的移动端体验，整合饮水、睡眠、心率、药箱、语音、电台、AI 晨报和报告分析入口。",
+    "featured": true,
+    "github": null,
+    "href": "https://elder-health.netlify.app/#/pages/index/index",
+    "name": "银龄守护",
+    "tags": [
+      "移动端",
+      "健康关怀",
+      "适老化"
+    ],
+    "type": "长辈健康关怀小程序界面"
+  },
+  {
+    "desc": "沉淀学习资源、设计素材、工具文件和项目资料的云端入口，方便集中整理、检索和分享。",
+    "featured": false,
+    "github": null,
+    "href": "https://pan.quark.cn/s/bc839cf401af#/list/share",
+    "name": "虚拟资源库",
+    "tags": [
+      "资料库",
+      "素材整理",
+      "云端分享"
+    ],
+    "type": "学习资料与素材集合"
+  },
+  {
+    "desc": "本站——基于 React + Tailwind 的个人网站，灵动流体浅色 UI 与 60fps 微交互设计系统。",
+    "featured": false,
+    "github": "https://github.com/zaz52/-",
+    "href": "https://github.com/zaz52/yi-corner",
+    "name": "壹隅 YI CORNER",
+    "tags": [
+      "React",
+      "Portfolio",
+      "Motion"
+    ],
+    "type": "个人网站（本站）"
+  },
+  {
+    "desc": "基于闲鱼自动回复系统的二次开发版本，重点重构前端 UI 和使用体验，让自动化管理工具更现代、更清晰。",
+    "featured": false,
+    "github": "https://github.com/zaz52/xianyu-super-butler",
+    "href": "https://github.com/zaz52/xianyu-super-butler",
+    "name": "闲鱼超级管家",
+    "tags": [
+      "Automation",
+      "UI",
+      "Tooling"
+    ],
+    "type": "自动化工具二次开发"
+  },
+  {
+    "desc": "面向小说创作流程的工作台项目，用于沉淀写作、设定、素材和内容生产相关能力。",
+    "featured": false,
+    "github": "https://github.com/zaz52/wei-yi",
+    "href": "https://github.com/zaz52/wei-yi",
+    "name": "小说工作台",
+    "tags": [
+      "TypeScript",
+      "Writing",
+      "Workbench"
+    ],
+    "type": "TypeScript 创作工具"
+  },
+  {
+    "desc": "用于个人穿搭、眼镜、色彩诊断、发型和形象升级报告的 Agent skill 与提示词集合。",
+    "featured": false,
+    "github": "https://github.com/zaz52/personal-style-advisor",
+    "href": "https://github.com/zaz52/personal-style-advisor",
+    "name": "个人形象顾问 Skill",
+    "tags": [
+      "Agent Skill",
+      "Style",
+      "Prompt"
+    ],
+    "type": "Agent 形象升级提示词"
+  },
+  {
+    "desc": "为 AI Agent 提供跨平台读取和搜索能力，覆盖 Twitter、Reddit、YouTube、GitHub、Bilibili、小红书等公开信息源。",
+    "featured": false,
+    "github": "https://github.com/zaz52/Agent-Reach",
+    "href": "https://github.com/zaz52/Agent-Reach",
+    "name": "Agent Reach",
+    "tags": [
+      "Agent",
+      "Search",
+      "CLI"
+    ],
+    "type": "AI Agent 网络信息读取工具"
+  },
+  {
+    "desc": "面向闲鱼平台的自动化客服与虚拟商品流程系统，覆盖消息处理、自动回复、自动发货、评价和商品维护。",
+    "featured": false,
+    "github": "https://github.com/zaz52/xianyu-auto-reply",
+    "href": "https://github.com/zaz52/xianyu-auto-reply",
+    "name": "闲鱼自动回复管理系统",
+    "tags": [
+      "Python",
+      "FastAPI",
+      "Automation"
+    ],
+    "type": "Python + FastAPI 自动化客服",
+    "hidden": true
+  },
+  {
+    "desc": "GitHub 上沉淀的 Python 项目，用于记录和整理 AI、自动化或实验性代码能力。",
+    "featured": false,
+    "github": "https://github.com/zaz52/GeniusFKoai",
+    "href": "https://github.com/zaz52/GeniusFKoai",
+    "name": "GeniusFKoai",
+    "tags": [
+      "Python",
+      "AI",
+      "GitHub"
+    ],
+    "type": "Python 实验项目",
+    "hidden": true
+  },
+  {
+    "desc": "围绕乾坤之道项目沉淀的部署与辅助脚本仓库，方便后续维护算卦相关站点和发布流程。",
+    "featured": false,
+    "github": "https://github.com/zaz52/yulesuangua-deploy",
+    "href": "https://github.com/zaz52/yulesuangua-deploy",
+    "name": "乾坤之道部署脚本",
+    "tags": [
+      "Python",
+      "Deploy"
+    ],
+    "type": "Python 部署辅助",
+    "hidden": true
+  },
+  {
+    "desc": "早期 GitHub Pages 个人网站仓库，作为个人网站迁移过程中的静态部署备份和历史版本。",
+    "featured": false,
+    "github": "https://github.com/zaz52/zaz52.github.io",
+    "href": "https://github.com/zaz52/zaz52.github.io",
+    "name": "GitHub Pages 作品集备份",
+    "tags": [
+      "HTML",
+      "Archive"
+    ],
+    "type": "HTML 静态站点备份",
+    "hidden": true
+  },
+  {
+    "name": "yulesuangua",
+    "type": "GitHub 开源项目",
+    "desc": "对自己的运势婚姻的测试",
+    "href": "https://github.com/zaz52/yulesuangua",
+    "tags": [
+      "Vue"
+    ],
+    "featured": false,
+    "github": "https://github.com/zaz52/yulesuangua",
+    "hidden": true
+  }
+]
