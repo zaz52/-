@@ -477,8 +477,8 @@ export default function App() {
 
         {/* 我的站点 */}
         <section>
-          <SectionHead icon={<Globe size={18} />} zh="我的站点" en="SITES" note="都是我的" />
-          <div className="mt-6 grid gap-5 md:grid-cols-3">
+          <SectionHead icon={<Globe size={18} />} zh="我的站点" en="SITES" note="自建与收藏" />
+          <div className="mt-6 grid gap-5 md:grid-cols-2">
             {/* 小店 */}
             <a
               href="https://999.lsrai.shop/"
@@ -534,6 +534,25 @@ export default function App() {
               </div>
               <span className="relative mt-auto inline-flex items-center gap-1.5 pt-6 text-sm font-extrabold">
                 去逛逛 <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </span>
+            </a>
+            {/* 无损音乐下载 */}
+            <a
+              href="https://flac.music.hi.cn/"
+              target="_blank"
+              rel="noreferrer"
+              className="group relative flex flex-col overflow-hidden rounded-[1.75rem] bg-gradient-to-br from-violet-600 via-purple-600 to-fuchsia-600 p-7 text-white shadow-xl shadow-purple-200 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-purple-200"
+            >
+              <div className="pointer-events-none absolute -right-12 -top-12 size-48 rounded-full bg-white/20 blur-2xl" />
+              <div className="relative">
+                <div className="inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-xs font-bold backdrop-blur-sm">
+                  🎵 音乐下载
+                </div>
+                <h3 className="mt-3 text-xl font-extrabold tracking-tight">无损音乐下载</h3>
+                <p className="mt-2 text-sm leading-relaxed text-white/85">免费无损音乐搜索下载，FLAC 音质收藏。</p>
+              </div>
+              <span className="relative mt-auto inline-flex items-center gap-1.5 pt-6 text-sm font-extrabold">
+                去下载 <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </span>
             </a>
           </div>
