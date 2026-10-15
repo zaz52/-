@@ -21,6 +21,7 @@ import {
   Trophy,
   Wrench,
   MoonStar,
+  Clapperboard,
 } from 'lucide-react';
 import { defaultProjects as projects } from './data/siteProjects';
 import { defaultContacts as contacts } from './data/siteContacts';
@@ -947,6 +948,22 @@ export default function App() {
           </div>
           <p className="text-center text-xs text-slate-400">
             加载不出来？<a href="https://suangua.weiyiai.top/" target="_blank" rel="noreferrer" className="font-bold text-indigo-600 hover:underline">在新窗口打开 →</a>
+          </p>
+        </section>
+
+        {/* 唯影影院：站内直接使用 */}
+        <section id="cinema" className="space-y-6 scroll-mt-28">
+          <SectionHead icon={<Clapperboard size={18} />} zh="唯影影院" en="CINEMA" note="不用跳转，直接开看" />
+          <div className={`${glass} overflow-hidden rounded-[1.75rem]`}>
+            <iframe
+              src="https://weiyi.indevs.in/"
+              title="唯影影院"
+              className="h-[80vh] min-h-[560px] w-full border-0"
+              loading="lazy"
+            />
+          </div>
+          <p className="text-center text-xs text-slate-400">
+            加载不出来？<a href="https://weiyi.indevs.in/" target="_blank" rel="noreferrer" className="font-bold text-indigo-600 hover:underline">在新窗口打开 →</a>
           </p>
         </section>
 
