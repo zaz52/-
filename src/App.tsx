@@ -10,6 +10,12 @@ import {
   Send,
   Music,
   Globe,
+  X,
+  Search,
+  SkipBack,
+  SkipForward,
+  Play,
+  Pause,
 } from 'lucide-react';
 import { defaultProjects as projects } from './data/siteProjects';
 import { defaultContacts as contacts } from './data/siteContacts';
@@ -70,48 +76,139 @@ function SectionHead({ icon, zh, en, note }: { icon: React.ReactNode; zh: string
   );
 }
 
-/* ================= 背景音乐悬浮按钮 ================= */
-/* 音频文件放 public/bgm.mp3；不存在时按钮自动隐藏 */
+/* ================= 悬浮音乐播放器（歌单 + 搜索） ================= */
+/* 音频放 public/music/，清单写 public/music.json：[{"title":"歌名","file":"/music/xxx.mp3"}] */
 
-function MusicToggle() {
+type Track = { title: string; file: string };
+
+function MusicPlayer() {
+  const [tracks, setTracks] = useState<Track[]>([]);
+  const [query, setQuery] = useState('');
+  const [open, setOpen] = useState(false);
+  const [current, setCurrent] = useState(0);
   const [playing, setPlaying] = useState(false);
-  const [hasMusic, setHasMusic] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    // Worker 对不存在的路径会兜底返回 index.html（200 + text/html），所以必须校验 content-type
-    fetch('/bgm.mp3', { method: 'HEAD' })
-      .then((r) =>
-        setHasMusic(r.ok && (r.headers.get('content-type') || '').startsWith('audio/'))
-      )
-      .catch(() => setHasMusic(false));
+    fetch('/music.json')
+      .then((r) => (r.ok ? r.json() : []))
+      .then((list) => {
+        if (Array.isArray(list)) setTracks(list.filter((t) => t && t.title && t.file));
+      })
+      .catch(() => {});
   }, []);
 
-  const toggle = async () => {
+  const playAt = async (i: number) => {
+    const a = audioRef.current;
+    if (!a || !tracks[i]) return;
+    setCurrent(i);
+    const url = new URL(tracks[i].file, window.location.href).href;
+    if (a.src !== url) a.src = tracks[i].file;
+    try {
+      await a.play();
+      setPlaying(true);
+    } catch {
+      /* 浏览器拦截未交互的播放，保持暂停 */
+    }
+  };
+
+  const togglePlay = async () => {
     const a = audioRef.current;
     if (!a) return;
     if (playing) {
       a.pause();
       setPlaying(false);
     } else {
-      try {
-        await a.play();
-        setPlaying(true);
-      } catch {
-        /* 浏览器拦截未交互的播放，保持暂停态 */
-      }
+      await playAt(current);
     }
   };
 
-  if (!hasMusic) return null;
+  const step = (d: number) => {
+    if (!tracks.length) return;
+    playAt((current + d + tracks.length) % tracks.length);
+  };
+
+  /* 播完自动下一首 */
+  useEffect(() => {
+    const a = audioRef.current;
+    if (!a) return;
+    const onEnded = () => step(1);
+    a.addEventListener('ended', onEnded);
+    return () => a.removeEventListener('ended', onEnded);
+  });
+
+  if (!tracks.length) return null;
+  const q = query.trim().toLowerCase();
+  const filtered = q ? tracks.filter((t) => t.title.toLowerCase().includes(q)) : tracks;
+
   return (
     <>
-      <audio ref={audioRef} src="/bgm.mp3" loop preload="none" />
+      <audio ref={audioRef} preload="none" />
+      {open && (
+        <div className="fixed bottom-20 right-6 z-50 flex max-h-[60vh] w-72 flex-col overflow-hidden rounded-[1.5rem] border border-white/70 bg-white/60 shadow-xl shadow-indigo-100 backdrop-blur-xl">
+          <div className="flex items-center gap-2 border-b border-white/60 px-4 py-3">
+            <Music size={16} className="text-indigo-500" />
+            <span className="text-sm font-extrabold text-slate-800">音乐</span>
+            <button onClick={() => setOpen(false)} className="ml-auto text-slate-400 transition-colors hover:text-slate-600" aria-label="关闭">
+              <X size={16} />
+            </button>
+          </div>
+          <div className="px-3 pt-3">
+            <div className="flex items-center gap-2 rounded-full bg-white/70 px-3 py-2">
+              <Search size={14} className="shrink-0 text-slate-400" />
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="搜索歌曲..."
+                className="w-full bg-transparent text-sm text-slate-700 outline-none placeholder:text-slate-400"
+              />
+            </div>
+          </div>
+          <div className="flex-1 overflow-y-auto px-2 py-2">
+            {filtered.length === 0 && (
+              <p className="px-3 py-6 text-center text-xs text-slate-400">没找到这首歌</p>
+            )}
+            {filtered.map((t) => {
+              const idx = tracks.indexOf(t);
+              const active = idx === current;
+              return (
+                <button
+                  key={t.file}
+                  onClick={() => playAt(idx)}
+                  className={`flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm transition-colors ${active ? 'bg-indigo-100/70 font-bold text-indigo-700' : 'text-slate-600 hover:bg-white/70'}`}
+                >
+                  {active && playing ? (
+                    <span className="flex h-4 items-end gap-[2px]">
+                      <span className="animate-eq-1 w-[2px] rounded-full bg-indigo-500" />
+                      <span className="animate-eq-2 w-[2px] rounded-full bg-violet-500" />
+                      <span className="animate-eq-3 w-[2px] rounded-full bg-indigo-500" />
+                    </span>
+                  ) : (
+                    <Music size={14} className="shrink-0 opacity-50" />
+                  )}
+                  <span className="truncate">{t.title}</span>
+                </button>
+              );
+            })}
+          </div>
+          <div className="flex items-center gap-1 border-t border-white/60 px-4 py-3">
+            <button onClick={() => step(-1)} className="grid size-9 place-items-center rounded-full text-slate-600 transition-colors hover:bg-white/70" aria-label="上一首">
+              <SkipBack size={16} />
+            </button>
+            <button onClick={togglePlay} className="grid size-10 place-items-center rounded-full bg-gradient-to-br from-indigo-500 to-violet-500 text-white shadow-md shadow-indigo-200 transition-transform active:scale-95" aria-label={playing ? '暂停' : '播放'}>
+              {playing ? <Pause size={16} /> : <Play size={16} className="translate-x-[1px]" />}
+            </button>
+            <button onClick={() => step(1)} className="grid size-9 place-items-center rounded-full text-slate-600 transition-colors hover:bg-white/70" aria-label="下一首">
+              <SkipForward size={16} />
+            </button>
+            <span className="ml-1 truncate text-xs font-semibold text-slate-500">{tracks[current]?.title}</span>
+          </div>
+        </div>
+      )}
       <button
-        onClick={toggle}
-        aria-label={playing ? '暂停背景音乐' : '播放背景音乐'}
-        title={playing ? '暂停背景音乐' : '播放背景音乐'}
-        className="fixed bottom-6 right-6 z-50 flex size-12 items-center justify-center rounded-full border border-white/70 bg-white/50 text-slate-700 shadow-lg shadow-indigo-100 backdrop-blur-xl transition-all hover:scale-105 active:scale-95"
+        onClick={() => setOpen(!open)}
+        aria-label="音乐"
+        className="fixed bottom-6 right-6 z-50 grid size-12 place-items-center rounded-full border border-white/70 bg-white/50 text-slate-700 shadow-lg shadow-indigo-100 backdrop-blur-xl transition-all hover:scale-105 active:scale-95"
       >
         {playing ? (
           <span className="flex h-5 items-end gap-[3px]">
@@ -127,6 +224,7 @@ function MusicToggle() {
     </>
   );
 }
+
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<'feel' | 'motion' | 'rhythm'>('feel');
@@ -539,7 +637,7 @@ export default function App() {
             <p className="text-xs text-slate-500">一隅之地 · Crafted with Motion & React</p>
           </div>
         </footer>
-        <MusicToggle />
+        <MusicPlayer />
       </main>
     </div>
   );
