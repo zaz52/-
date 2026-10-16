@@ -847,6 +847,36 @@ export default function App() {
           </div>
         </section>
 
+        {/* 苍柏影院 */}
+        <section id="cinema" className="space-y-6 scroll-mt-28">
+          <SectionHead icon={<Clapperboard size={18} />} zh="苍柏影院" en="CINEMA" note="海量影视，一点即看" />
+          <a
+            href="https://weiyi.indevs.in/"
+            target="_blank"
+            rel="noreferrer"
+            className={`group relative block overflow-hidden rounded-[1.75rem] ${glass} transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_48px_rgba(31,38,135,0.18)]`}
+          >
+            <div className="relative aspect-[21/9] w-full overflow-hidden">
+              <img
+                src={cinemaPoster}
+                alt="苍柏影院"
+                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 text-center">
+                <span className="grid size-16 place-items-center rounded-full bg-white/15 text-white backdrop-blur-md transition-transform duration-300 group-hover:scale-110">
+                  <Play size={26} className="ml-1" fill="currentColor" />
+                </span>
+                <div>
+                  <div className="text-2xl font-extrabold tracking-tight text-white drop-shadow-lg">苍柏影院</div>
+                  <div className="mt-1 text-sm text-white/70">点击进入 · 免费观影</div>
+                </div>
+              </div>
+            </div>
+          </a>
+        </section>
+
         {/* 作品 */}
         <section id="projects" className="space-y-6 scroll-mt-28">
           <SectionHead icon={<FolderKanban size={18} />} zh="作品" en="PROJECTS" note="点击卡片访问线上地址 / 仓库" />
@@ -905,36 +935,6 @@ export default function App() {
           <p className="text-center text-xs text-slate-400">
             加载不出来？<a href="https://suangua.weiyiai.top/" target="_blank" rel="noreferrer" className="font-bold text-indigo-600 hover:underline">在新窗口打开 →</a>
           </p>
-        </section>
-
-        {/* 苍柏影院 */}
-        <section id="cinema" className="space-y-6 scroll-mt-28">
-          <SectionHead icon={<Clapperboard size={18} />} zh="苍柏影院" en="CINEMA" note="海量影视，一点即看" />
-          <a
-            href="https://weiyi.indevs.in/"
-            target="_blank"
-            rel="noreferrer"
-            className={`group relative block overflow-hidden rounded-[1.75rem] ${glass} transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_48px_rgba(31,38,135,0.18)]`}
-          >
-            <div className="relative aspect-[21/9] w-full overflow-hidden">
-              <img
-                src={cinemaPoster}
-                alt="苍柏影院"
-                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 text-center">
-                <span className="grid size-16 place-items-center rounded-full bg-white/15 text-white backdrop-blur-md transition-transform duration-300 group-hover:scale-110">
-                  <Play size={26} className="ml-1" fill="currentColor" />
-                </span>
-                <div>
-                  <div className="text-2xl font-extrabold tracking-tight text-white drop-shadow-lg">苍柏影院</div>
-                  <div className="mt-1 text-sm text-white/70">点击进入 · 免费观影</div>
-                </div>
-              </div>
-            </div>
-          </a>
         </section>
 
         {/* 工具箱 */}
