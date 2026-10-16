@@ -1,1 +1,13 @@
-[]
+[
+  {
+    "name": "cangbai-cinema",
+    "type": "GitHub 开源项目",
+    "desc": "苍柏 CINEMA：Cloudflare Workers + D1 影视搜索、授权源管理与在线播放网站",
+    "href": "https://weiyi.indevs.in",
+    "tags": [
+      "JavaScript"
+    ],
+    "featured": false,
+    "github": "https://github.com/zaz52/cangbai-cinema"
+  }
+]
