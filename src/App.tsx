@@ -32,7 +32,7 @@ import { toolbox } from './data/toolbox';
 
 const NAV = [
   { label: '作品', href: '#projects' },
-  { label: '设计', href: '#design' },
+  { label: '工具箱', href: '#toolbox' },
   { label: '关于', href: '#about' },
   { label: '联系', href: '#contact' },
 ];
@@ -52,7 +52,7 @@ const marqueeTags = [
 
 
 const stats = [
-  { value: '14', suffix: '', label: '作品项目' },
+  { value: '10', suffix: '', label: '作品项目' },
   { value: '120', suffix: '+', label: '设计组件' },
   { value: '30', suffix: '+', label: '创意练习' },
   { value: '100', suffix: '%', label: '关注体验' },

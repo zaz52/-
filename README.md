@@ -1,27 +1,22 @@
-# 唯一 Portfolio
+# 壹隅 YI CORNER
 
-唯一的个人作品集与 UI 设计系统网站。当前视觉方向为“复古科技 + 青春自然”，用于展示在线作品、网页/移动端界面、卡片、控件、按钮、图标、间距、圆角和联系方式。
+Songyu 的个人网站 —— 作品、工具与日常。[weiyiai.top](https://weiyiai.top/)
+
+## 网站内容
+
+- **作品 / PROJECTS**：10 个精选项目（乾坤之道、魔方简历、PPT Master、银龄守护等）
+- **乾坤之道 / DIVINATION**：站内直接开算的 AI 问事平台
+- **苍柏影院 / CINEMA**：免费观影入口
+- **工具箱 / TOOLBOX**：5 大类 25 个精选工具，含 8 个自制站点（带"自制"徽标）
+- **小游戏**：星尘躲避、记忆翻牌
+- **音乐播放器**：右下角悬浮歌单播放器
+- **留言板**：访客留言
 
 ## 技术栈
 
-- React
-- TypeScript
-- Vite
+- React + TypeScript + Vite
 - Tailwind CSS
 - lucide-react
-
-## 设计系统
-
-核心模块位于首页：
-
-- 色彩与字体
-- 按钮、输入框、下拉、开关、选择控件
-- 卡片样式和内容卡片
-- Web 页面预览与移动端界面预览
-- 间距、圆角、图标系统
-- 提示、徽章、标签和联系方式组件
-
-设计 token 位于 `src/data/designSystem.ts`，个人内容位于 `src/data/portfolio.ts`。
 
 ## 本地运行
 
@@ -36,24 +31,17 @@ npm run dev
 npm run build
 ```
 
-构建产物输出到 `dist/`，可直接部署到 Netlify。
+构建产物输出到 `dist/`，通过 GitHub Actions 自动部署到 Cloudflare Worker。
 
 ## 内容维护
 
-主要内容集中在 `src/data/portfolio.ts`：
-
-- 个人定位与简介
-- 在线作品入口
-- 项目案例
-- 联系方式
-
-头像文件位于 `public/avatar.jpg`。替换头像时保持同名文件即可。
+- 作品数据：`src/data/curated.json`（精选）+ `src/data/generated.json`（自动同步）
+- 工具箱数据：`src/data/toolbox.ts`（后续补充往对应分类的 tools 数组加一行即可）
+- 联系方式：`src/data/contacts.json`
 
 ## 🔗 联系方式
 
-- 邮箱：1845779520@qq.com
-- 微信：Z3_March
-- X：https://x.com/Weiyi_Learn
-- QQ：1845779520
-- Telegram：https://t.me/Weiyiusername
 - GitHub：https://github.com/zaz52
+- X：https://x.com/Cangbaic
+- Telegram：https://t.me/CANGBAIC
+- WhatsApp：+44 7343 121534
