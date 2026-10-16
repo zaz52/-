@@ -26,6 +26,7 @@ import {
 import { defaultProjects as projects } from './data/siteProjects';
 import { defaultContacts as contacts } from './data/siteContacts';
 import { cinemaPoster } from './data/cinemaPoster';
+import { toolbox } from './data/toolbox';
 
 /* ================= 数据 ================= */
 
@@ -55,52 +56,6 @@ const stats = [
   { value: '120', suffix: '+', label: '设计组件' },
   { value: '30', suffix: '+', label: '创意练习' },
   { value: '100', suffix: '%', label: '关注体验' },
-];
-
-/* ================= 工具箱数据 ================= */
-const toolbox = [
-  {
-    emoji: '🤖', name: 'AI 效率',
-    tools: [
-      { name: 'PDFMathTranslate', desc: 'PDF 论文一键翻译，公式表格不乱码', url: 'https://github.com/PDFMathTranslate/PDFMathTranslate' },
-      { name: 'ppt-master', desc: '输入文档或主题，AI 生成原生 PPT', url: 'https://github.com/hugohe3/ppt-master' },
-      { name: 'OfficeCLI', desc: '命令行里的 Office 套件，极客范', url: 'https://github.com/iOfficeAI/OfficeCLI' },
-      { name: 'ChatGPT 中文调教指南', desc: '各种场景的提示词玩法，学让 AI 听话', url: 'https://github.com/PlexPt/awesome-chatgpt-prompts-zh' },
-    ],
-  },
-  {
-    emoji: '✍️', name: 'AI 写作',
-    tools: [
-      { name: 'Humanizer-zh', desc: '消除文本中的 AI 痕迹，改得更像人写的', url: 'https://github.com/op7418/Humanizer-zh' },
-      { name: 'ai-flavor-remover', desc: '一键去除 AI 味，文字更自然', url: 'https://github.com/hylarucoder/ai-flavor-remover' },
-      { name: 'writing-dna-skill', desc: '蒸馏复刻任意写作风格，Agent 技能', url: 'https://github.com/larashero3-dotcom/writing-dna-skill' },
-    ],
-  },
-  {
-    emoji: '📱', name: '内容创作',
-    tools: [
-      { name: '抖音下载器', desc: '批量下载抖音视频，无水印', url: 'https://github.com/jiji262/douyin-downloader' },
-      { name: 'MultiPost', desc: '一篇文章，多平台一键发布', url: 'https://github.com/leaperone/MultiPost-Extension' },
-      { name: 'lieflat-cards', desc: '把文字变成克制编辑感的图文卡片', url: 'https://github.com/larashero3-dotcom/lieflat-cards' },
-      { name: 'creatorhub', desc: '多平台内容监控采集，一个面板管起', url: 'https://github.com/3441293738/creatorhub' },
-    ],
-  },
-  {
-    emoji: '🎬', name: '影音娱乐',
-    tools: [
-      { name: 'lx-music-desktop', desc: '免费开源音乐播放器，全网搜歌随便听', url: 'https://github.com/lyswhut/lx-music-desktop' },
-      { name: 'LibreTV', desc: '一分钟搭建自己的影视站', url: 'https://github.com/LibreSpark/LibreTV' },
-      { name: '追剧资源指南', desc: '免费无广告追剧资源，人工精选', url: 'https://github.com/laoma528/awesome-zhuiju-free' },
-    ],
-  },
-  {
-    emoji: '🧰', name: '实用小工具',
-    tools: [
-      { name: '闲鱼自动回复', desc: '闲鱼客服自动回复系统，解放双手', url: 'https://github.com/zhinianboke/xianyu-auto-reply' },
-      { name: '微信 AI 记忆库', desc: '微信聊天记录筛选归档，可追溯', url: 'https://github.com/ikevss/wechat-ai-memory' },
-      { name: 'QzoneArchive', desc: 'QQ 空间历史动态照片视频一键备份', url: 'https://github.com/Gaoshu705/QzoneArchive' },
-    ],
-  },
 ];
 
 /* ============ AURA 玻璃拟态 ============ */
@@ -998,7 +953,10 @@ export default function App() {
                     <a key={t.name} href={t.url} target="_blank" rel="noreferrer"
                       className="group rounded-2xl border border-white/60 bg-white/50 p-4 transition-all duration-200 hover:-translate-y-0.5 hover:bg-white/80 hover:shadow-lg hover:shadow-indigo-100">
                       <div className="flex items-start justify-between gap-2">
-                        <div className="text-sm font-extrabold tracking-tight text-slate-800">{t.name}</div>
+                        <div className="flex items-center gap-1.5">
+                          <div className="text-sm font-extrabold tracking-tight text-slate-800">{t.name}</div>
+                          {t.mine && <span className="rounded-full bg-gradient-to-r from-amber-500 to-orange-500 px-1.5 py-px text-[10px] font-bold text-white">自制</span>}
+                        </div>
                         <ExternalLink size={13} className="mt-0.5 shrink-0 text-slate-300 transition-colors group-hover:text-indigo-500" />
                       </div>
                       <p className="mt-1.5 text-xs leading-relaxed text-slate-500">{t.desc}</p>
