@@ -911,7 +911,7 @@ export default function App() {
         <section id="cinema" className="space-y-6 scroll-mt-28">
           <SectionHead icon={<Clapperboard size={18} />} zh="苍柏影院" en="CINEMA" note="海量影视，一点即看" />
           <a
-            href="https://nav.weiyi.indevs.in/"
+            href="https://weiyi.indevs.in/"
             target="_blank"
             rel="noreferrer"
             className={`group relative block overflow-hidden rounded-[1.75rem] ${glass} transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_48px_rgba(31,38,135,0.18)]`}
