@@ -52,7 +52,7 @@ export const toolbox: ToolboxCategory[] = [
   {
     emoji: '🎬', name: '影音娱乐',
     tools: [
-      { name: '唯影导航', desc: '全类型视频网站导航，143 个平台', url: 'https://weiyi.indevs.in/', mine: true },
+      { name: '唯影导航', desc: '全类型视频网站导航，143 个平台', url: 'https://nav.weiyi.indevs.in/', mine: true },
       { name: 'lx-music-desktop', desc: '免费开源音乐播放器，全网搜歌随便听', url: 'https://github.com/lyswhut/lx-music-desktop' },
       { name: 'LibreTV', desc: '一分钟搭建自己的影视站', url: 'https://github.com/LibreSpark/LibreTV' },
       { name: '追剧资源指南', desc: '免费无广告追剧资源，人工精选', url: 'https://github.com/laoma528/awesome-zhuiju-free' },
